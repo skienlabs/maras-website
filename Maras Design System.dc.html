@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:#070D0C;}
+  ::selection{background:rgba(0,214,161,0.3);color:#fff;}
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-track{background:#070D0C;}
+  ::-webkit-scrollbar-thumb{background:rgba(0,214,161,0.25);}
+  @keyframes dsBlink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+</style>
+</helmet>
+
+<div style="position:relative;min-height:100vh;background:#070D0C;color:#E8F3F0;font-family:'Space Grotesk',sans-serif;overflow:hidden;">
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,214,161,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,214,161,0.045) 1px,transparent 1px);background-size:54px 54px;mask-image:radial-gradient(ellipse 120% 80% at 50% 0%,#000 30%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse 120% 80% at 50% 0%,#000 30%,transparent 90%);"></div>
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 45% at 50% -8%,rgba(0,214,161,0.14),transparent 60%);"></div>
+  <div style="position:fixed;inset:0;z-index:6;pointer-events:none;box-shadow:inset 0 0 220px 40px rgba(0,0,0,0.8);"></div>
+  <div style="position:fixed;top:18px;left:18px;width:24px;height:24px;border-top:2px solid rgba(0,214,161,0.5);border-left:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
+  <div style="position:fixed;top:18px;right:18px;width:24px;height:24px;border-top:2px solid rgba(0,214,161,0.5);border-right:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
+  <div style="position:fixed;bottom:18px;left:18px;width:24px;height:24px;border-bottom:2px solid rgba(0,214,161,0.5);border-left:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
+  <div style="position:fixed;bottom:18px;right:18px;width:24px;height:24px;border-bottom:2px solid rgba(0,214,161,0.5);border-right:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
+
+  <div style="position:relative;z-index:5;max-width:1080px;margin:0 auto;padding:clamp(40px,6vw,80px) clamp(20px,5vw,48px) 120px;">
+
+    <header style="padding:clamp(40px,7vw,90px) 0 clamp(50px,7vw,80px);border-bottom:1px solid rgba(0,214,161,0.14);">
+      <img src="assets/maras-logo.png" alt="Maras Solutions" style="height:clamp(86px,12vw,128px);width:auto;filter:drop-shadow(0 0 18px rgba(0,214,161,0.35));margin-bottom:36px;"/>
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#00D6A1;border:1px solid rgba(0,214,161,0.25);padding:7px 14px;border-radius:2px;margin-bottom:28px;">
+        <span style="width:6px;height:6px;background:#00D6A1;border-radius:50%;box-shadow:0 0 8px #00D6A1;"></span>DESIGN SYSTEM · V1.0
+      </div>
+      <h1 style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:clamp(34px,5vw,60px);line-height:1.05;letter-spacing:-0.01em;color:#F2FBF8;margin-bottom:20px;">The Maras visual language</h1>
+      <p style="font-size:clamp(16px,1.5vw,19px);line-height:1.7;color:#92A8A1;max-width:60ch;">A technical, terminal-inspired identity for a software, data, and AI consultancy. This document defines the colors, type, spacing, components, and iconography that keep every Maras surface consistent — bilingual EN ⇄ AR included.</p>
+    </header>
+
+    <section style="padding:clamp(50px,7vw,84px) 0;border-bottom:1px solid rgba(0,214,161,0.14);">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#00D6A1;margin-bottom:14px;"><span style="font-size:13px;">01</span><span style="width:26px;height:1px;background:#00D6A1;"></span>COLOR</div>
+      <h2 style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:clamp(24px,3vw,36px);color:#F2FBF8;margin-bottom:12px;">Palette</h2>
+      <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:54ch;margin-bottom:36px;">A near-black teal base lets the single bright accent do all the signalling. Use accent for one action per view; never two competing greens.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;">
+        <sc-for list="{{ colors }}" as="c" hint-placeholder-count="8">
+          <div style="border:1px solid rgba(0,214,161,0.14);border-radius:5px;overflow:hidden;background:#080F0E;">
+            <div style="height:96px;background:{{ c.bg }};border-bottom:1px solid rgba(0,214,161,0.14);position:relative;">
+              <div style="position:absolute;top:8px;left:8px;width:12px;height:12px;border-top:1.5px solid rgba(255,255,255,0.25);border-left:1.5px solid rgba(255,255,255,0.25);"></div>
+            </div>
+            <div style="padding:14px 15px;">
+              <div style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:14px;color:#EAF6F2;margin-bottom:5px;">{{ c.name }}</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00D6A1;margin-bottom:8px;">{{ c.hex }}</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#5d7a72;line-height:1.5;">{{ c.use }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="padding:clamp(50px,7vw,84px) 0;border-bottom:1px solid rgba(0,214,161,0.14);">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#00D6A1;margin-bottom:14px;"><span style="font-size:13px;">02</span><span style="width:26px;height:1px;background:#00D6A1;"></span>TYPOGRAPHY</div>
+      <h2 style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:clamp(24px,3vw,36px);color:#F2FBF8;margin-bottom:36px;">Four roles, four families</h2>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(24px,3vw,36px);">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:18px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;">DISPLAY · HEADINGS</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00D6A1;">Chakra Petch · 600</span></div>
+          <div style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:clamp(30px,4vw,52px);color:#F2FBF8;line-height:1.05;">We architect intelligent software</div>
+        </div>
+        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(24px,3vw,36px);">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:18px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;">BODY · UI TEXT</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00D6A1;">Space Grotesk · 300–500</span></div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:19px;line-height:1.7;color:#C4D6D0;">Maras designs, builds, and scales custom software, data platforms, and AI systems — from first commit to production.</div>
+        </div>
+        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(24px,3vw,36px);">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:18px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;">LABELS · DATA · CODE</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00D6A1;">JetBrains Mono · 400–600</span></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:16px;letter-spacing:0.1em;color:#00D6A1;">// EYEBROW_LABEL &nbsp;·&nbsp; $ maras deploy --env prod &nbsp;·&nbsp; 99.9%</div>
+        </div>
+        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(24px,3vw,36px);" dir="rtl">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:18px;" dir="ltr"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;">ARABIC · RTL</span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00D6A1;">IBM Plex Sans Arabic · 400–600</span></div>
+          <div style="font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(24px,3vw,40px);color:#F2FBF8;line-height:1.4;">نُصمّم برمجيات ذكية للفرق الطموحة</div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:clamp(50px,7vw,84px) 0;border-bottom:1px solid rgba(0,214,161,0.14);">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#00D6A1;margin-bottom:14px;"><span style="font-size:13px;">03</span><span style="width:26px;height:1px;background:#00D6A1;"></span>SPACE · FORM · MOTION</div>
+      <h2 style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:clamp(24px,3vw,36px);color:#F2FBF8;margin-bottom:36px;">Structure & motifs</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;">
+        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:28px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;margin-bottom:20px;">RADIUS</div>
+          <div style="display:flex;align-items:flex-end;gap:14px;">
+            <div style="text-align:center;"><div style="width:52px;height:52px;background:rgba(0,214,161,0.1);border:1px solid rgba(0,214,161,0.3);border-radius:2px;"></div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7d938c;margin-top:8px;">2px</div></div>
+            <div style="text-align:center;"><div style="width:52px;height:52px;background:rgba(0,214,161,0.1);border:1px solid rgba(0,214,161,0.3);border-radius:5px;"></div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7d938c;margin-top:8px;">5px</div></div>
+            <div style="text-align:center;"><div style="width:52px;height:52px;background:rgba(0,214,161,0.1);border:1px solid rgba(0,214,161,0.3);border-radius:8px;"></div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#7d938c;margin-top:8px;">8px</div></div>
+          </div>
+        </div>
+        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:28px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;margin-bottom:20px;">SPACING SCALE</div>
+          <div style="display:flex;align-items:flex-end;gap:8px;height:64px;">
+            <sc-for list="{{ spacing }}" as="sp" hint-placeholder-count="5">
+              <div style="text-align:center;"><div style="width:18px;background:#00D6A1;border-radius:1px;height:{{ sp.h }};opacity:0.8;"></div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#7d938c;margin-top:6px;">{{ sp.v }}</div></div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:28px;overflow:hidden;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;margin-bottom:20px;">HUD CORNERS</div>
+          <div style="position:relative;height:64px;border:1px dashed rgba(0,214,161,0.2);">
+            <div style="position:absolute;top:-1px;left:-1px;width:18px;height:18px;border-top:2px solid #00D6A1;border-left:2px solid #00D6A1;"></div>
+            <div style="position:absolute;top:-1px;right:-1px;width:18px;height:18px;border-top:2px solid #00D6A1;border-right:2px solid #00D6A1;"></div>
+            <div style="position:absolute;bottom:-1px;left:-1px;width:18px;height:18px;border-bottom:2px solid #00D6A1;border-left:2px solid #00D6A1;"></div>
+            <div style="position:absolute;bottom:-1px;right:-1px;width:18px;height:18px;border-bottom:2px solid #00D6A1;border-right:2px solid #00D6A1;"></div>
+          </div>
+        </div>
+        <div style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:28px;overflow:hidden;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;margin-bottom:20px;">GLOW</div>
+          <div style="display:flex;align-items:center;justify-content:center;height:64px;">
+            <div style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:34px;color:#00D6A1;text-shadow:0 0 28px rgba(0,214,161,0.6);">99.9%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:clamp(50px,7vw,84px) 0;border-bottom:1px solid rgba(0,214,161,0.14);">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#00D6A1;margin-bottom:14px;"><span style="font-size:13px;">04</span><span style="width:26px;height:1px;background:#00D6A1;"></span>COMPONENTS</div>
+      <h2 style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:clamp(24px,3vw,36px);color:#F2FBF8;margin-bottom:36px;">Core building blocks</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;">
+        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:30px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;margin-bottom:22px;">BUTTONS</div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:0.04em;color:#070D0C;background:#00D6A1;padding:13px 22px;border-radius:2px;box-shadow:0 0 24px rgba(0,214,161,0.4);">Primary →</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;letter-spacing:0.04em;color:#E8F3F0;border:1px solid rgba(0,214,161,0.3);padding:13px 22px;border-radius:2px;">Secondary</span>
+          </div>
+        </div>
+        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:30px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;margin-bottom:22px;">EYEBROW + TAGS</div>
+          <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;color:#00D6A1;margin-bottom:16px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>WHAT WE DO</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6f9a8f;border:1px solid rgba(0,214,161,0.16);padding:5px 10px;border-radius:2px;">LLMs</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6f9a8f;border:1px solid rgba(0,214,161,0.16);padding:5px 10px;border-radius:2px;">MLOps</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6f9a8f;border:1px solid rgba(0,214,161,0.16);padding:5px 10px;border-radius:2px;">Pipelines</span>
+          </div>
+        </div>
+        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:30px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;margin-bottom:22px;">INPUT</div>
+          <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;margin-bottom:8px;">NAME</label>
+          <div style="background:#070D0C;border:1px solid #00D6A1;border-radius:3px;padding:13px 14px;font-family:'Space Grotesk',sans-serif;font-size:14px;color:#E8F3F0;">Layla Haddad<span style="display:inline-block;width:8px;height:14px;background:#00D6A1;vertical-align:middle;margin-left:2px;animation:dsBlink 1s steps(1) infinite;"></span></div>
+        </div>
+        <div style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:30px;overflow:hidden;">
+          <div style="position:absolute;top:14px;right:14px;width:16px;height:16px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.18em;color:#5d7a72;margin-bottom:22px;">STAT</div>
+          <div style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:42px;color:#00D6A1;line-height:1;text-shadow:0 0 24px rgba(0,214,161,0.35);">120+</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.18em;color:#7d938c;margin-top:12px;">PROJECTS DELIVERED</div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:clamp(50px,7vw,84px) 0;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:14px;">
+        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.2em;color:#00D6A1;"><span style="font-size:13px;">05</span><span style="width:26px;height:1px;background:#00D6A1;"></span>ICONOGRAPHY</div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5d7a72;">{{ iconCount }} ICONS · 24×24 · 1.5px STROKE</span>
+      </div>
+      <h2 style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:clamp(24px,3vw,36px);color:#F2FBF8;margin-bottom:12px;">Icon library</h2>
+      <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:60ch;margin-bottom:14px;">Single-weight line icons on a 24×24 grid, drawn with <span style="color:#00D6A1;font-family:'JetBrains Mono',monospace;font-size:14px;">stroke="currentColor"</span> so they inherit any text color. Round caps and joins, geometric construction — never filled. Each ships as an individual optimized SVG.</p>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#00D6A1;margin-bottom:32px;">→ Download the full set from the card in chat &nbsp;·&nbsp; assets/icons/*.svg</div>
+      {{ iconGrid }}
+    </section>
+
+    <div style="margin-top:60px;padding-top:30px;border-top:1px solid rgba(0,214,161,0.12);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#5d7a72;">MARAS SOLUTIONS · DESIGN SYSTEM V1.0</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#3a5650;">مراس الحلول</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  iconPaths() {
+    return {
+      'ai': '<circle cx="6" cy="7" r="2.2"/><circle cx="18" cy="7" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M8.1 8.2 10.4 16M15.9 8.2 13.6 16M8.2 7h7.6"/>',
+      'code': '<path d="M9 8l-4 4 4 4M15 8l4 4-4 4M13 6l-2 12"/>',
+      'cloud': '<path d="M17 18H7a4 4 0 0 1-.8-7.9 5 5 0 0 1 9.7-1A3.5 3.5 0 0 1 17 18z"/>',
+      'mobile': '<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/>',
+      'web': '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18M6 7h.01M8 7h.01M10 7h.01"/>',
+      'gear': '<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.1 5.1l2.1 2.1M16.8 16.8l2.1 2.1M18.9 5.1 16.8 7.2M7.2 16.8 5.1 18.9"/>',
+      'lightbulb': '<path d="M9 18h6M10 21h4M8.5 14a6 6 0 1 1 7 0c-.6.5-1 1.1-1 1.9V16h-5v-.1c0-.8-.4-1.4-1-1.9z"/>',
+      'target': '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.6"/>',
+      'search': '<circle cx="11" cy="11" r="6"/><path d="m20 20-3.8-3.8"/>',
+      'database': '<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.66 3.13 3 7 3s7-1.34 7-3V6"/><path d="M5 12c0 1.66 3.13 3 7 3s7-1.34 7-3"/>',
+      'server': '<rect x="3" y="4" width="18" height="7" rx="1.5"/><rect x="3" y="13" width="18" height="7" rx="1.5"/><path d="M7 7.5h.01M7 16.5h.01"/>',
+      'chip': '<rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/>',
+      'layers': '<path d="M12 3 3 7.5l9 4.5 9-4.5zM3 12l9 4.5 9-4.5M3 16.5 12 21l9-4.5"/>',
+      'terminal': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/>',
+      'api': '<path d="M9 7V4M15 7V4M7 7h10v3.5a5 5 0 0 1-10 0zM12 15.5V21"/>',
+      'branch': '<circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="8" r="2.4"/><path d="M6 8.4v7.2M15.6 8A8 8 0 0 0 6 15.6"/>',
+      'workflow': '<rect x="3" y="9" width="6" height="6" rx="1.2"/><rect x="15" y="3" width="6" height="6" rx="1.2"/><rect x="15" y="15" width="6" height="6" rx="1.2"/><path d="M9 12h3V6h3M12 12v6h3"/>',
+      'dataflow': '<path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5"/>',
+      'cpu-pulse': '<path d="M3 12h3l2-5 4 10 2-5h3l1.5 3H21"/>',
+      'shield': '<path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/>',
+      'lock': '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+      'check-circle': '<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+      'bolt': '<path d="M13 3 5 13h6l-1 8 8-10h-6z"/>',
+      'rocket': '<path d="M12 3c3 1.6 5 5.2 5 9.2L14.5 15h-5L7 12.2C7 8.2 9 4.6 12 3z"/><path d="M9.5 16 8 21l3.2-1.6M14.5 16 16 21l-3.2-1.6"/><circle cx="12" cy="10" r="1.5"/>',
+      'integration': '<rect x="3" y="3" width="7.5" height="7.5" rx="1.2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.2"/><path d="M10.5 6.8H15a2.5 2.5 0 0 1 2.5 2.5v4.2"/>',
+      'analytics': '<path d="M3 20h18M6 20v-7M11 20V6M16 20v-9"/>',
+      'users': '<circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0M16 5.4a3 3 0 0 1 0 5.2M20.5 20a5.5 5.5 0 0 0-3.5-5.1"/>',
+      'arrow-right': '<path d="M4 12h15M13 6l6 6-6 6"/>',
+      'mail': '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/>',
+      'plus': '<path d="M12 5v14M5 12h14"/>',
+      'external': '<path d="M14 4h6v6M20 4l-8 8M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/>'
+    };
+  }
+
+  renderVals() {
+    const paths = this.iconPaths();
+    const names = Object.keys(paths);
+
+    const cell = (name) => React.createElement('div', {
+      key: name,
+      style: { display:'flex', flexDirection:'column', alignItems:'center', gap:'12px', padding:'22px 10px', background:'#080F0E', border:'1px solid rgba(0,214,161,0.14)', borderRadius:'5px', color:'#00D6A1' }
+    }, [
+      React.createElement('div', {
+        key:'svg', style:{ color:'#00D6A1', filter:'drop-shadow(0 0 10px rgba(0,214,161,0.3))' },
+        dangerouslySetInnerHTML: { __html: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+paths[name]+'</svg>' }
+      }),
+      React.createElement('span', { key:'lbl', style:{ fontFamily:"'JetBrains Mono',monospace", fontSize:'10.5px', color:'#7d938c', letterSpacing:'0.04em', textAlign:'center' } }, name)
+    ]);
+
+    const iconGrid = React.createElement('div', {
+      style: { display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(110px,1fr))', gap:'12px' }
+    }, names.map(cell));
+
+    const colors = [
+      { name:'Base / Void', hex:'#070D0C', bg:'#070D0C', use:'Page background' },
+      { name:'Panel', hex:'#080F0E', bg:'#080F0E', use:'Cards, surfaces' },
+      { name:'Panel Alt', hex:'#0A1411', bg:'#0A1411', use:'Hover / raised' },
+      { name:'Accent', hex:'#00D6A1', bg:'#00D6A1', use:'Primary action, glow' },
+      { name:'Accent Bright', hex:'#34F5D0', bg:'#34F5D0', use:'Hover, highlight' },
+      { name:'Text', hex:'#E8F3F0', bg:'#E8F3F0', use:'Headings, body' },
+      { name:'Muted', hex:'#8AA099', bg:'#8AA099', use:'Secondary text' },
+      { name:'Hairline', hex:'#0E2620', bg:'rgba(0,214,161,0.14)', use:'Borders @14% accent' }
+    ];
+
+    const spacing = [
+      { v:'4', h:'12px' }, { v:'8', h:'20px' }, { v:'16', h:'32px' }, { v:'24', h:'44px' }, { v:'48', h:'60px' }
+    ];
+
+    return { iconGrid, colors, spacing, iconCount: names.length };
+  }
+}
+</script>
+</body>
+</html>
