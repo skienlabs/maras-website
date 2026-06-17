@@ -26,12 +26,12 @@ jobs:
       # Build the Nginx Docker image containing your HTML files
       - name: Build image
         run: |
-          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/test-images/maras-website:latest .
+          docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/test-images/maras-site:latest .
 
       # Push the image to GCP Artifact Registry
       - name: Push image
         run: |
-          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/test-images/maras-website:latest
+          docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/test-images/maras-site:latest
 
       # Deploy to your VM
       - name: Deploy to VM
@@ -43,8 +43,8 @@ jobs:
           script: |
             gcloud auth configure-docker us-central1-docker.pkg.dev -q
             # Ensure the directory exists
-            mkdir -p ~/docker/maras-website
-            cd ~/docker/maras-website
+            mkdir -p ~/docker/maras
+            cd ~/docker/maras
             # Pull the new image and restart the container
             sudo docker compose pull
             sudo docker compose up -d
