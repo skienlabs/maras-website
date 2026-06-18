@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail" data-bg-color="#070D0C">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#070D0C"/>
+    <g fill="none" stroke="#00D6A1" stroke-opacity="0.12" stroke-width="2">
+      <path d="M360 0V800M600 0V800M840 0V800M0 280H1200M0 520H1200"/>
+    </g>
+    <g stroke="#00D6A1" stroke-width="6" fill="none">
+      <path d="M360 300H300V360"/>
+      <path d="M840 300H900V360"/>
+      <path d="M360 500H300V440"/>
+      <path d="M840 500H900V440"/>
+    </g>
+    <text x="600" y="380" font-family="'Chakra Petch',monospace" font-size="150" font-weight="700" fill="#00D6A1" text-anchor="middle" letter-spacing="6">M</text>
+    <text x="600" y="470" font-family="monospace" font-size="34" font-weight="600" fill="#E8F3F0" text-anchor="middle" letter-spacing="12">MARAS</text>
+    <rect x="700" y="450" width="14" height="26" fill="#00D6A1"/>
+  </svg>
+</template>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:#070D0C;}
+  ::selection{background:rgba(0,214,161,0.3);color:#fff;}
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-track{background:#070D0C;}
+  ::-webkit-scrollbar-thumb{background:rgba(0,214,161,0.25);border-radius:0;}
+  @keyframes mrGridDrift{from{background-position:0 0;}to{background-position:54px 54px;}}
+  @keyframes mrScan{from{transform:translateY(0);}to{transform:translateY(8px);}}
+  @keyframes mrBlink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+  @keyframes mrMarquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  @keyframes mrPulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
+  @keyframes mrFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+  @keyframes mrSweep{0%{opacity:0;transform:translateX(-30%);}50%{opacity:0.6;}100%{opacity:0;transform:translateX(130%);}}
+</style>
+</helmet>
+
+<div dir="{{ dir }}" style="position:relative;min-height:100vh;background:#070D0C;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;overflow:hidden;">
+
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,214,161,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,214,161,0.05) 1px,transparent 1px);background-size:54px 54px;animation:mrGridDrift 6s linear infinite;mask-image:radial-gradient(ellipse 120% 90% at 50% 0%,#000 30%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse 120% 90% at 50% 0%,#000 30%,transparent 90%);"></div>
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(0,214,161,0.16),transparent 60%);"></div>
+  <div style="position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.18) 0px,rgba(0,0,0,0.18) 1px,transparent 1px,transparent 3px);opacity:0.5;mix-blend-mode:multiply;animation:mrScan 0.6s steps(3) infinite;"></div>
+  <div style="position:fixed;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 220px 40px rgba(0,0,0,0.85);"></div>
+  <div style="position:fixed;top:18px;left:18px;width:26px;height:26px;border-top:2px solid rgba(0,214,161,0.5);border-left:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
+  <div style="position:fixed;top:18px;right:18px;width:26px;height:26px;border-top:2px solid rgba(0,214,161,0.5);border-right:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
+  <div style="position:fixed;bottom:18px;left:18px;width:26px;height:26px;border-bottom:2px solid rgba(0,214,161,0.5);border-left:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
+  <div style="position:fixed;bottom:18px;right:18px;width:26px;height:26px;border-bottom:2px solid rgba(0,214,161,0.5);border-right:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
+
+  <header style="position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(7,13,12,0.72);border-bottom:1px solid rgba(0,214,161,0.12);">
+    <div style="max-width:1320px;margin:0 auto;padding:14px clamp(20px,5vw,48px);display:flex;align-items:center;justify-content:space-between;gap:24px;">
+      <a href="#top" style="display:flex;align-items:center;gap:14px;text-decoration:none;flex-shrink:0;">
+        <img src="assets/maras-wordmark.png" alt="Maras Solutions" style="height:32px;width:auto;filter:drop-shadow(0 0 10px rgba(0,214,161,0.35));"/>
+      </a>
+      <nav style="display:flex;align-items:center;gap:30px;">
+        <a href="#services" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.services }}</a>
+        <a href="#work" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.work }}</a>
+        <a href="#process" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.process }}</a>
+        <a href="#stack" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.stack }}</a>
+        <a href="#team" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.team }}</a>
+      </nav>
+      <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;">
+        <button onClick="{{ toggleLang }}" style="display:flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(0,214,161,0.3);color:#00D6A1;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.08em;padding:8px 12px;cursor:pointer;border-radius:2px;" style-hover="background:rgba(0,214,161,0.1);">
+          <span style="width:6px;height:6px;background:#00D6A1;border-radius:50%;box-shadow:0 0 8px #00D6A1;"></span>{{ langBtn }}
+        </button>
+        <a href="#contact" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:0.06em;color:#070D0C;background:#00D6A1;padding:10px 18px;text-decoration:none;border-radius:2px;box-shadow:0 0 20px rgba(0,214,161,0.35);" style-hover="background:#34F5D0;">{{ t.nav.cta }}</a>
+      </div>
+    </div>
+  </header>
+
+  <main style="position:relative;z-index:5;max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,48px);" id="top">
+
+    <section style="padding:clamp(60px,9vw,120px) 0 clamp(48px,6vw,80px);display:grid;grid-template-columns:1.15fr 0.85fr;gap:clamp(32px,5vw,72px);align-items:center;">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;border:1px solid rgba(0,214,161,0.25);padding:7px 14px;border-radius:2px;margin-bottom:28px;">
+          <span style="width:6px;height:6px;background:#00D6A1;border-radius:50%;animation:mrPulse 1.6s infinite;"></span>{{ t.hero.eyebrow }}
+        </div>
+        <h1 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(38px,5.6vw,68px);line-height:1.04;letter-spacing:-0.01em;color:#F2FBF8;margin-bottom:26px;text-wrap:balance;">{{ t.hero.titleA }}<span style="color:#00D6A1;text-shadow:0 0 30px rgba(0,214,161,0.45);">{{ t.hero.titleB }}</span>{{ t.hero.titleC }}</h1>
+        <p style="font-size:clamp(16px,1.4vw,19px);line-height:1.7;color:#92A8A1;max-width:46ch;margin-bottom:36px;">{{ t.hero.sub }}</p>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;">
+          <a href="#contact" style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;letter-spacing:0.04em;color:#070D0C;background:#00D6A1;padding:15px 26px;text-decoration:none;border-radius:2px;box-shadow:0 0 28px rgba(0,214,161,0.4);" style-hover="background:#34F5D0;">{{ t.hero.cta1 }} <span style="font-size:16px;">{{ arrow }}</span></a>
+          <a href="#work" style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;letter-spacing:0.04em;color:#E8F3F0;background:transparent;border:1px solid rgba(0,214,161,0.3);padding:15px 26px;text-decoration:none;border-radius:2px;" style-hover="border-color:#00D6A1;background:rgba(0,214,161,0.06);">{{ t.hero.cta2 }}</a>
+        </div>
+      </div>
+
+      <div style="position:relative;">
+        <div style="position:absolute;inset:-1px;background:linear-gradient(135deg,rgba(0,214,161,0.4),transparent 50%);border-radius:8px;opacity:0.55;filter:blur(2px);"></div>
+        <div style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.18);border-radius:7px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,0.8);">
+          <div style="display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid rgba(0,214,161,0.12);background:rgba(0,214,161,0.03);" dir="ltr">
+            <span style="width:11px;height:11px;border-radius:50%;background:#1c2c28;border:1px solid rgba(0,214,161,0.3);"></span>
+            <span style="width:11px;height:11px;border-radius:50%;background:#1c2c28;border:1px solid rgba(0,214,161,0.3);"></span>
+            <span style="width:11px;height:11px;border-radius:50%;background:#1c2c28;border:1px solid rgba(0,214,161,0.3);"></span>
+            <span style="margin-left:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#5d7a72;letter-spacing:0.1em;">maras@prod ~ deploy.sh</span>
+          </div>
+          <div style="padding:20px 18px;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.95;" dir="ltr">
+            <div style="color:#5d7a72;">$ <span style="color:#E8F3F0;">maras deploy --env prod</span></div>
+            <div style="color:#00D6A1;">✓ building data pipeline … <span style="color:#5d7a72;">done 4.2s</span></div>
+            <div style="color:#00D6A1;">✓ running 1,284 tests … <span style="color:#5d7a72;">passed</span></div>
+            <div style="color:#00D6A1;">✓ provisioning infra … <span style="color:#5d7a72;">ok</span></div>
+            <div style="color:#00D6A1;">✓ training model … <span style="color:#5d7a72;">acc 98.7%</span></div>
+            <div style="color:#9DB3AC;">→ shipping to <span style="color:#34F5D0;">3 regions</span></div>
+            <div style="margin-top:6px;color:#E8F3F0;">deploy complete <span style="display:inline-block;width:9px;height:15px;background:#00D6A1;vertical-align:middle;animation:mrBlink 1s steps(1) infinite;box-shadow:0 0 8px #00D6A1;"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(0,214,161,0.12);border:1px solid rgba(0,214,161,0.12);border-radius:4px;overflow:hidden;margin-bottom:clamp(70px,10vw,130px);">
+      <sc-for list="{{ t.stats }}" as="s" hint-placeholder-count="4">
+        <div style="background:#080F0E;padding:clamp(22px,3vw,34px) clamp(16px,2vw,28px);">
+          <div style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:clamp(30px,4vw,46px);color:#00D6A1;line-height:1;text-shadow:0 0 24px rgba(0,214,161,0.35);">{{ s.num }}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:{{ ls }};color:#7d938c;margin-top:12px;line-height:1.5;">{{ s.label }}</div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section id="services" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:clamp(32px,4vw,52px);">
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.servicesSec.eyebrow }}</div>
+          <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:18ch;text-wrap:balance;">{{ t.servicesSec.title }}</h2>
+        </div>
+        <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:34ch;">{{ t.servicesSec.sub }}</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.6vw,20px);">
+        <sc-for list="{{ t.servicesSec.items }}" as="srv" hint-placeholder-count="4">
+          <div style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(26px,3vw,38px);overflow:hidden;" style-hover="border-color:rgba(0,214,161,0.45);background:#0A1411;">
+            <div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;">
+              <div style="width:50px;height:50px;border:1px solid rgba(0,214,161,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#00D6A1;background:rgba(0,214,161,0.05);box-shadow:inset 0 0 18px rgba(0,214,161,0.12);" dir="ltr"><span style="font-family:'JetBrains Mono',monospace;font-size:20px;">{{ srv.glyph }}</span></div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3a5650;">{{ srv.n }}</span>
+            </div>
+            <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(19px,1.7vw,23px);color:#EAF6F2;margin-bottom:12px;">{{ srv.title }}</h3>
+            <p style="font-size:15px;line-height:1.7;color:#869c95;margin-bottom:22px;">{{ srv.desc }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <sc-for list="{{ srv.tags }}" as="tg" hint-placeholder-count="3">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6f9a8f;border:1px solid rgba(0,214,161,0.16);padding:5px 10px;border-radius:2px;">{{ tg }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="stack" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+      <div style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
+        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.stack.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
+        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:20ch;margin:0 auto 14px;text-wrap:balance;">{{ t.stack.title }}</h2>
+        <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:50ch;margin:0 auto;">{{ t.stack.sub }}</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.6vw,20px);">
+        <sc-for list="{{ t.stack.groups }}" as="grp" hint-placeholder-count="4">
+          <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.12);border-radius:5px;padding:clamp(22px,2.4vw,30px);">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;">{{ grp.name }}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:9px;">
+              <sc-for list="{{ grp.items }}" as="it" hint-placeholder-count="6">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#b8ccc5;background:rgba(0,214,161,0.04);border:1px solid rgba(0,214,161,0.14);padding:7px 13px;border-radius:2px;" dir="ltr">{{ it }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="work" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:clamp(32px,4vw,52px);">
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.workSec.eyebrow }}</div>
+          <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:18ch;text-wrap:balance;">{{ t.workSec.title }}</h2>
+        </div>
+        <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:34ch;">{{ t.workSec.sub }}</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:clamp(14px,1.6vw,20px);">
+        <sc-for list="{{ t.workSec.items }}" as="w" hint-placeholder-count="3">
+          <div style="display:grid;grid-template-columns:0.9fr 1.1fr;gap:clamp(20px,3vw,44px);align-items:center;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(20px,2.4vw,32px);overflow:hidden;" style-hover="border-color:rgba(0,214,161,0.4);">
+            <div style="position:relative;aspect-ratio:16/10;border-radius:4px;overflow:hidden;background:radial-gradient(circle at 30% 20%,rgba(0,214,161,0.18),transparent 55%),#0B1512;border:1px solid rgba(0,214,161,0.14);">
+              <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,214,161,0.1) 1px,transparent 1px),linear-gradient(90deg,rgba(0,214,161,0.1) 1px,transparent 1px);background-size:26px 26px;"></div>
+              <div style="position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(0,214,161,0.22) 50%,transparent 70%);animation:mrSweep 4s ease-in-out infinite;"></div>
+              <div style="position:absolute;left:18px;bottom:16px;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:clamp(34px,4vw,52px);color:#00D6A1;text-shadow:0 0 30px rgba(0,214,161,0.5);line-height:0.9;" dir="ltr">{{ w.metric }}<div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:400;letter-spacing:{{ ls }};color:#7d938c;margin-top:8px;">{{ w.metricLabel }}</div></div>
+              <div style="position:absolute;top:14px;left:14px;width:16px;height:16px;border-top:1.5px solid rgba(0,214,161,0.5);border-left:1.5px solid rgba(0,214,161,0.5);"></div>
+            </div>
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#00D6A1;border:1px solid rgba(0,214,161,0.25);padding:4px 10px;border-radius:2px;">{{ w.tag }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#3a5650;">{{ w.year }}</span>
+              </div>
+              <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(20px,2vw,28px);color:#EAF6F2;margin-bottom:14px;">{{ w.title }}</h3>
+              <p style="font-size:15.5px;line-height:1.75;color:#869c95;margin-bottom:20px;">{{ w.desc }}</p>
+              <a href="#contact" style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:0.04em;color:#00D6A1;text-decoration:none;">{{ t.workSec.cta }} <span>{{ arrow }}</span></a>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="process" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+      <div style="text-align:center;margin-bottom:clamp(36px,5vw,60px);">
+        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.processSec.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
+        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:20ch;margin:0 auto;text-wrap:balance;">{{ t.processSec.title }}</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,20px);">
+        <sc-for list="{{ t.processSec.steps }}" as="st" hint-placeholder-count="4">
+          <div style="position:relative;padding-top:28px;">
+            <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,#00D6A1,rgba(0,214,161,0.1));"></div>
+            <div style="position:absolute;top:-6px;left:0;width:11px;height:11px;background:#00D6A1;border-radius:50%;box-shadow:0 0 12px #00D6A1;"></div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00D6A1;margin-bottom:14px;">{{ st.n }}</div>
+            <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(18px,1.7vw,22px);color:#EAF6F2;margin-bottom:12px;">{{ st.title }}</h3>
+            <p style="font-size:14.5px;line-height:1.7;color:#869c95;">{{ st.desc }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="padding-bottom:clamp(60px,8vw,100px);">
+      <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:32px;">{{ t.clients.label }}</div>
+      <div style="position:relative;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);" dir="ltr">
+        <div style="display:flex;gap:clamp(40px,6vw,80px);width:max-content;animation:mrMarquee 28s linear infinite;">
+          <sc-for list="{{ clientsLoop }}" as="c" hint-placeholder-count="16">
+            <span style="font-family:'Chakra Petch',sans-serif;font-weight:600;font-size:clamp(20px,2.4vw,30px);color:#46645c;letter-spacing:0.04em;white-space:nowrap;">{{ c }}</span>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section id="team" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:clamp(32px,4vw,52px);">
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.teamSec.eyebrow }}</div>
+          <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:18ch;text-wrap:balance;">{{ t.teamSec.title }}</h2>
+        </div>
+        <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:34ch;">{{ t.teamSec.sub }}</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,20px);">
+        <sc-for list="{{ t.teamSec.members }}" as="m" hint-placeholder-count="4">
+          <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(20px,2.2vw,26px);" style-hover="border-color:rgba(0,214,161,0.4);">
+            <div style="position:relative;aspect-ratio:1;border-radius:4px;background:radial-gradient(circle at 50% 35%,rgba(0,214,161,0.16),transparent 60%),#0B1512;border:1px solid rgba(0,214,161,0.16);display:flex;align-items:center;justify-content:center;margin-bottom:18px;overflow:hidden;">
+              <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,214,161,0.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,214,161,0.08) 1px,transparent 1px);background-size:20px 20px;"></div>
+              <span style="position:relative;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:clamp(28px,3vw,40px);color:#00D6A1;text-shadow:0 0 22px rgba(0,214,161,0.45);" dir="ltr">{{ m.initials }}</span>
+              <div style="position:absolute;top:10px;left:10px;width:14px;height:14px;border-top:1.5px solid rgba(0,214,161,0.4);border-left:1.5px solid rgba(0,214,161,0.4);"></div>
+              <div style="position:absolute;bottom:10px;right:10px;width:14px;height:14px;border-bottom:1.5px solid rgba(0,214,161,0.4);border-right:1.5px solid rgba(0,214,161,0.4);"></div>
+            </div>
+            <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:17px;color:#EAF6F2;margin-bottom:6px;">{{ m.name }}</h3>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00D6A1;margin-bottom:10px;">{{ m.role }}</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#5d7a72;" dir="ltr">{{ m.handle }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="padding-bottom:clamp(70px,10vw,130px);">
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.6vw,20px);">
+        <sc-for list="{{ t.testimonials }}" as="q" hint-placeholder-count="2">
+          <div style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(28px,3vw,40px);">
+            <div style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:60px;color:rgba(0,214,161,0.2);line-height:0.6;height:30px;" dir="ltr">"</div>
+            <p style="font-size:clamp(16px,1.6vw,20px);line-height:1.65;color:#D4E5E0;margin-bottom:26px;text-wrap:pretty;">{{ q.quote }}</p>
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div style="width:42px;height:42px;border-radius:4px;border:1px solid rgba(0,214,161,0.3);display:flex;align-items:center;justify-content:center;font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:15px;color:#00D6A1;background:rgba(0,214,161,0.05);" dir="ltr">{{ q.initials }}</div>
+              <div>
+                <div style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:15px;color:#EAF6F2;">{{ q.name }}</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#7d938c;margin-top:3px;">{{ q.role }}</div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="contact" style="padding-bottom:clamp(60px,8vw,100px);scroll-margin-top:90px;">
+      <div style="position:relative;background:linear-gradient(160deg,#0A1614,#070D0C);border:1px solid rgba(0,214,161,0.2);border-radius:8px;padding:clamp(32px,5vw,68px);overflow:hidden;">
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 0%,rgba(0,214,161,0.16),transparent 50%);pointer-events:none;"></div>
+        <div style="position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);align-items:start;">
+          <div>
+            <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:20px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.contact.eyebrow }}</div>
+            <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:700;font-size:clamp(32px,4vw,54px);line-height:1.04;color:#F2FBF8;margin-bottom:18px;text-wrap:balance;">{{ t.contact.title }}</h2>
+            <p style="font-size:16px;line-height:1.7;color:#92A8A1;max-width:40ch;margin-bottom:34px;">{{ t.contact.sub }}</p>
+            <div style="display:flex;flex-direction:column;gap:18px;">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5d7a72;letter-spacing:{{ ls }};width:64px;">EMAIL</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:14px;color:#00D6A1;" dir="ltr">hello@maras.solutions</span>
+              </div>
+              <sc-for list="{{ t.contact.offices }}" as="o" hint-placeholder-count="2">
+                <div style="display:flex;align-items:center;gap:14px;">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5d7a72;letter-spacing:{{ ls }};width:64px;">{{ o.label }}</span>
+                  <span style="font-size:14px;color:#C4D6D0;">{{ o.city }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div>
+                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.name }}</label>
+                <input type="text" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
+              </div>
+              <div>
+                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.email }}</label>
+                <input type="text" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
+              </div>
+            </div>
+            <div>
+              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.company }}</label>
+              <input type="text" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
+            </div>
+            <div>
+              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.message }}</label>
+              <textarea rows="4" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;resize:vertical;" style-focus="border-color:#00D6A1;"></textarea>
+            </div>
+            <button style="margin-top:6px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;letter-spacing:0.04em;color:#070D0C;background:#00D6A1;border:none;padding:15px 26px;border-radius:3px;cursor:pointer;box-shadow:0 0 28px rgba(0,214,161,0.4);" style-hover="background:#34F5D0;">{{ t.contact.form.submit }} <span style="font-size:15px;">{{ arrow }}</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="position:relative;z-index:5;border-top:1px solid rgba(0,214,161,0.12);background:rgba(7,13,12,0.6);">
+    <div style="max-width:1320px;margin:0 auto;padding:clamp(40px,5vw,60px) clamp(20px,5vw,48px);display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px;align-items:start;">
+      <div>
+        <img src="assets/maras-logo.png" alt="Maras Solutions" style="height:74px;width:auto;filter:drop-shadow(0 0 12px rgba(0,214,161,0.3));margin-bottom:18px;"/>
+        <p style="font-size:14px;line-height:1.7;color:#7d938c;max-width:32ch;">{{ t.footer.tagline }}</p>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:16px;">{{ t.footer.navLabel }}</div>
+        <div style="display:flex;flex-direction:column;gap:11px;">
+          <a href="#services" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.services }}</a>
+          <a href="#work" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.work }}</a>
+          <a href="#process" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.process }}</a>
+          <a href="#team" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.team }}</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:16px;">{{ t.footer.connectLabel }}</div>
+        <div style="display:flex;flex-direction:column;gap:11px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#00D6A1;" dir="ltr">hello@maras.solutions</span>
+          <a href="#" style="font-size:14px;color:#A9BEB7;text-decoration:none;">LinkedIn</a>
+          <a href="#" style="font-size:14px;color:#A9BEB7;text-decoration:none;">GitHub</a>
+          <a href="#" style="font-size:14px;color:#A9BEB7;text-decoration:none;">X / Twitter</a>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(0,214,161,0.1);">
+      <div style="max-width:1320px;margin:0 auto;padding:18px clamp(20px,5vw,48px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#5d7a72;">{{ t.footer.rights }}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#3a5650;" dir="ltr">{{ t.footer.built }}</span>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { lang: 'en' };
+
+  toggleLang = () => this.setState(s => ({ lang: s.lang === 'en' ? 'ar' : 'en' }));
+
+  content() {
+    const en = {
+      nav: { services:'SERVICES', work:'WORK', process:'PROCESS', stack:'STACK', team:'TEAM', contact:'CONTACT', cta:'START A PROJECT' },
+      hero: {
+        eyebrow:'SOFTWARE · DATA · AI CONSULTING',
+        titleA:'We architect ', titleB:'intelligent software', titleC:' for ambitious teams.',
+        sub:'Maras Solutions designs, builds, and scales custom software, data platforms, and AI systems — from first commit to production. Senior engineering, embedded with your team.',
+        cta1:'Start a project', cta2:'See our work'
+      },
+      stats: [
+        { num:'120+', label:'PROJECTS DELIVERED' },
+        { num:'40+', label:'ENGINEERS & SPECIALISTS' },
+        { num:'9', label:'INDUSTRIES SERVED' },
+        { num:'99.9%', label:'PRODUCTION UPTIME' }
+      ],
+      servicesSec: {
+        eyebrow:'WHAT WE DO', title:'Engineering capabilities, end to end.',
+        sub:'Four practices that take you from raw idea to resilient, production-grade systems.',
+        items: [
+          { n:'01', glyph:'\u25C8', title:'AI & Data Engineering', desc:'Production ML, real-time pipelines, and intelligent automation. We turn messy data into reliable decisions.', tags:['LLMs','MLOps','Pipelines','Vector DB'] },
+          { n:'02', glyph:'\u2328', title:'Custom Software Development', desc:'End-to-end product engineering — resilient backends, clean architectures, software built to outlast trends.', tags:['Backends','APIs','Architecture','Testing'] },
+          { n:'03', glyph:'\u25F0', title:'IT Consulting & Strategy', desc:'Technical due diligence, architecture reviews, and roadmaps that align engineering with the business.', tags:['Audits','Roadmaps','Cloud','Security'] },
+          { n:'04', glyph:'\u25A3', title:'Web & Mobile Apps', desc:'Fast, accessible, beautiful interfaces across web, iOS and Android — shipped continuously.', tags:['React','iOS','Android','Design'] }
+        ]
+      },
+      stack: {
+        eyebrow:'TECH STACK', title:'Battle-tested tools, chosen for the job.',
+        sub:'We are pragmatic about technology — the right stack for your problem, not our preference.',
+        groups: [
+          { name:'// LANGUAGES', items:['TypeScript','Python','Go','Rust','Kotlin','Swift'] },
+          { name:'// AI & DATA', items:['PyTorch','TensorFlow','LangChain','Spark','Snowflake','Kafka'] },
+          { name:'// CLOUD & INFRA', items:['AWS','GCP','Kubernetes','Terraform','Docker','Postgres'] },
+          { name:'// FRONTEND', items:['React','Next.js','React Native','Tailwind','Figma','WebGL'] }
+        ]
+      },
+      workSec: {
+        eyebrow:'SELECTED WORK', title:'Outcomes, not just output.',
+        sub:'A few engagements where the numbers tell the story.', cta:'Read case study',
+        items: [
+          { tag:'FINTECH', year:'2025', metric:'\u221238%', metricLabel:'FALSE POSITIVES', title:'Real-time fraud detection at scale', desc:'A streaming ML platform scoring 12M transactions a day in under 40ms — cutting false positives by 38% while catching more genuine fraud.' },
+          { tag:'LOGISTICS', year:'2024', metric:'\u221227%', metricLabel:'DISPATCH TIME', title:'Unified logistics command center', desc:'One operational dashboard across fleets, warehouses, and routing — collapsing dispatch time and giving operators a live view of the network.' },
+          { tag:'HEALTHCARE', year:'2024', metric:'30+', metricLabel:'RESEARCH TEAMS', title:'HIPAA-compliant clinical data platform', desc:'A governed lakehouse powering 30+ research teams with secure, auditable access to clinical data — without slowing anyone down.' }
+        ]
+      },
+      processSec: {
+        eyebrow:'HOW WE WORK', title:'A clear path from idea to production.',
+        steps: [
+          { n:'01', title:'Discover', desc:'We embed, audit the terrain, and map every constraint before writing a line of code.' },
+          { n:'02', title:'Architect', desc:'Blueprints, prototypes, and a delivery plan you can actually trust and resource.' },
+          { n:'03', title:'Build', desc:'Tight iterations, continuous delivery, and zero-surprise demos every single week.' },
+          { n:'04', title:'Scale', desc:'Hardening, handover, and a system engineered to grow long after launch day.' }
+        ]
+      },
+      clients: { label:'TRUSTED BY TEAMS BUILDING THE FUTURE' },
+      teamSec: {
+        eyebrow:'THE TEAM', title:'Senior people who ship.',
+        sub:'No layers, no handoffs to juniors — the people you meet are the people who build.',
+        members: [
+          { initials:'LH', name:'Layla Haddad', role:'Founder · Principal Architect', handle:'@layla' },
+          { initials:'OK', name:'Omar Khalil', role:'Head of AI', handle:'@omar' },
+          { initials:'SN', name:'Sara Nasser', role:'Lead Product Engineer', handle:'@sara' },
+          { initials:'YM', name:'Yusuf Mansour', role:'Director of Delivery', handle:'@yusuf' }
+        ]
+      },
+      testimonials: [
+        { quote:'Maras felt like our own senior team — just faster, and far more disciplined. They shipped what three agencies couldn\u2019t.', initials:'RK', name:'Rana Karam', role:'CTO · Fintech Scale-up' },
+        { quote:'They understood the business before touching the code. The platform they built is still the backbone of our operation.', initials:'DA', name:'Daniel Asfour', role:'VP Engineering · Logistics' }
+      ],
+      contact: {
+        eyebrow:'GET IN TOUCH', title:'Let\u2019s build something that lasts.',
+        sub:'Tell us what you\u2019re working on. We\u2019ll come back within one business day with a concrete next step.',
+        form: { name:'NAME', email:'EMAIL', company:'COMPANY', message:'WHAT ARE YOU BUILDING?', submit:'Send message' },
+        offices: [ { label:'RIYADH', city:'King Fahd Rd, Riyadh, KSA' }, { label:'DUBAI', city:'DIFC, Dubai, UAE' } ]
+      },
+      footer: {
+        tagline:'Engineering intelligent software for ambitious teams. From first commit to production.',
+        navLabel:'// SITEMAP', connectLabel:'// CONNECT',
+        rights:'\u00A9 2026 Maras Solutions. All rights reserved.', built:'BUILT IN RIYADH & DUBAI'
+      }
+    };
+
+    const ar = {
+      nav: { services:'الخدمات', work:'أعمالنا', process:'منهجيتنا', stack:'التقنيات', team:'الفريق', contact:'تواصل', cta:'ابدأ مشروعك' },
+      hero: {
+        eyebrow:'استشارات البرمجيات · البيانات · الذكاء الاصطناعي',
+        titleA:'نُصمّم ', titleB:'برمجيات ذكية', titleC:' للفرق الطموحة.',
+        sub:'مراس الحلول تُصمّم وتبني وتوسّع البرمجيات المخصّصة ومنصّات البيانات وأنظمة الذكاء الاصطناعي — من أول سطر برمجي حتى الإطلاق. خبرة هندسية رفيعة، مدمجة مع فريقك.',
+        cta1:'ابدأ مشروعك', cta2:'شاهد أعمالنا'
+      },
+      stats: [
+        { num:'+120', label:'مشروع منجز' },
+        { num:'+40', label:'مهندس ومتخصص' },
+        { num:'9', label:'قطاعات نخدمها' },
+        { num:'99.9%', label:'جاهزية التشغيل' }
+      ],
+      servicesSec: {
+        eyebrow:'ماذا نقدّم', title:'قدرات هندسية متكاملة من البداية للنهاية.',
+        sub:'أربع ممارسات تأخذك من الفكرة الخام إلى أنظمة جاهزة للإنتاج وموثوقة.',
+        items: [
+          { n:'01', glyph:'\u25C8', title:'الذكاء الاصطناعي وهندسة البيانات', desc:'نماذج تعلّم آلي إنتاجية، وخطوط بيانات فورية، وأتمتة ذكية. نحوّل البيانات الفوضوية إلى قرارات موثوقة.', tags:['LLMs','MLOps','خطوط بيانات','Vector DB'] },
+          { n:'02', glyph:'\u2328', title:'تطوير البرمجيات المخصّصة', desc:'هندسة منتجات متكاملة — أنظمة خلفية مرنة، وبنى نظيفة، وبرمجيات تدوم أطول من الموضات التقنية.', tags:['أنظمة خلفية','واجهات برمجية','بنية','اختبارات'] },
+          { n:'03', glyph:'\u25F0', title:'الاستشارات والاستراتيجية التقنية', desc:'تدقيق تقني، ومراجعات معمارية، وخرائط طريق تُوائم الهندسة مع أهداف العمل.', tags:['تدقيق','خرائط طريق','سحابة','أمن'] },
+          { n:'04', glyph:'\u25A3', title:'تطبيقات الويب والجوال', desc:'واجهات سريعة وجميلة وسهلة الوصول عبر الويب وiOS وأندرويد — تُطلَق باستمرار.', tags:['React','iOS','أندرويد','تصميم'] }
+        ]
+      },
+      stack: {
+        eyebrow:'التقنيات', title:'أدوات مُجرّبة، نختارها لكل مهمة.',
+        sub:'نحن عمليّون في التقنية — التقنية المناسبة لمشكلتك، لا لتفضيلاتنا.',
+        groups: [
+          { name:'// لغات البرمجة', items:['TypeScript','Python','Go','Rust','Kotlin','Swift'] },
+          { name:'// الذكاء والبيانات', items:['PyTorch','TensorFlow','LangChain','Spark','Snowflake','Kafka'] },
+          { name:'// السحابة والبنية', items:['AWS','GCP','Kubernetes','Terraform','Docker','Postgres'] },
+          { name:'// الواجهات', items:['React','Next.js','React Native','Tailwind','Figma','WebGL'] }
+        ]
+      },
+      workSec: {
+        eyebrow:'مختارات من أعمالنا', title:'نتائج، لا مجرّد مخرجات.',
+        sub:'مشاريع تحكي الأرقام فيها القصة كاملة.', cta:'اقرأ دراسة الحالة',
+        items: [
+          { tag:'تقنية مالية', year:'2025', metric:'\u221238%', metricLabel:'بلاغات خاطئة', title:'كشف الاحتيال الفوري على نطاق واسع', desc:'منصّة تعلّم آلي تُقيّم 12 مليون عملية يومياً في أقل من 40 جزءاً من الثانية — مع خفض البلاغات الخاطئة 38% وكشف احتيال أكثر.' },
+          { tag:'لوجستيات', year:'2024', metric:'\u221227%', metricLabel:'زمن الإرسال', title:'مركز قيادة لوجستي موحّد', desc:'لوحة تشغيل واحدة عبر الأساطيل والمستودعات والمسارات — قلّصت زمن الإرسال ومنحت المشغّلين رؤية حيّة للشبكة.' },
+          { tag:'رعاية صحية', year:'2024', metric:'+30', metricLabel:'فريق بحثي', title:'منصّة بيانات سريرية متوافقة مع HIPAA', desc:'بحيرة بيانات محوكمة تُمكّن أكثر من 30 فريقاً بحثياً من وصول آمن وقابل للتدقيق — دون إبطاء أحد.' }
+        ]
+      },
+      processSec: {
+        eyebrow:'كيف نعمل', title:'مسار واضح من الفكرة إلى الإنتاج.',
+        steps: [
+          { n:'01', title:'الاكتشاف', desc:'نندمج مع فريقك، ندقّق الميدان، ونرسم كل قيد قبل كتابة أي سطر برمجي.' },
+          { n:'02', title:'التصميم المعماري', desc:'مخطّطات ونماذج أوّلية وخطة تسليم يمكنك الوثوق بها وتخصيص مواردها.' },
+          { n:'03', title:'البناء', desc:'دورات قصيرة، وتسليم مستمر، وعروض أسبوعية بلا مفاجآت.' },
+          { n:'04', title:'التوسّع', desc:'تمتين، وتسليم، ونظام مُهندَس لينمو بعد الإطلاق بوقت طويل.' }
+        ]
+      },
+      clients: { label:'موثوق من فرق تبني المستقبل' },
+      teamSec: {
+        eyebrow:'الفريق', title:'خبراء يُسلّمون فعلاً.',
+        sub:'بلا طبقات ولا تسليم للمبتدئين — من تقابلهم هم من يبنون.',
+        members: [
+          { initials:'LH', name:'ليلى حدّاد', role:'المؤسِّسة · كبيرة المعماريين', handle:'@layla' },
+          { initials:'OK', name:'عمر خليل', role:'رئيس الذكاء الاصطناعي', handle:'@omar' },
+          { initials:'SN', name:'سارة ناصر', role:'مهندسة منتجات أولى', handle:'@sara' },
+          { initials:'YM', name:'يوسف منصور', role:'مدير التسليم', handle:'@yusuf' }
+        ]
+      },
+      testimonials: [
+        { quote:'كان فريق مراس كأنه فريقنا الأول — لكن أسرع وأكثر انضباطاً. أنجزوا ما عجزت عنه ثلاث شركات.', initials:'RK', name:'رنا كرم', role:'الرئيسة التقنية · شركة تقنية مالية' },
+        { quote:'فهموا العمل قبل أن يلمسوا الكود. المنصّة التي بنوها لا تزال العمود الفقري لعملياتنا.', initials:'DA', name:'دانيال عصفور', role:'نائب رئيس الهندسة · لوجستيات' }
+      ],
+      contact: {
+        eyebrow:'تواصل معنا', title:'لنبنِ شيئاً يدوم.',
+        sub:'أخبرنا بما تعمل عليه، وسنعود إليك خلال يوم عمل واحد بخطوة تالية واضحة.',
+        form: { name:'الاسم', email:'البريد', company:'الشركة', message:'ما الذي تبنيه؟', submit:'أرسل الرسالة' },
+        offices: [ { label:'الرياض', city:'طريق الملك فهد، الرياض، السعودية' }, { label:'دبي', city:'مركز دبي المالي، الإمارات' } ]
+      },
+      footer: {
+        tagline:'نُهندس برمجيات ذكية للفرق الطموحة. من أول سطر برمجي حتى الإطلاق.',
+        navLabel:'// خريطة الموقع', connectLabel:'// تواصل',
+        rights:'\u00A9 2026 مراس الحلول. جميع الحقوق محفوظة.', built:'صُنع في الرياض ودبي'
+      }
+    };
+    return { en, ar };
+  }
+
+  renderVals() {
+    const lang = this.state.lang;
+    const t = this.content()[lang];
+    const isAr = lang === 'ar';
+    const clients = ['NEXORA','VAULT','HELIOS','QUBIT','MERIDIAN','STRATOS','ORBIT','LUMEN'];
+    return {
+      t,
+      dir: isAr ? 'rtl' : 'ltr',
+      ls: isAr ? 'normal' : '0.18em',
+      navLs: isAr ? 'normal' : '0.06em',
+      langBtn: isAr ? 'EN' : 'ع',
+      arrow: isAr ? '\u2190' : '\u2192',
+      toggleLang: this.toggleLang,
+      clientsLoop: [...clients, ...clients]
+    };
+  }
+}
+</script>
+</body>
+</html>
