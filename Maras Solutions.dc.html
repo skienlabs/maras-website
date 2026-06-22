@@ -44,6 +44,25 @@
   @keyframes mrFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
   @keyframes mrSweep{0%{opacity:0;transform:translateX(-30%);}50%{opacity:0.6;}100%{opacity:0;transform:translateX(130%);}}
 
+  /* ---------- Scroll reveal & micro-interactions ---------- */
+  .mr-js [data-reveal]{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.16,.84,.44,1),transform .8s cubic-bezier(.16,.84,.44,1);}
+  .mr-js [data-reveal="left"]{transform:translateX(-34px);}
+  .mr-js [data-reveal="right"]{transform:translateX(34px);}
+  .mr-js [data-reveal="scale"]{transform:scale(.94);}
+  .mr-js [data-reveal].mr-in{opacity:1;transform:none;}
+  [data-reveal]:nth-child(3n+2){transition-delay:.07s;}
+  [data-reveal]:nth-child(3n){transition-delay:.14s;}
+  [data-float]{animation:mrFloat 7s ease-in-out infinite;}
+  .mr-nav a,.mr-footer a{transition:color .2s ease;}
+  .mr-nav a:hover,.mr-footer a:hover{color:#00D6A1;}
+  .mr-actions a,.mr-actions button,.mr-hero a,button[type="submit"]{transition:transform .22s ease,box-shadow .25s ease,background .2s ease,border-color .2s ease;}
+  .mr-actions a:hover,.mr-hero a:hover,button[type="submit"]:hover{transform:translateY(-2px);}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .mr-js [data-reveal]{opacity:1 !important;transform:none !important;transition:none !important;}
+    [data-float]{animation:none !important;}
+  }
+
   /* ---------- Responsive ---------- */
   @media (max-width:1000px){
     .mr-hero{grid-template-columns:1fr !important;gap:clamp(32px,6vw,56px) !important;}
@@ -69,6 +88,33 @@
     .mr-corner{display:none !important;}
   }
 </style>
+<script>
+(function(){
+  if (window.__mrRevealInit) return; window.__mrRevealInit = true;
+  document.documentElement.classList.add('mr-js');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) {
+    var showAll = function(){ var n=document.querySelectorAll('[data-reveal]'); for (var i=0;i<n.length;i++) n[i].classList.add('mr-in'); };
+    if (document.readyState!=='loading') showAll(); else document.addEventListener('DOMContentLoaded', showAll);
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    for (var i=0;i<entries.length;i++){ var e=entries[i]; if (e.isIntersecting){ e.target.classList.add('mr-in'); io.unobserve(e.target); } }
+  }, { threshold: 0.1, rootMargin: '0px 0px -7% 0px' });
+  var scan = function(){
+    var n = document.querySelectorAll('[data-reveal]:not([data-rb])');
+    for (var i=0;i<n.length;i++){ n[i].setAttribute('data-rb',''); io.observe(n[i]); }
+  };
+  var start = function(){
+    scan();
+    requestAnimationFrame(scan);
+    if (window.MutationObserver){
+      new MutationObserver(function(){ scan(); }).observe(document.body, { childList:true, subtree:true });
+    }
+  };
+  if (document.readyState!=='loading') start(); else document.addEventListener('DOMContentLoaded', start);
+})();
+</script>
 </helmet>
 
 <div dir="{{ dir }}" style="position:relative;min-height:100vh;background:#070D0C;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;overflow:hidden;">
@@ -87,10 +133,12 @@
       <a href="#top" class="mr-logo" style="display:flex;align-items:center;gap:14px;text-decoration:none;flex-shrink:0;">
         <img src="assets/maras-wordmark.png" alt="Maras Solutions" style="height:32px;width:auto;filter:drop-shadow(0 0 10px rgba(0,214,161,0.35));"/>
       </a>
-      <nav class="mr-nav" style="display:flex;align-items:center;gap:30px;">
+      <nav class="mr-nav" style="display:flex;align-items:center;gap:22px;">
         <a href="#about" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.about }}</a>
         <a href="#why" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.why }}</a>
         <a href="#services" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.services }}</a>
+        <a href="#products" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.products }}</a>
+        <a href="#process" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.process }}</a>
         <a href="#industries" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.industries }}</a>
         <a href="#contact" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.contact }}</a>
       </nav>
@@ -107,7 +155,7 @@
 
     <!-- HERO -->
     <section class="mr-hero" style="padding:clamp(60px,9vw,120px) 0 clamp(48px,6vw,80px);display:grid;grid-template-columns:1.15fr 0.85fr;gap:clamp(32px,5vw,72px);align-items:center;">
-      <div>
+      <div data-reveal="left">
         <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;border:1px solid rgba(0,214,161,0.25);padding:7px 14px;border-radius:2px;margin-bottom:28px;">
           <span style="width:6px;height:6px;background:#00D6A1;border-radius:50%;animation:mrPulse 1.6s infinite;"></span>{{ t.hero.eyebrow }}
         </div>
@@ -119,7 +167,7 @@
         </div>
       </div>
 
-      <div style="position:relative;">
+      <div data-reveal="right" data-float style="position:relative;">
         <div style="position:absolute;inset:-1px;background:linear-gradient(135deg,rgba(0,214,161,0.4),transparent 50%);border-radius:8px;opacity:0.55;filter:blur(2px);"></div>
         <div style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.18);border-radius:7px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,0.8);padding:clamp(24px,3vw,36px);">
           <div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
@@ -138,16 +186,28 @@
       </div>
     </section>
 
+    <!-- DIFFERENTIATORS STRIP -->
+    <section style="padding-bottom:clamp(48px,7vw,84px);">
+      <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(0,214,161,0.12);border:1px solid rgba(0,214,161,0.14);border-radius:5px;overflow:hidden;">
+        <sc-for list="{{ t.diff.items }}" as="d" hint-placeholder-count="4">
+          <div data-reveal="up" style="background:#080F0E;padding:clamp(16px,2vw,22px) clamp(16px,2vw,22px);display:flex;align-items:center;gap:12px;">
+            <span style="flex-shrink:0;width:7px;height:7px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span>
+            <span style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(13px,1.3vw,15.5px);color:#D4E5E0;line-height:1.3;">{{ d }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
     <!-- PILLARS -->
     <section id="pillars" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
-      <div style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
+      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
         <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.pillars.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
         <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:20ch;margin:0 auto 14px;text-wrap:balance;">{{ t.pillars.title }}</h2>
         <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:54ch;margin:0 auto;">{{ t.pillars.sub }}</p>
       </div>
       <div class="mr-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,20px);">
         <sc-for list="{{ t.pillars.items }}" as="p" hint-placeholder-count="3">
-          <div style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(26px,3vw,38px);overflow:hidden;" style-hover="border-color:rgba(0,214,161,0.45);background:#0A1411;">
+          <div data-reveal="up" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(26px,3vw,38px);overflow:hidden;" style-hover="border-color:rgba(0,214,161,0.45);background:#0A1411;">
             <div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;">
               <div style="width:50px;height:50px;border:1px solid rgba(0,214,161,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#00D6A1;background:rgba(0,214,161,0.05);box-shadow:inset 0 0 18px rgba(0,214,161,0.12);" dir="ltr"><span style="font-family:'JetBrains Mono',monospace;font-size:20px;">{{ p.glyph }}</span></div>
@@ -171,7 +231,7 @@
       </div>
       <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,20px);margin-bottom:clamp(28px,4vw,44px);">
         <sc-for list="{{ t.why.reasons }}" as="r" hint-placeholder-count="4">
-          <div style="position:relative;padding-top:28px;">
+          <div data-reveal="up" style="position:relative;padding-top:28px;">
             <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,#00D6A1,rgba(0,214,161,0.1));"></div>
             <div style="position:absolute;top:-6px;left:0;width:11px;height:11px;background:#00D6A1;border-radius:50%;box-shadow:0 0 12px #00D6A1;"></div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00D6A1;margin-bottom:14px;">{{ r.n }}</div>
@@ -181,7 +241,7 @@
         </sc-for>
       </div>
       <div class="mr-grid-2" style="display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.6vw,20px);">
-        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.12);border-radius:6px;padding:clamp(26px,3vw,36px);">
+        <div data-reveal="left" style="background:#080F0E;border:1px solid rgba(0,214,161,0.12);border-radius:6px;padding:clamp(26px,3vw,36px);">
           <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(17px,1.6vw,20px);color:#9DB3AC;margin-bottom:20px;">{{ t.why.typicalLabel }}</h3>
           <div style="display:flex;flex-direction:column;gap:14px;">
             <sc-for list="{{ t.why.typical }}" as="x" hint-placeholder-count="3">
@@ -192,7 +252,7 @@
             </sc-for>
           </div>
         </div>
-        <div style="position:relative;background:linear-gradient(160deg,#0A1614,#080F0E);border:1px solid rgba(0,214,161,0.3);border-radius:6px;padding:clamp(26px,3vw,36px);overflow:hidden;">
+        <div data-reveal="right" style="position:relative;background:linear-gradient(160deg,#0A1614,#080F0E);border:1px solid rgba(0,214,161,0.3);border-radius:6px;padding:clamp(26px,3vw,36px);overflow:hidden;">
           <div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 0%,rgba(0,214,161,0.14),transparent 55%);pointer-events:none;"></div>
           <h3 style="position:relative;font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(17px,1.6vw,20px);color:#00D6A1;margin-bottom:20px;">{{ t.why.marasLabel }}</h3>
           <div style="position:relative;display:flex;flex-direction:column;gap:14px;">
@@ -209,13 +269,13 @@
 
     <!-- SERVICES -->
     <section id="services" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
-      <div style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
+      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
         <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.services.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
         <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:22ch;margin:0 auto;text-wrap:balance;">{{ t.services.title }}</h2>
       </div>
       <div class="mr-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,20px);">
         <sc-for list="{{ t.services.items }}" as="srv" hint-placeholder-count="3">
-          <div style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(26px,3vw,36px);overflow:hidden;display:flex;flex-direction:column;" style-hover="border-color:rgba(0,214,161,0.45);background:#0A1411;">
+          <div data-reveal="up" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(26px,3vw,36px);overflow:hidden;display:flex;flex-direction:column;" style-hover="border-color:rgba(0,214,161,0.45);background:#0A1411;">
             <div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
             <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3a5650;margin-bottom:18px;">{{ srv.n }}</span>
             <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(19px,1.7vw,23px);color:#EAF6F2;margin-bottom:12px;">{{ srv.title }}</h3>
@@ -229,6 +289,64 @@
               </sc-for>
             </div>
             <a href="#contact" style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:0.04em;color:#00D6A1;text-decoration:none;margin-top:24px;">{{ t.services.cta }} <span>{{ arrow }}</span></a>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section id="products" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(26px,3.4vw,40px);">
+        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.products.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
+        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:24ch;margin:0 auto 14px;text-wrap:balance;">{{ t.products.title }}</h2>
+        <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:58ch;margin:0 auto;">{{ t.products.sub }}</p>
+      </div>
+      <div style="display:flex;justify-content:center;margin-bottom:clamp(28px,4vw,44px);">
+        <div style="display:inline-flex;align-items:center;gap:11px;background:rgba(0,214,161,0.06);border:1px solid rgba(0,214,161,0.22);border-radius:3px;padding:11px 18px;max-width:100%;">
+          <span style="flex-shrink:0;width:7px;height:7px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:{{ navLs }};color:#C4D6D0;line-height:1.5;">{{ t.products.badge }}</span>
+        </div>
+      </div>
+      <div class="mr-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,20px);">
+        <sc-for list="{{ t.products.items }}" as="pr" hint-placeholder-count="6">
+          <div data-reveal="up" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(24px,2.8vw,34px);overflow:hidden;display:flex;flex-direction:column;" style-hover="border-color:rgba(0,214,161,0.45);background:#0A1411;">
+            <div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+              <div style="width:48px;height:48px;border:1px solid rgba(0,214,161,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#00D6A1;background:rgba(0,214,161,0.05);box-shadow:inset 0 0 18px rgba(0,214,161,0.12);" dir="ltr"><span style="font-family:'JetBrains Mono',monospace;font-size:20px;">{{ pr.glyph }}</span></div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3a5650;">{{ pr.n }}</span>
+            </div>
+            <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(19px,1.7vw,23px);color:#EAF6F2;margin-bottom:12px;">{{ pr.title }}</h3>
+            <p style="font-size:14.5px;line-height:1.7;color:#869c95;margin-bottom:22px;">{{ pr.desc }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;">
+              <sc-for list="{{ pr.tags }}" as="tg" hint-placeholder-count="3">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.02em;color:#9DB3AC;background:rgba(0,214,161,0.05);border:1px solid rgba(0,214,161,0.16);padding:5px 10px;border-radius:2px;">{{ tg }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div data-reveal="up" style="margin-top:clamp(28px,4vw,44px);display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:11px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:{{ ls }};color:#5d7a72;align-self:center;">{{ t.products.moreLabel }} //</span>
+        <sc-for list="{{ t.products.more }}" as="mod" hint-placeholder-count="9">
+          <span style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:500;font-size:13.5px;color:#C4D6D0;background:rgba(0,214,161,0.05);border:1px solid rgba(0,214,161,0.16);padding:8px 16px;border-radius:3px;" style-hover="border-color:rgba(0,214,161,0.45);color:#EAF6F2;background:rgba(0,214,161,0.08);">{{ mod }}</span>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section id="process" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
+        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.process.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
+        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:24ch;margin:0 auto 14px;text-wrap:balance;">{{ t.process.title }}</h2>
+        <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:56ch;margin:0 auto;">{{ t.process.sub }}</p>
+      </div>
+      <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,20px);">
+        <sc-for list="{{ t.process.steps }}" as="st" hint-placeholder-count="4">
+          <div data-reveal="up" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(24px,2.6vw,32px);overflow:hidden;" style-hover="border-color:rgba(0,214,161,0.4);background:#0A1411;">
+            <div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
+            <div style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:clamp(30px,3.4vw,42px);color:rgba(0,214,161,0.25);line-height:1;margin-bottom:18px;" dir="ltr">{{ st.n }}</div>
+            <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(18px,1.7vw,22px);color:#EAF6F2;margin-bottom:12px;">{{ st.title }}</h3>
+            <p style="font-size:14.5px;line-height:1.7;color:#869c95;">{{ st.desc }}</p>
           </div>
         </sc-for>
       </div>
@@ -249,25 +367,25 @@
       </div>
 
       <div class="mr-grid-2" style="display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.6vw,20px);margin-bottom:clamp(40px,6vw,72px);">
-        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(26px,3vw,38px);">
+        <div data-reveal="up" style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(26px,3vw,38px);">
           <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:16px;">{{ t.about.visionLabel }}</div>
           <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(18px,1.7vw,22px);color:#EAF6F2;margin-bottom:14px;">{{ t.about.visionTitle }}</h3>
           <p style="font-size:14.5px;line-height:1.75;color:#869c95;">{{ t.about.visionText }}</p>
         </div>
-        <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(26px,3vw,38px);">
+        <div data-reveal="up" style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(26px,3vw,38px);">
           <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:16px;">{{ t.about.missionLabel }}</div>
           <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(18px,1.7vw,22px);color:#EAF6F2;margin-bottom:14px;">{{ t.about.missionTitle }}</h3>
           <p style="font-size:14.5px;line-height:1.75;color:#869c95;">{{ t.about.missionText }}</p>
         </div>
       </div>
 
-      <div style="text-align:center;margin-bottom:clamp(28px,4vw,44px);">
+      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(28px,4vw,44px);">
         <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:14px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.about.valuesLabel }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
         <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(26px,3.2vw,40px);line-height:1.1;color:#F2FBF8;">{{ t.about.valuesTitle }}</h2>
       </div>
       <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,20px);">
         <sc-for list="{{ t.about.values }}" as="v" hint-placeholder-count="4">
-          <div style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(20px,2.2vw,28px);" style-hover="border-color:rgba(0,214,161,0.4);">
+          <div data-reveal="up" style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(20px,2.2vw,28px);" style-hover="border-color:rgba(0,214,161,0.4);">
             <div style="width:38px;height:38px;border:1px solid rgba(0,214,161,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#00D6A1;background:rgba(0,214,161,0.05);margin-bottom:18px;" dir="ltr"><span style="width:8px;height:8px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span></div>
             <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:17px;color:#EAF6F2;margin-bottom:10px;">{{ v.title }}</h3>
             <p style="font-size:14px;line-height:1.65;color:#869c95;">{{ v.desc }}</p>
@@ -278,7 +396,7 @@
 
     <!-- INDUSTRIES -->
     <section id="industries" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
-      <div style="text-align:center;margin-bottom:clamp(32px,4vw,48px);">
+      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,48px);">
         <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.industries.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
         <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(26px,3.2vw,42px);line-height:1.1;color:#F2FBF8;max-width:22ch;margin:0 auto;text-wrap:balance;">{{ t.industries.title }}</h2>
       </div>
@@ -293,7 +411,7 @@
 
     <!-- CONTACT -->
     <section id="contact" style="padding-bottom:clamp(60px,8vw,100px);scroll-margin-top:90px;">
-      <div style="position:relative;background:linear-gradient(160deg,#0A1614,#070D0C);border:1px solid rgba(0,214,161,0.2);border-radius:8px;padding:clamp(32px,5vw,68px);overflow:hidden;">
+      <div data-reveal="scale" style="position:relative;background:linear-gradient(160deg,#0A1614,#070D0C);border:1px solid rgba(0,214,161,0.2);border-radius:8px;padding:clamp(32px,5vw,68px);overflow:hidden;">
         <div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 0%,rgba(0,214,161,0.16),transparent 50%);pointer-events:none;"></div>
         <div class="mr-grid-2" style="position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);align-items:start;">
           <div>
@@ -309,33 +427,39 @@
               </sc-for>
             </div>
           </div>
-          <div style="display:flex;flex-direction:column;gap:14px;">
+          <form onSubmit="{{ submitForm }}" style="display:flex;flex-direction:column;gap:14px;">
             <div class="mr-form-2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
               <div>
                 <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.name }}</label>
-                <input type="text" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
+                <input type="text" name="name" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
               </div>
               <div>
                 <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.company }}</label>
-                <input type="text" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
+                <input type="text" name="company" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
               </div>
             </div>
             <div class="mr-form-2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
               <div>
                 <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.phone }}</label>
-                <input type="text" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
+                <input type="text" name="phone" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
               </div>
               <div>
                 <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.email }}</label>
-                <input type="text" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
+                <input type="email" name="email" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
               </div>
             </div>
             <div>
               <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.message }}</label>
-              <textarea rows="4" placeholder="{{ t.contact.form.messagePh }}" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;resize:vertical;" style-focus="border-color:#00D6A1;"></textarea>
+              <textarea rows="4" name="message" placeholder="{{ t.contact.form.messagePh }}" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;resize:vertical;" style-focus="border-color:#00D6A1;"></textarea>
             </div>
-            <button style="margin-top:6px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;letter-spacing:0.04em;color:#070D0C;background:#00D6A1;border:none;padding:15px 26px;border-radius:3px;cursor:pointer;box-shadow:0 0 28px rgba(0,214,161,0.4);" style-hover="background:#34F5D0;">{{ t.contact.form.submit }} <span style="font-size:15px;">{{ arrow }}</span></button>
-          </div>
+            <button type="submit" style="margin-top:6px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;letter-spacing:0.04em;color:#070D0C;background:#00D6A1;border:none;padding:15px 26px;border-radius:3px;cursor:pointer;box-shadow:0 0 28px rgba(0,214,161,0.4);" style-hover="background:#34F5D0;">{{ t.contact.form.submit }} <span style="font-size:15px;">{{ arrow }}</span></button>
+            <sc-if value="{{ sent }}">
+              <div style="display:flex;align-items:center;gap:11px;background:rgba(0,214,161,0.08);border:1px solid rgba(0,214,161,0.3);border-radius:3px;padding:13px 15px;margin-top:4px;">
+                <span style="flex-shrink:0;width:7px;height:7px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span>
+                <span style="font-size:13.5px;line-height:1.5;color:#D4E5E0;">{{ t.contact.form.sent }}</span>
+              </div>
+            </sc-if>
+          </form>
         </div>
       </div>
     </section>
@@ -353,6 +477,8 @@
           <a href="#about" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.about }}</a>
           <a href="#why" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.why }}</a>
           <a href="#services" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.services }}</a>
+          <a href="#products" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.products }}</a>
+          <a href="#process" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.process }}</a>
           <a href="#contact" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.contact }}</a>
         </div>
       </div>
@@ -384,7 +510,7 @@ class Component extends DCLogic {
       if (s === 'en' || s === 'ar') return s;
     } catch (e) {}
     return 'en';
-  })() };
+  })(), sent: false };
 
   toggleLang = () => this.setState(s => {
     var next = s.lang === 'en' ? 'ar' : 'en';
@@ -397,9 +523,32 @@ class Component extends DCLogic {
     return { lang: next };
   });
 
+  submitForm = (e) => {
+    e.preventDefault();
+    var f = new FormData(e.currentTarget);
+    var fm = this.content()[this.state.lang].contact.form;
+    var get = function (k) { return (f.get(k) || '').toString().trim(); };
+    var lines = [
+      fm.name + ': ' + get('name'),
+      fm.company + ': ' + get('company'),
+      fm.phone + ': ' + get('phone'),
+      fm.email + ': ' + get('email'),
+      '',
+      fm.message + ':',
+      get('message')
+    ];
+    var subject = 'Website inquiry — ' + (get('company') || get('name') || 'New contact');
+    var href = 'mailto:hello@maras.solutions'
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(lines.join('\n'));
+    try { window.location.href = href; } catch (err) {}
+    this.setState({ sent: true });
+  };
+
   content() {
     const en = {
-      nav: { about:'ABOUT', why:'WHY MARAS', services:'SERVICES', industries:'INDUSTRIES', contact:'CONTACT', cta:'FREE CONSULTATION' },
+      nav: { about:'ABOUT', why:'WHY MARAS', services:'SERVICES', products:'PRODUCTS', process:'PROCESS', industries:'INDUSTRIES', contact:'CONTACT', cta:'FREE CONSULTATION' },
+      diff: { items:['Customer-Centric Approach','On-Time Delivery','Enterprise-Grade Quality','Dedicated Ongoing Support'] },
       hero: {
         eyebrow:'TECHNOLOGY \u00D7 MANAGEMENT \u00D7 FIELD EXPERIENCE',
         titleA:'Real Expertise. ', titleB:'Real Solutions.', titleC:' Real Results.',
@@ -454,7 +603,34 @@ class Component extends DCLogic {
         items: [
           { n:'01', title:'Business & Technical Consulting', desc:'Business development for manufacturing and distribution, with a focus on the F&B sector.', points:['Factory management, time & cost reduction','Quality elevation & tech system implementation','Distribution efficiency & sales development','HR, procurement & logistics support'] },
           { n:'02', title:'Financial Consulting', desc:'Enterprise-grade financial discipline, with flexibility that scales with you.', points:['Financial auditing & internal controls','Outsourced bookkeeping subscription','Freelance accounting teams on demand','Feasibility & quality studies'] },
-          { n:'03', title:'Information Technology', desc:'Software and hardware engineered for what your operation actually needs.', points:['Custom software & e-commerce platforms','Fleet management system','Production & quality / OEE app','Salon POS & IoT solutions'] }
+          { n:'03', title:'Information Technology', desc:'Software and hardware engineered for what your operation actually needs — from concept to deployment.', points:['Custom software, e-commerce & mobile apps','Smart automation & real-time analytics','Fleet, production & OEE monitoring systems','Salon POS, IoT & seamless integrations'] }
+        ]
+      },
+      products: {
+        eyebrow:'ONE INTEGRATED SUITE',
+        title:'One Platform. Every Module Your Business Runs On.',
+        sub:'From CRM and sales to production, warehouse, fleet, HR, and AI — Maras delivers a single connected suite. Switch on only the modules you need today, and add the rest as you grow.',
+        badge:'LOCALIZED FOR KSA & EGYPT — ARABIC-FIRST, ZATCA & E-INVOICING READY',
+        items: [
+          { n:'01', glyph:'⊗', title:'Production & OEE', desc:'Manufacturing from bill of materials to finished goods, with quality and equipment effectiveness tracked from the floor up.', tags:['Production Orders','BOM','Planning','OEE'] },
+          { n:'02', glyph:'◈', title:'Smart POS', desc:'Fast, reliable checkout for retail and salons — inventory and VAT built in.', tags:['POS VAT / non-VAT','Carts','Stock control'] },
+          { n:'03', glyph:'◰', title:'Fleet Management', desc:'Vehicles, trips, and telematics tracked in real time — with zero IoT subscription fees.', tags:['Live Map','Geofencing','Trip Planning','Maintenance'] },
+          { n:'04', glyph:'◧', title:'Sales', desc:'Quote-to-cash across every channel, online and in-store.', tags:['Orders','Invoicing','Quotations','Returns'] },
+          { n:'05', glyph:'▦', title:'Accounts & eInvoicing', desc:'Total financial control plus built-in ZATCA tax and e-invoicing compliance.', tags:['Chart of Accounts','VAT','Fixed Assets','ZATCA'] },
+          { n:'06', glyph:'⇄', title:'ERP & Integrations', desc:'Connect everything to Microsoft Dynamics 365 and SAP — one clean data flow.', tags:['Dynamics 365','SAP','APIs'] }
+        ],
+        moreLabel:'PLUS THE FULL SUITE',
+        more:['CRM','Purchase','Warehouse','Transfers & Distribution','Workshop','HR & Payroll','CMS & Web','AI & Automation','Customer Support']
+      },
+      process: {
+        eyebrow:'HOW WE WORK',
+        title:'From Concept to Deployment — End to End',
+        sub:'One accountable team takes you from the first conversation to a running, supported solution — no handoffs, no finger-pointing.',
+        steps: [
+          { n:'01', title:'Discover', desc:'We sit on your floor, map your operations, and find where cost, quality, and time are leaking.' },
+          { n:'02', title:'Design', desc:'We shape a practical plan and the right technology — built around how you actually work.' },
+          { n:'03', title:'Build & Implement', desc:'Our in-house team builds, customizes, and rolls out — alongside your people, not over their heads.' },
+          { n:'04', title:'Support & Grow', desc:'Dedicated support and real-time monitoring keep things running and improving long after launch.' }
         ]
       },
       about: {
@@ -484,7 +660,7 @@ class Component extends DCLogic {
         eyebrow:'GET IN TOUCH',
         title:'Your Business Deserves Solutions Built From Experience',
         sub:'Not assumptions. Talk to a team that has actually run what they now advise you on. Reach out for a free consultation, and our team will get back to you within one business day.',
-        form: { name:'FULL NAME', company:'COMPANY NAME', phone:'PHONE / WHATSAPP', email:'EMAIL', message:'YOUR MESSAGE', messagePh:'Tell us about the challenge your business is facing...', submit:'Send Request' },
+        form: { name:'FULL NAME', company:'COMPANY NAME', phone:'PHONE / WHATSAPP', email:'EMAIL', message:'YOUR MESSAGE', messagePh:'Tell us about the challenge your business is facing...', submit:'Send Request', sent:'Thanks — your message is ready in your email app. Hit send and we’ll reply within one business day.' },
         info: [ { label:'EMAIL', value:'hello@maras.solutions' }, { label:'LOCATION', value:'Saudi Arabia \u2014 serving the GCC, Egypt & Africa' } ]
       },
       footer: {
@@ -496,7 +672,8 @@ class Component extends DCLogic {
     };
 
     const ar = {
-      nav: { about:'\u0645\u0646 \u0646\u062D\u0646', why:'\u0644\u0645\u0627\u0630\u0627 \u0645\u0631\u0627\u0633', services:'\u062E\u062F\u0645\u0627\u062A\u0646\u0627', industries:'\u0627\u0644\u0642\u0637\u0627\u0639\u0627\u062A', contact:'\u062A\u0648\u0627\u0635\u0644', cta:'\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0645\u062C\u0627\u0646\u064A\u0629' },
+      nav: { about:'\u0645\u0646 \u0646\u062D\u0646', why:'\u0644\u0645\u0627\u0630\u0627 \u0645\u0631\u0627\u0633', services:'\u062E\u062F\u0645\u0627\u062A\u0646\u0627', products:'\u0645\u0646\u062A\u062C\u0627\u062A\u0646\u0627', process:'\u0645\u0646\u0647\u062C\u064A\u062A\u0646\u0627', industries:'\u0627\u0644\u0642\u0637\u0627\u0639\u0627\u062A', contact:'\u062A\u0648\u0627\u0635\u0644', cta:'\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0645\u062C\u0627\u0646\u064A\u0629' },
+      diff: { items:['\u0646\u0647\u062C \u064A\u0631\u0643\u0651\u0632 \u0639\u0644\u0649 \u0627\u0644\u0639\u0645\u064A\u0644','\u0627\u0644\u062A\u0633\u0644\u064A\u0645 \u0641\u064A \u0627\u0644\u0648\u0642\u062A \u0627\u0644\u0645\u062D\u062F\u062F','\u062C\u0648\u062F\u0629 \u0628\u0645\u0639\u0627\u064A\u064A\u0631 \u0627\u0644\u0645\u0624\u0633\u0633\u0627\u062A','\u062F\u0639\u0645 \u0645\u0633\u062A\u0645\u0631 \u0648\u0645\u062E\u0635\u0635'] },
       hero: {
         eyebrow:'\u062A\u0642\u0646\u064A\u0629 \u00D7 \u0625\u062F\u0627\u0631\u0629 \u00D7 \u062E\u0628\u0631\u0629 \u0645\u064A\u062F\u0627\u0646\u064A\u0629',
         titleA:'\u062E\u0628\u0631\u0629 \u062D\u0642\u064A\u0642\u064A\u0629... ', titleB:'\u062D\u0644\u0648\u0644 \u0639\u0645\u0644\u064A\u0629...', titleC:' \u0646\u062A\u0627\u0626\u062C \u0645\u0644\u0645\u0648\u0633\u0629',
@@ -551,7 +728,34 @@ class Component extends DCLogic {
         items: [
           { n:'01', title:'\u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0627\u062A \u0627\u0644\u0641\u0646\u064A\u0629 \u0648\u0627\u0644\u0625\u062F\u0627\u0631\u064A\u0629', desc:'\u062A\u0637\u0648\u064A\u0631 \u0627\u0644\u0623\u0639\u0645\u0627\u0644 \u0644\u0644\u062A\u0635\u0646\u064A\u0639 \u0648\u0627\u0644\u062A\u0648\u0632\u064A\u0639\u060C \u0645\u0639 \u062A\u0631\u0643\u064A\u0632 \u062E\u0627\u0635 \u0639\u0644\u0649 \u0642\u0637\u0627\u0639 \u0627\u0644\u0623\u063A\u0630\u064A\u0629 \u0648\u0627\u0644\u0645\u0634\u0631\u0648\u0628\u0627\u062A.', points:['\u062A\u062D\u0633\u064A\u0646 \u0639\u0645\u0644\u064A\u0627\u062A \u0627\u0644\u062A\u0635\u0646\u064A\u0639','\u0643\u0641\u0627\u0621\u0629 \u0627\u0644\u062A\u062C\u0632\u0626\u0629 \u0648\u0627\u0644\u062A\u0648\u0632\u064A\u0639','\u0631\u0641\u0639 \u0627\u0644\u062C\u0648\u062F\u0629 \u0648\u062A\u0637\u0628\u064A\u0642 \u0627\u0644\u0623\u0646\u0638\u0645\u0629 \u0627\u0644\u062A\u0642\u0646\u064A\u0629','\u062F\u0639\u0645 \u0627\u0644\u0645\u0648\u0627\u0631\u062F \u0627\u0644\u0628\u0634\u0631\u064A\u0629 \u0648\u0627\u0644\u0644\u0648\u062C\u0633\u062A\u064A\u0627\u062A'] },
           { n:'02', title:'\u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0627\u062A \u0627\u0644\u0645\u0627\u0644\u064A\u0629', desc:'\u0627\u0646\u0636\u0628\u0627\u0637 \u0645\u0627\u0644\u064A \u0639\u0644\u0649 \u0645\u0633\u062A\u0648\u0649 \u0627\u0644\u0645\u0624\u0633\u0633\u0627\u062A \u0627\u0644\u0643\u0628\u0631\u0649\u060C \u0628\u0645\u0631\u0648\u0646\u0629 \u062A\u0646\u0627\u0633\u0628 \u0646\u0645\u0648 \u0634\u0631\u0643\u062A\u0643.', points:['\u0627\u0644\u062A\u062F\u0642\u064A\u0642 \u0627\u0644\u0645\u0627\u0644\u064A \u0648\u0627\u0644\u0631\u0642\u0627\u0628\u0629 \u0627\u0644\u062F\u0627\u062E\u0644\u064A\u0629','\u0645\u062D\u0627\u0633\u0628\u0629 \u062E\u0627\u0631\u062C\u064A\u0629 \u0628\u0646\u0638\u0627\u0645 \u0627\u0634\u062A\u0631\u0627\u0643 \u0634\u0647\u0631\u064A','\u0641\u0631\u0642 \u0645\u062D\u0627\u0633\u0628\u0629 \u0645\u0633\u062A\u0642\u0644\u0629 \u0639\u0646\u062F \u0627\u0644\u0637\u0644\u0628','\u062F\u0631\u0627\u0633\u0627\u062A \u0627\u0644\u062C\u062F\u0648\u0649 \u0648\u0627\u0644\u062C\u0648\u062F\u0629'] },
-          { n:'03', title:'\u062E\u062F\u0645\u0627\u062A \u062A\u0642\u0646\u064A\u0629 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062A', desc:'\u0628\u0631\u0645\u062C\u064A\u0627\u062A \u0648\u0623\u062C\u0647\u0632\u0629 \u0645\u0635\u0645\u0645\u0629 \u062E\u0635\u064A\u0635\u0627\u064B \u0644\u0645\u0627 \u062A\u062D\u062A\u0627\u062C\u0647 \u0639\u0645\u0644\u064A\u0627\u062A\u0643 \u0641\u0639\u0644\u0627\u064B.', points:['\u0628\u0631\u0645\u062C\u064A\u0627\u062A \u0645\u062E\u0635\u0635\u0629 \u0648\u0645\u062A\u0627\u062C\u0631 \u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A\u0629','\u0646\u0638\u0627\u0645 \u0625\u062F\u0627\u0631\u0629 \u0627\u0644\u0623\u0633\u0637\u0648\u0644','\u062A\u0637\u0628\u064A\u0642 \u0645\u062A\u0627\u0628\u0639\u0629 \u0627\u0644\u0625\u0646\u062A\u0627\u062C \u0648\u0627\u0644\u062C\u0648\u062F\u0629 \u0648OEE','\u0643\u0627\u0634\u064A\u0631 \u0627\u0644\u0635\u0627\u0644\u0648\u0646\u0627\u062A \u0648\u062D\u0644\u0648\u0644 \u0625\u0646\u062A\u0631\u0646\u062A \u0627\u0644\u0623\u0634\u064A\u0627\u0621'] }
+          { n:'03', title:'\u062E\u062F\u0645\u0627\u062A \u062A\u0642\u0646\u064A\u0629 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062A', desc:'\u0628\u0631\u0645\u062C\u064A\u0627\u062A \u0648\u0623\u062C\u0647\u0632\u0629 \u0645\u0635\u0645\u0645\u0629 \u062E\u0635\u064A\u0635\u0627\u064B \u0644\u0645\u0627 \u062A\u062D\u062A\u0627\u062C\u0647 \u0639\u0645\u0644\u064A\u0627\u062A\u0643 \u0641\u0639\u0644\u0627\u064B \u2014 \u0645\u0646 \u0627\u0644\u0641\u0643\u0631\u0629 \u0625\u0644\u0649 \u0627\u0644\u062A\u0634\u063A\u064A\u0644.', points:['\u0628\u0631\u0645\u062C\u064A\u0627\u062A \u0645\u062E\u0635\u0635\u0629 \u0648\u0645\u062A\u0627\u062C\u0631 \u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A\u0629 \u0648\u062A\u0637\u0628\u064A\u0642\u0627\u062A \u062C\u0648\u0627\u0644','\u0623\u062A\u0645\u062A\u0629 \u0630\u0643\u064A\u0629 \u0648\u062A\u062D\u0644\u064A\u0644\u0627\u062A \u0644\u062D\u0638\u064A\u0629','\u0623\u0646\u0638\u0645\u0629 \u0645\u062A\u0627\u0628\u0639\u0629 \u0627\u0644\u0623\u0633\u0637\u0648\u0644 \u0648\u0627\u0644\u0625\u0646\u062A\u0627\u062C \u0648OEE','\u0643\u0627\u0634\u064A\u0631 \u0627\u0644\u0635\u0627\u0644\u0648\u0646\u0627\u062A \u0648\u0625\u0646\u062A\u0631\u0646\u062A \u0627\u0644\u0623\u0634\u064A\u0627\u0621 \u0648\u062A\u0643\u0627\u0645\u0644\u0627\u062A \u0633\u0644\u0633\u0629'] }
+        ]
+      },
+      products: {
+        eyebrow:'\u0645\u0646\u0638\u0648\u0645\u0629 \u0648\u0627\u062D\u062F\u0629 \u0645\u062A\u0643\u0627\u0645\u0644\u0629',
+        title:'\u0645\u0646\u0635\u0629 \u0648\u0627\u062D\u062F\u0629. \u0648\u0643\u0644 \u0648\u062D\u062F\u0629 \u062A\u062D\u062A\u0627\u062C\u0647\u0627 \u0623\u0639\u0645\u0627\u0644\u0643.',
+        sub:'\u0645\u0646 \u0625\u062F\u0627\u0631\u0629 \u0639\u0644\u0627\u0642\u0627\u062A \u0627\u0644\u0639\u0645\u0644\u0627\u0621 \u0648\u0627\u0644\u0645\u0628\u064A\u0639\u0627\u062A \u0625\u0644\u0649 \u0627\u0644\u0625\u0646\u062A\u0627\u062C \u0648\u0627\u0644\u0645\u0633\u062A\u0648\u062F\u0639\u0627\u062A \u0648\u0627\u0644\u0623\u0633\u0637\u0648\u0644 \u0648\u0627\u0644\u0645\u0648\u0627\u0631\u062F \u0627\u0644\u0628\u0634\u0631\u064A\u0629 \u0648\u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064A \u2014 \u062A\u0648\u0641\u0651\u0631 \u0645\u0631\u0627\u0633 \u0645\u0646\u0638\u0648\u0645\u0629 \u0648\u0627\u062D\u062F\u0629 \u0645\u062A\u0631\u0627\u0628\u0637\u0629. \u0641\u0639\u0651\u0644 \u0645\u0627 \u062A\u062D\u062A\u0627\u062C\u0647 \u0627\u0644\u064A\u0648\u0645 \u0641\u0642\u0637\u060C \u0648\u0623\u0636\u0641 \u0627\u0644\u0628\u0627\u0642\u064A \u0645\u0639 \u0646\u0645\u0648\u0651\u0643.',
+        badge:'\u0645\u0639\u0631\u0651\u0628\u0629 \u0644\u0644\u0633\u0639\u0648\u062F\u064A\u0629 \u0648\u0645\u0635\u0631 \u2014 \u0639\u0631\u0628\u064A\u0629 \u0623\u0648\u0644\u0627\u064B\u060C \u0648\u062C\u0627\u0647\u0632\u0629 \u0644\u0644\u0641\u0648\u062A\u0631\u0629 \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A\u0629 \u0648\u0647\u064A\u0626\u0629 \u0627\u0644\u0632\u0643\u0627\u0629 \u0648\u0627\u0644\u0636\u0631\u064A\u0628\u0629',
+        items: [
+          { n:'01', glyph:'\u2297', title:'\u0627\u0644\u0625\u0646\u062A\u0627\u062C \u0648\u0643\u0641\u0627\u0621\u0629 \u0627\u0644\u0645\u0639\u062F\u0627\u062A', desc:'\u0627\u0644\u062A\u0635\u0646\u064A\u0639 \u0645\u0646 \u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u0645\u0648\u0627\u062F \u0625\u0644\u0649 \u0627\u0644\u0645\u0646\u062A\u062C \u0627\u0644\u0646\u0647\u0627\u0626\u064A\u060C \u0645\u0639 \u0645\u062A\u0627\u0628\u0639\u0629 \u0627\u0644\u062C\u0648\u062F\u0629 \u0648\u0643\u0641\u0627\u0621\u0629 \u0627\u0644\u0645\u0639\u062F\u0627\u062A \u0645\u0646 \u0623\u0631\u0636 \u0627\u0644\u0645\u0635\u0646\u0639.', tags:['\u0623\u0648\u0627\u0645\u0631 \u0627\u0644\u0625\u0646\u062A\u0627\u062C','\u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u0645\u0648\u0627\u062F','\u0627\u0644\u062A\u062E\u0637\u064A\u0637','OEE'] },
+          { n:'02', glyph:'\u25C8', title:'\u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064A\u0639 \u0627\u0644\u0630\u0643\u064A\u0629', desc:'\u0643\u0627\u0634\u064A\u0631 \u0633\u0631\u064A\u0639 \u0648\u0645\u0648\u062B\u0648\u0642 \u0644\u0644\u062A\u062C\u0632\u0626\u0629 \u0648\u0627\u0644\u0635\u0627\u0644\u0648\u0646\u0627\u062A \u2014 \u0627\u0644\u0645\u062E\u0632\u0648\u0646 \u0648\u0627\u0644\u0636\u0631\u064A\u0628\u0629 \u0645\u062F\u0645\u062C\u0627\u0646.', tags:['\u0643\u0627\u0634\u064A\u0631 \u0628\u0636\u0631\u064A\u0628\u0629/\u0628\u062F\u0648\u0646','\u0627\u0644\u0633\u0644\u0627\u062A','\u0636\u0628\u0637 \u0627\u0644\u0645\u062E\u0632\u0648\u0646'] },
+          { n:'03', glyph:'\u25F0', title:'\u0625\u062F\u0627\u0631\u0629 \u0627\u0644\u0623\u0633\u0637\u0648\u0644', desc:'\u0627\u0644\u0645\u0631\u0643\u0628\u0627\u062A \u0648\u0627\u0644\u0631\u062D\u0644\u0627\u062A \u0648\u0627\u0644\u062A\u062A\u0628\u0651\u0639 \u0644\u062D\u0638\u064A\u0627\u064B \u2014 \u0648\u062F\u0648\u0646 \u0623\u064A \u0627\u0634\u062A\u0631\u0627\u0643 \u0644\u0625\u0646\u062A\u0631\u0646\u062A \u0627\u0644\u0623\u0634\u064A\u0627\u0621.', tags:['\u062E\u0631\u064A\u0637\u0629 \u062D\u064A\u0629','\u0627\u0644\u0633\u064A\u0627\u062C \u0627\u0644\u062C\u063A\u0631\u0627\u0641\u064A','\u062C\u062F\u0648\u0644\u0629 \u0627\u0644\u0631\u062D\u0644\u0627\u062A','\u0627\u0644\u0635\u064A\u0627\u0646\u0629'] },
+          { n:'04', glyph:'\u25E7', title:'\u0627\u0644\u0645\u0628\u064A\u0639\u0627\u062A', desc:'\u0645\u0646 \u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631 \u0625\u0644\u0649 \u0627\u0644\u062A\u062D\u0635\u064A\u0644 \u0639\u0628\u0631 \u0643\u0644 \u0627\u0644\u0642\u0646\u0648\u0627\u062A\u060C \u0623\u0648\u0646\u0644\u0627\u064A\u0646 \u0648\u0641\u064A \u0627\u0644\u0645\u062A\u062C\u0631.', tags:['\u0627\u0644\u0637\u0644\u0628\u0627\u062A','\u0627\u0644\u0641\u0648\u062A\u0631\u0629','\u0639\u0631\u0648\u0636 \u0627\u0644\u0623\u0633\u0639\u0627\u0631','\u0627\u0644\u0645\u0631\u062A\u062C\u0639\u0627\u062A'] },
+          { n:'05', glyph:'\u25A6', title:'\u0627\u0644\u062D\u0633\u0627\u0628\u0627\u062A \u0648\u0627\u0644\u0641\u0648\u062A\u0631\u0629 \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A\u0629', desc:'\u062A\u062D\u0643\u0645 \u0645\u0627\u0644\u064A \u0643\u0627\u0645\u0644 \u0645\u0639 \u0627\u0644\u062A\u0632\u0627\u0645 \u0636\u0631\u064A\u0628\u064A \u0648\u0641\u0648\u062A\u0631\u0629 \u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A\u0629 \u0645\u062F\u0645\u062C\u0629 \u0644\u0647\u064A\u0626\u0629 \u0627\u0644\u0632\u0643\u0627\u0629.', tags:['\u062F\u0644\u064A\u0644 \u0627\u0644\u062D\u0633\u0627\u0628\u0627\u062A','\u0636\u0631\u064A\u0628\u0629 \u0627\u0644\u0642\u064A\u0645\u0629','\u0627\u0644\u0623\u0635\u0648\u0644 \u0627\u0644\u062B\u0627\u0628\u062A\u0629','\u0647\u064A\u0626\u0629 \u0627\u0644\u0632\u0643\u0627\u0629'] },
+          { n:'06', glyph:'\u21C4', title:'\u062A\u0643\u0627\u0645\u0644 \u0623\u0646\u0638\u0645\u0629 ERP', desc:'\u0627\u0631\u0628\u0637 \u0643\u0644 \u0634\u064A\u0621 \u0628\u0645\u0627\u064A\u0643\u0631\u0648\u0633\u0648\u0641\u062A Dynamics 365 \u0648SAP \u2014 \u062A\u062F\u0641\u0651\u0642 \u0628\u064A\u0627\u0646\u0627\u062A \u0648\u0627\u062D\u062F \u0648\u0646\u0638\u064A\u0641.', tags:['Dynamics 365','SAP','\u0648\u0627\u062C\u0647\u0627\u062A API'] }
+        ],
+        moreLabel:'\u0648\u0643\u0627\u0645\u0644 \u0627\u0644\u0645\u0646\u0638\u0648\u0645\u0629 \u0623\u064A\u0636\u0627\u064B',
+        more:['\u0625\u062F\u0627\u0631\u0629 \u0639\u0644\u0627\u0642\u0627\u062A \u0627\u0644\u0639\u0645\u0644\u0627\u0621','\u0627\u0644\u0645\u0634\u062A\u0631\u064A\u0627\u062A','\u0627\u0644\u0645\u0633\u062A\u0648\u062F\u0639\u0627\u062A','\u0627\u0644\u062A\u062D\u0648\u064A\u0644\u0627\u062A \u0648\u0627\u0644\u062A\u0648\u0632\u064A\u0639','\u0627\u0644\u0648\u0631\u0634','\u0627\u0644\u0645\u0648\u0627\u0631\u062F \u0627\u0644\u0628\u0634\u0631\u064A\u0629 \u0648\u0627\u0644\u0631\u0648\u0627\u062A\u0628','\u0625\u062F\u0627\u0631\u0629 \u0627\u0644\u0645\u062D\u062A\u0648\u0649 \u0648\u0627\u0644\u0648\u064A\u0628','\u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064A \u0648\u0627\u0644\u0623\u062A\u0645\u062A\u0629','\u062F\u0639\u0645 \u0627\u0644\u0639\u0645\u0644\u0627\u0621']
+      },
+      process: {
+        eyebrow:'\u0643\u064A\u0641 \u0646\u0639\u0645\u0644',
+        title:'\u0645\u0646 \u0627\u0644\u0641\u0643\u0631\u0629 \u0625\u0644\u0649 \u0627\u0644\u062A\u0634\u063A\u064A\u0644 \u2014 \u0645\u0646 \u0627\u0644\u0628\u062F\u0627\u064A\u0629 \u0625\u0644\u0649 \u0627\u0644\u0646\u0647\u0627\u064A\u0629',
+        sub:'\u0641\u0631\u064A\u0642 \u0648\u0627\u062D\u062F \u0645\u0633\u0624\u0648\u0644 \u064A\u0631\u0627\u0641\u0642\u0643 \u0645\u0646 \u0623\u0648\u0644 \u062D\u062F\u064A\u062B \u062D\u062A\u0649 \u062D\u0644\u064D\u0651 \u064A\u0639\u0645\u0644 \u0648\u064A\u064F\u062F\u0639\u064E\u0645 \u2014 \u062F\u0648\u0646 \u062A\u0646\u0642\u0651\u0644 \u0644\u0644\u0645\u0633\u0624\u0648\u0644\u064A\u0629 \u0623\u0648 \u062A\u0628\u0627\u062F\u0644 \u0644\u0644\u0651\u0648\u0645.',
+        steps: [
+          { n:'01', title:'\u0627\u0644\u0627\u0633\u062A\u0643\u0634\u0627\u0641', desc:'\u0646\u0646\u0632\u0644 \u0625\u0644\u0649 \u0623\u0631\u0636 \u0627\u0644\u0639\u0645\u0644\u060C \u0648\u0646\u062D\u0644\u0651\u0644 \u0639\u0645\u0644\u064A\u0627\u062A\u0643\u060C \u0648\u0646\u0643\u062A\u0634\u0641 \u0623\u064A\u0646 \u062A\u062A\u0633\u0631\u0651\u0628 \u0627\u0644\u062A\u0643\u0627\u0644\u064A\u0641 \u0648\u0627\u0644\u062C\u0648\u062F\u0629 \u0648\u0627\u0644\u0648\u0642\u062A.' },
+          { n:'02', title:'\u0627\u0644\u062A\u0635\u0645\u064A\u0645', desc:'\u0646\u0636\u0639 \u062E\u0637\u0629 \u0639\u0645\u0644\u064A\u0629 \u0648\u0627\u0644\u062A\u0642\u0646\u064A\u0629 \u0627\u0644\u0645\u0646\u0627\u0633\u0628\u0629 \u2014 \u0645\u0628\u0646\u064A\u0629 \u0639\u0644\u0649 \u0637\u0631\u064A\u0642\u0629 \u0639\u0645\u0644\u0643 \u0627\u0644\u0641\u0639\u0644\u064A\u0629.' },
+          { n:'03', title:'\u0627\u0644\u062A\u0646\u0641\u064A\u0630 \u0648\u0627\u0644\u062A\u0637\u0628\u064A\u0642', desc:'\u0641\u0631\u064A\u0642\u0646\u0627 \u0627\u0644\u062F\u0627\u062E\u0644\u064A \u064A\u0628\u0646\u064A \u0648\u064A\u062E\u0635\u0651\u0635 \u0648\u064A\u0637\u0628\u0651\u0642 \u2014 \u0645\u0639 \u0641\u0631\u064A\u0642\u0643\u060C \u0644\u0627 \u0628\u062F\u0644\u0627\u064B \u0639\u0646\u0647.' },
+          { n:'04', title:'\u0627\u0644\u062F\u0639\u0645 \u0648\u0627\u0644\u0646\u0645\u0648', desc:'\u062F\u0639\u0645 \u0645\u062E\u0635\u0635 \u0648\u0645\u0631\u0627\u0642\u0628\u0629 \u0644\u062D\u0638\u064A\u0629 \u062A\u062D\u0627\u0641\u0638 \u0639\u0644\u0649 \u0627\u0644\u062A\u0634\u063A\u064A\u0644 \u0648\u0627\u0644\u062A\u062D\u0633\u064A\u0646 \u0628\u0639\u062F \u0627\u0644\u0625\u0637\u0644\u0627\u0642.' }
         ]
       },
       about: {
@@ -581,7 +785,7 @@ class Component extends DCLogic {
         eyebrow:'\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627',
         title:'\u0623\u0639\u0645\u0627\u0644\u0643 \u062A\u0633\u062A\u062D\u0642 \u062D\u0644\u0648\u0644\u0627\u064B \u0645\u0628\u0646\u064A\u0629 \u0639\u0644\u0649 \u062E\u0628\u0631\u0629 \u062D\u0642\u064A\u0642\u064A\u0629',
         sub:'\u0644\u0627 \u0639\u0644\u0649 \u0627\u0641\u062A\u0631\u0627\u0636\u0627\u062A. \u062A\u062D\u062F\u062B \u0645\u0639 \u0641\u0631\u064A\u0642 \u0633\u0628\u0642 \u0644\u0647 \u062A\u0634\u063A\u064A\u0644 \u0645\u0627 \u064A\u0633\u062A\u0634\u064A\u0631\u0643 \u0641\u064A\u0647 \u0627\u0644\u064A\u0648\u0645. \u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 \u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0645\u062C\u0627\u0646\u064A\u0629\u060C \u0648\u0633\u064A\u0639\u0627\u0648\u062F \u0641\u0631\u064A\u0642\u0646\u0627 \u0627\u0644\u0627\u062A\u0635\u0627\u0644 \u0628\u0643 \u062E\u0644\u0627\u0644 \u064A\u0648\u0645 \u0639\u0645\u0644 \u0648\u0627\u062D\u062F.',
-        form: { name:'\u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0643\u0627\u0645\u0644', company:'\u0627\u0633\u0645 \u0627\u0644\u0634\u0631\u0643\u0629', phone:'\u0627\u0644\u062C\u0648\u0627\u0644 / \u0648\u0627\u062A\u0633\u0627\u0628', email:'\u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A', message:'\u0631\u0633\u0627\u0644\u062A\u0643', messagePh:'\u062D\u062F\u0651\u062B\u0646\u0627 \u0639\u0646 \u0627\u0644\u062A\u062D\u062F\u064A \u0627\u0644\u0630\u064A \u062A\u0648\u0627\u062C\u0647\u0647 \u0634\u0631\u0643\u062A\u0643...', submit:'\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0637\u0644\u0628' },
+        form: { name:'\u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0643\u0627\u0645\u0644', company:'\u0627\u0633\u0645 \u0627\u0644\u0634\u0631\u0643\u0629', phone:'\u0627\u0644\u062C\u0648\u0627\u0644 / \u0648\u0627\u062A\u0633\u0627\u0628', email:'\u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A', message:'\u0631\u0633\u0627\u0644\u062A\u0643', messagePh:'\u062D\u062F\u0651\u062B\u0646\u0627 \u0639\u0646 \u0627\u0644\u062A\u062D\u062F\u064A \u0627\u0644\u0630\u064A \u062A\u0648\u0627\u062C\u0647\u0647 \u0634\u0631\u0643\u062A\u0643...', submit:'\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0637\u0644\u0628', sent:'\u0634\u0643\u0631\u0627\u064B \u2014 \u0631\u0633\u0627\u0644\u062A\u0643 \u062C\u0627\u0647\u0632\u0629 \u0641\u064A \u062A\u0637\u0628\u064A\u0642 \u0627\u0644\u0628\u0631\u064A\u062F \u0644\u062F\u064A\u0643. \u0623\u0631\u0633\u0644\u0647\u0627 \u0648\u0633\u0646\u0631\u062F \u062E\u0644\u0627\u0644 \u064A\u0648\u0645 \u0639\u0645\u0644 \u0648\u0627\u062D\u062F.' },
         info: [ { label:'\u0627\u0644\u0628\u0631\u064A\u062F', value:'hello@maras.solutions' }, { label:'\u0627\u0644\u0645\u0648\u0642\u0639', value:'\u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629 \u2014 \u0628\u062E\u062F\u0645\u0629 \u0627\u0644\u062E\u0644\u064A\u062C \u0648\u0645\u0635\u0631 \u0648\u0623\u0641\u0631\u064A\u0642\u064A\u0627' } ]
       },
       footer: {
@@ -605,6 +809,8 @@ class Component extends DCLogic {
       langBtn: isAr ? 'EN' : '\u0639',
       arrow: isAr ? '\u2190' : '\u2192',
       toggleLang: this.toggleLang,
+      submitForm: this.submitForm,
+      sent: this.state.sent,
       industriesLoop: [...t.industries.items, ...t.industries.items]
     };
   }
