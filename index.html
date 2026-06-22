@@ -1,30 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
-</head>
-<body>
-<template id="__bundler_thumbnail" data-bg-color="#070D0C">
-  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
-    <rect width="1200" height="800" fill="#070D0C"/>
-    <g fill="none" stroke="#00D6A1" stroke-opacity="0.12" stroke-width="2">
-      <path d="M360 0V800M600 0V800M840 0V800M0 280H1200M0 520H1200"/>
-    </g>
-    <g stroke="#00D6A1" stroke-width="6" fill="none">
-      <path d="M360 300H300V360"/>
-      <path d="M840 300H900V360"/>
-      <path d="M360 500H300V440"/>
-      <path d="M840 500H900V440"/>
-    </g>
-    <text x="600" y="380" font-family="'Chakra Petch',monospace" font-size="150" font-weight="700" fill="#00D6A1" text-anchor="middle" letter-spacing="6">M</text>
-    <text x="600" y="470" font-family="monospace" font-size="34" font-weight="600" fill="#E8F3F0" text-anchor="middle" letter-spacing="12">MARAS</text>
-    <rect x="700" y="450" width="14" height="26" fill="#00D6A1"/>
-  </svg>
-</template>
-<x-dc>
-<helmet>
 <title>MARAS Solutions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,7 +23,6 @@
   @keyframes mrFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
   @keyframes mrSweep{0%{opacity:0;transform:translateX(-30%);}50%{opacity:0.6;}100%{opacity:0;transform:translateX(130%);}}
 
-  /* ---------- Scroll reveal & micro-interactions ---------- */
   .mr-js [data-reveal]{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.16,.84,.44,1),transform .8s cubic-bezier(.16,.84,.44,1);}
   .mr-js [data-reveal="left"]{transform:translateX(-34px);}
   .mr-js [data-reveal="right"]{transform:translateX(34px);}
@@ -63,8 +40,6 @@
     .mr-js [data-reveal]{opacity:1 !important;transform:none !important;transition:none !important;}
     [data-float]{animation:none !important;}
   }
-
-  /* ---------- Responsive ---------- */
   @media (max-width:1000px){
     .mr-hero{grid-template-columns:1fr !important;gap:clamp(32px,6vw,56px) !important;}
     .mr-split{grid-template-columns:1fr !important;}
@@ -88,734 +63,784 @@
     .mr-grid-4{grid-template-columns:1fr !important;}
     .mr-corner{display:none !important;}
   }
+
+  /* Hover states via CSS */
+  .btn-primary{transition:background .2s,transform .22s,box-shadow .25s;}
+  .btn-primary:hover{background:#34F5D0 !important;transform:translateY(-2px);}
+  .btn-outline:hover{border-color:#00D6A1 !important;background:rgba(0,214,161,0.06) !important;transform:translateY(-2px);}
+  .card-hover:hover{border-color:rgba(0,214,161,0.45) !important;background:#0A1411 !important;}
+  .pill-hover:hover{border-color:rgba(0,214,161,0.45) !important;color:#EAF6F2 !important;background:rgba(0,214,161,0.08) !important;}
+  .lang-btn:hover{background:rgba(0,214,161,0.1) !important;}
+  input:focus,textarea:focus{border-color:#00D6A1 !important;outline:none;}
+
+  #sent-msg{display:none;}
+  #sent-msg.visible{display:flex;}
 </style>
+</head>
+<body>
+<div id="app"></div>
+
 <script>
-(function(){
-  if (window.__mrRevealInit) return; window.__mrRevealInit = true;
-  document.documentElement.classList.add('mr-js');
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce || !('IntersectionObserver' in window)) {
-    var showAll = function(){ var n=document.querySelectorAll('[data-reveal]'); for (var i=0;i<n.length;i++) n[i].classList.add('mr-in'); };
-    if (document.readyState!=='loading') showAll(); else document.addEventListener('DOMContentLoaded', showAll);
-    return;
-  }
-  var io = new IntersectionObserver(function(entries){
-    for (var i=0;i<entries.length;i++){ var e=entries[i]; if (e.isIntersecting){ e.target.classList.add('mr-in'); io.unobserve(e.target); } }
-  }, { threshold: 0.1, rootMargin: '0px 0px -7% 0px' });
-  var scan = function(){
-    var n = document.querySelectorAll('[data-reveal]:not([data-rb])');
-    for (var i=0;i<n.length;i++){ n[i].setAttribute('data-rb',''); io.observe(n[i]); }
-  };
-  var start = function(){
-    scan();
-    requestAnimationFrame(scan);
-    if (window.MutationObserver){
-      new MutationObserver(function(){ scan(); }).observe(document.body, { childList:true, subtree:true });
+// ─── Content Data ───────────────────────────────────────────────────────────
+const CONTENT = {
+  en: {
+    nav: { about:'ABOUT', why:'WHY MARAS', services:'SERVICES', products:'PRODUCTS', process:'PROCESS', industries:'INDUSTRIES', contact:'CONTACT', cta:'FREE CONSULTATION' },
+    diff: { items:['Customer-Centric Approach','On-Time Delivery','Enterprise-Grade Quality','Dedicated Ongoing Support'] },
+    hero: {
+      eyebrow:'TECHNOLOGY × MANAGEMENT × FIELD EXPERIENCE',
+      titleA:'Real Expertise. ', titleB:'Real Solutions.', titleC:' Real Results.',
+      sub:'Maras Solutions bridges the gap between technology and business management — built by people who have actually run the operations, not just studied them.',
+      cta1:'Book a Free Consultation', cta2:'Explore Our Services',
+      panelEyebrow:'WHAT SETS US APART',
+      panelTitle:'From the factory floor to the boardroom',
+      panelText:'Our consultants and technology experts have spent years inside the industries they now help transform.',
+      stats: [
+        { num:'3', label:'INTEGRATED DISCIPLINES' },
+        { num:'F&B', label:'SECTOR FOCUS' },
+        { num:'0', label:'IoT SUBSCRIPTION FEES' }
+      ]
+    },
+    pillars: {
+      eyebrow:'ONE CONNECTED SYSTEM',
+      title:'Three Disciplines, One Path to Growth',
+      sub:'Most businesses juggle separate consultants, accountants, and software vendors who never talk to each other. Maras Solutions brings all three disciplines under one roof.',
+      items: [
+        { n:'01', glyph:'◈', title:'Business & Operations Consulting', desc:'Smarter operations. Lower costs. Higher quality.' },
+        { n:'02', glyph:'⌨', title:'Financial Consulting & Accounting', desc:'Clarity and control over every riyal.' },
+        { n:'03', glyph:'◰', title:'Custom Technology Solutions', desc:'Built around your business, not the reverse.' }
+      ]
+    },
+    why: {
+      eyebrow:'WHY MARAS',
+      title:'Our People Are Our Product',
+      sub:'Our consultants and IT specialists have worked inside factories, distribution networks, and finance departments — long before writing a single recommendation.',
+      reasons: [
+        { n:'01', title:'Hands-On Market Experience', desc:'Our team has run the operations they now advise on.' },
+        { n:'02', title:'Senior In-House Tech Team', desc:'We build and customize; we don\'t just resell software.' },
+        { n:'03', title:'F&B & Manufacturing Specialists', desc:'Deep, sector-specific expertise where it matters most.' },
+        { n:'04', title:'Smart IoT, Zero Subscription', desc:'Real-time monitoring without recurring connectivity fees.' }
+      ],
+      typicalLabel:'Typical Consulting Firms',
+      typical: [
+        'Generic academic frameworks applied to every client',
+        'Recommendations delivered without operational accountability',
+        'Software resold "as-is" with no industry context'
+      ],
+      marasLabel:'The Maras Team',
+      maras: [
+        'Solutions built from years on the factory floor and in the field',
+        'Consultants who\'ve managed real P&Ls, real production lines, real teams',
+        'An in-house tech team that customizes — not just installs'
+      ]
+    },
+    services: {
+      eyebrow:'OUR SERVICES',
+      title:'One Partner, Every Solution Your Business Needs',
+      cta:'Learn more',
+      items: [
+        { n:'01', title:'Business & Technical Consulting', desc:'Business development for manufacturing and distribution, with a focus on the F&B sector.', points:['Factory management, time & cost reduction','Quality elevation & tech system implementation','Distribution efficiency & sales development','HR, procurement & logistics support'] },
+        { n:'02', title:'Financial Consulting', desc:'Enterprise-grade financial discipline, with flexibility that scales with you.', points:['Financial auditing & internal controls','Outsourced bookkeeping subscription','Freelance accounting teams on demand','Feasibility & quality studies'] },
+        { n:'03', title:'Information Technology', desc:'Software and hardware engineered for what your operation actually needs — from concept to deployment.', points:['Custom software, e-commerce & mobile apps','Smart automation & real-time analytics','Fleet, production & OEE monitoring systems','Salon POS, IoT & seamless integrations'] }
+      ]
+    },
+    products: {
+      eyebrow:'ONE INTEGRATED SUITE',
+      title:'One Platform. Every Module Your Business Runs On.',
+      sub:'From CRM and sales to production, warehouse, fleet, HR, and AI — Maras delivers a single connected suite. Switch on only the modules you need today, and add the rest as you grow.',
+      badge:'LOCALIZED FOR KSA & EGYPT — ARABIC-FIRST, ZATCA & E-INVOICING READY',
+      items: [
+        { n:'01', glyph:'⊗', title:'Production & OEE', desc:'Manufacturing from bill of materials to finished goods, with quality and equipment effectiveness tracked from the floor up.', tags:['Production Orders','BOM','Planning','OEE'] },
+        { n:'02', glyph:'◈', title:'Smart POS', desc:'Fast, reliable checkout for retail and salons — inventory and VAT built in.', tags:['POS VAT / non-VAT','Carts','Stock control'] },
+        { n:'03', glyph:'◰', title:'Fleet Management', desc:'Vehicles, trips, and telematics tracked in real time — with zero IoT subscription fees.', tags:['Live Map','Geofencing','Trip Planning','Maintenance'] },
+        { n:'04', glyph:'◧', title:'Sales', desc:'Quote-to-cash across every channel, online and in-store.', tags:['Orders','Invoicing','Quotations','Returns'] },
+        { n:'05', glyph:'▦', title:'Accounts & eInvoicing', desc:'Total financial control plus built-in ZATCA tax and e-invoicing compliance.', tags:['Chart of Accounts','VAT','Fixed Assets','ZATCA'] },
+        { n:'06', glyph:'⇄', title:'ERP & Integrations', desc:'Connect everything to Microsoft Dynamics 365 and SAP — one clean data flow.', tags:['Dynamics 365','SAP','APIs'] }
+      ],
+      moreLabel:'PLUS THE FULL SUITE',
+      more:['CRM','Purchase','Warehouse','Transfers & Distribution','Workshop','HR & Payroll','CMS & Web','AI & Automation','Customer Support']
+    },
+    process: {
+      eyebrow:'HOW WE WORK',
+      title:'From Concept to Deployment — End to End',
+      sub:'One accountable team takes you from the first conversation to a running, supported solution — no handoffs, no finger-pointing.',
+      steps: [
+        { n:'01', title:'Discover', desc:'We sit on your floor, map your operations, and find where cost, quality, and time are leaking.' },
+        { n:'02', title:'Design', desc:'We shape a practical plan and the right technology — built around how you actually work.' },
+        { n:'03', title:'Build & Implement', desc:'Our in-house team builds, customizes, and rolls out — alongside your people, not over their heads.' },
+        { n:'04', title:'Support & Grow', desc:'Dedicated support and real-time monitoring keep things running and improving long after launch.' }
+      ]
+    },
+    about: {
+      eyebrow:'ABOUT US',
+      title:'Built by Practitioners, Not Just Consultants',
+      sub:'Our story starts on the operations floor, not in a lecture hall.',
+      story:'Maras Solutions for Technology, Technical & Administrative Consultations was founded on a simple observation: most consulting firms write reports, while businesses need results. We built Maras differently — around a team of consultants and IT professionals who spent years inside manufacturing floors, distribution networks, finance departments, and technology projects across Saudi Arabia and the region before ever writing a single recommendation.',
+      story2:'That field experience is our foundation, and it shapes everything we deliver: practical, implementable, and tailored to how your business actually operates — not how a textbook says it should.',
+      visionLabel:'// VISION', visionTitle:'A Trusted Bridge Between Technology and Management',
+      visionText:'To become the trusted bridge between technology and business management for SMEs and mid-market companies across Saudi Arabia, the GCC, Egypt, and Africa — empowering them to grow with the same tools and discipline as the region\'s largest enterprises.',
+      missionLabel:'// MISSION', missionTitle:'Operational Expertise × Modern Technology',
+      missionText:'We combine hands-on operational expertise with modern technology to help manufacturing, distribution, and service businesses reduce cost, improve quality, strengthen financial control, and digitize their operations — in full alignment with the goals of Saudi Vision 2030.',
+      valuesLabel:'WHAT GUIDES US', valuesTitle:'Our Core Values',
+      values: [
+        { title:'Practicality', desc:'We design for implementation, not just admiration.' },
+        { title:'Precision', desc:'Every recommendation is backed by real operational detail.' },
+        { title:'Partnership', desc:'We work alongside your team, not above it.' },
+        { title:'Innovation', desc:'We engineer what doesn\'t exist yet when off-the-shelf falls short.' }
+      ]
+    },
+    industries: {
+      eyebrow:'INDUSTRIES WE SERVE',
+      title:'Sector focus where it matters most',
+      items:['Manufacturing','Food & Beverage','Retail & Distribution','Salons & Beauty','SMEs']
+    },
+    contact: {
+      eyebrow:'GET IN TOUCH',
+      title:'Your Business Deserves Solutions Built From Experience',
+      sub:'Not assumptions. Talk to a team that has actually run what they now advise you on. Reach out for a free consultation, and our team will get back to you within one business day.',
+      form: { name:'FULL NAME', company:'COMPANY NAME', phone:'PHONE / WHATSAPP', email:'EMAIL', message:'YOUR MESSAGE', messagePh:'Tell us about the challenge your business is facing...', submit:'Send Request', sent:'Thanks — your message is ready in your email app. Hit send and we\'ll reply within one business day.' },
+      info: [ { label:'EMAIL', value:'hello@maras.solutions' }, { label:'LOCATION', value:'Saudi Arabia — serving the GCC, Egypt & Africa' } ]
+    },
+    footer: {
+      tagline:'Real expertise. Real solutions. Bridging technology and business management for manufacturing, distribution, and service companies across Saudi Arabia and the GCC.',
+      navLabel:'// SITEMAP', connectLabel:'// CONNECT',
+      location:'Saudi Arabia',
+      rights:'© 2026 Maras Solutions. All rights reserved.', built:'PROUDLY SUPPORTING SAUDI VISION 2030'
     }
-  };
-  if (document.readyState!=='loading') start(); else document.addEventListener('DOMContentLoaded', start);
-})();
-</script>
-</helmet>
+  },
 
-<div dir="{{ dir }}" style="position:relative;min-height:100vh;background:#070D0C;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;overflow:hidden;">
+  ar: {
+    nav: { about:'من نحن', why:'لماذا مراس', services:'خدماتنا', products:'منتجاتنا', process:'منهجيتنا', industries:'القطاعات', contact:'تواصل', cta:'استشارة مجانية' },
+    diff: { items:['نهج يركّز على العميل','التسليم في الوقت المحدد','جودة بمعايير المؤسسات','دعم مستمر ومخصص'] },
+    hero: {
+      eyebrow:'تقنية × إدارة × خبرة ميدانية',
+      titleA:'خبرة حقيقية... ', titleB:'حلول عملية...', titleC:' نتائج ملموسة',
+      sub:'مراس الحلول تجمع بين التقنية والإدارة في منظومة واحدة، يقودها فريق عمل من الميدان لا من النظرية فقط.',
+      cta1:'اطلب استشارة مجانية', cta2:'استكشف خدماتنا',
+      panelEyebrow:'ما يميزنا',
+      panelTitle:'من أرض المصنع إلى قرارات الإدارة العليا',
+      panelText:'خبراؤنا في الاستشارات والتقنية عملوا لسنوات داخل القطاعات التي يساعدون اليوم على تطويرها.',
+      stats: [
+        { num:'3', label:'تخصصات متكاملة' },
+        { num:'F&B', label:'تركيز قطاعي' },
+        { num:'0', label:'اشتراك لحلول IoT' }
+      ]
+    },
+    pillars: {
+      eyebrow:'منظومة واحدة متصلة',
+      title:'ثلاث تخصصات، طريق واحد لنمو أعمالك',
+      sub:'تنتهي أغلب الشركات بالتعامل مع مستشار منفصل، ومحاسب منفصل، ومزوّد برمجيات منفصل، دون أي تنسيق بينهم. تجمع مراس الحلول هذه التخصصات الثلاثة تحت سقف واحد.',
+      items: [
+        { n:'01', glyph:'◈', title:'الاستشارات الفنية والإدارية', desc:'تشغيل أذكى، تكاليف أقل، جودة أعلى.' },
+        { n:'02', glyph:'⌨', title:'الاستشارات المالية', desc:'وضوح وسيطرة على كل ريال يتحرك في شركتك.' },
+        { n:'03', glyph:'◰', title:'حلول تقنية وبرمجية مخصصة', desc:'نبني التقنية حول طريقة عملك.' }
+      ]
+    },
+    why: {
+      eyebrow:'لماذا مراس',
+      title:'فريقنا هو منتجنا الحقيقي',
+      sub:'مستشارونا وخبراؤنا التقنيون عملوا فعلياً داخل المصانع وشبكات التوزيع والإدارات المالية، قبل أن يكتبوا توصية واحدة.',
+      reasons: [
+        { n:'01', title:'خبرة ميدانية حقيقية', desc:'فريقنا أدار العمليات التي يقدّم الاستشارة فيها اليوم.' },
+        { n:'02', title:'فريق تقني داخلي متمرس', desc:'نبني ونخصّص الحلول، لا نعيد بيع برمجيات جاهزة.' },
+        { n:'03', title:'تخصص في التصنيع والأغذية', desc:'خبرة عميقة في القطاعات الأكثر حساسية تشغيلياً.' },
+        { n:'04', title:'إنترنت الأشياء بدون اشتراك', desc:'مراقبة لحظية دون فاتورة اتصال متكررة.' }
+      ],
+      typicalLabel:'شركات الاستشارات التقليدية',
+      typical: [
+        'أطر أكاديمية عامة تُطبَّق على كل عميل بالتساوي',
+        'توصيات تُسلَّم دون أي مسؤولية عن تطبيقها',
+        'برمجيات تُعاد بيعها كما هي دون فهم حقيقي للقطاع'
+      ],
+      marasLabel:'فريق مراس',
+      maras: [
+        'حلول مبنية على سنوات من العمل الميداني الفعلي',
+        'مستشارون أداروا أرباحاً وخسائر، وخطوط إنتاج، وفرقاً فعلية',
+        'فريق تقني داخلي يُخصّص الحلول لا يقتصر على تركيبها'
+      ]
+    },
+    services: {
+      eyebrow:'خدماتنا',
+      title:'شريك واحد، وكل الحلول التي تحتاجها شركتك',
+      cta:'اعرف أكثر',
+      items: [
+        { n:'01', title:'الاستشارات الفنية والإدارية', desc:'تطوير الأعمال للتصنيع والتوزيع، مع تركيز خاص على قطاع الأغذية والمشروبات.', points:['تحسين عمليات التصنيع','كفاءة التجزئة والتوزيع','رفع الجودة وتطبيق الأنظمة التقنية','دعم الموارد البشرية واللوجستيات'] },
+        { n:'02', title:'الاستشارات المالية', desc:'انضباط مالي على مستوى المؤسسات الكبرى، بمرونة تناسب نمو شركتك.', points:['التدقيق المالي والرقابة الداخلية','محاسبة خارجية بنظام اشتراك شهري','فرق محاسبة مستقلة عند الطلب','دراسات الجدوى والجودة'] },
+        { n:'03', title:'خدمات تقنية المعلومات', desc:'برمجيات وأجهزة مصممة خصيصاً لما تحتاجه عملياتك فعلاً — من الفكرة إلى التشغيل.', points:['برمجيات مخصصة ومتاجر إلكترونية وتطبيقات جوال','أتمتة ذكية وتحليلات لحظية','أنظمة متابعة الأسطول والإنتاج وOEE','كاشير الصالونات وإنترنت الأشياء وتكاملات سلسة'] }
+      ]
+    },
+    products: {
+      eyebrow:'منظومة واحدة متكاملة',
+      title:'منصة واحدة. وكل وحدة تحتاجها أعمالك.',
+      sub:'من إدارة علاقات العملاء والمبيعات إلى الإنتاج والمستودعات والأسطول والموارد البشرية والذكاء الاصطناعي — توفّر مراس منظومة واحدة مترابطة. فعّل ما تحتاجه اليوم فقط، وأضف الباقي مع نموّك.',
+      badge:'معرَّبة للسعودية ومصر — عربية أولاً، وجاهزة للفاتورة الإلكترونية وهيئة الزكاة والضريبة',
+      items: [
+        { n:'01', glyph:'⊗', title:'الإنتاج وكفاءة المعدات', desc:'التصنيع من قائمة المواد إلى المنتج النهائي، مع متابعة الجودة وكفاءة المعدات من أرض المصنع.', tags:['أوامر الإنتاج','قائمة المواد','التخطيط','OEE'] },
+        { n:'02', glyph:'◈', title:'نقاط البيع الذكية', desc:'كاشير سريع وموثوق للتجزئة والصالونات — المخزون والضريبة مدمجان.', tags:['كاشير بضريبة/بدون','السلات','ضبط المخزون'] },
+        { n:'03', glyph:'◰', title:'إدارة الأسطول', desc:'المركبات والرحلات والتتبّع لحظياً — ودون أي اشتراك لإنترنت الأشياء.', tags:['خريطة حية','السياج الجغرافي','جدولة الرحلات','الصيانة'] },
+        { n:'04', glyph:'◧', title:'المبيعات', desc:'من عرض السعر إلى التحصيل عبر كل القنوات، أونلاين وفي المتجر.', tags:['الطلبات','الفاتورة','عروض الأسعار','المرتجعات'] },
+        { n:'05', glyph:'▦', title:'الحسابات والفاتورة الإلكترونية', desc:'تحكم مالي كامل مع التزام ضريبي وفاتورة إلكترونية مدمجة لهيئة الزكاة.', tags:['دليل الحسابات','ضريبة القيمة','الأصول الثابتة','هيئة الزكاة'] },
+        { n:'06', glyph:'⇄', title:'تكامل أنظمة ERP', desc:'اربط كل شيء بمايكروسوفت Dynamics 365 وSAP — تدفّق بيانات واحد ونظيف.', tags:['Dynamics 365','SAP','واجهات API'] }
+      ],
+      moreLabel:'وكامل المنظومة أيضاً',
+      more:['إدارة علاقات العملاء','المشتريات','المستودعات','التحويلات والتوزيع','الورش','الموارد البشرية والرواتب','إدارة المحتوى والويب','الذكاء الاصطناعي والأتمتة','دعم العملاء']
+    },
+    process: {
+      eyebrow:'كيف نعمل',
+      title:'من الفكرة إلى التشغيل — من البداية إلى النهاية',
+      sub:'فريق واحد مسؤول يرافقك من أول حديث حتى حلٍّ يعمل ويُدعَم — دون تنقّل للمسؤولية أو تبادل للوّم.',
+      steps: [
+        { n:'01', title:'الاستكشاف', desc:'ننزل إلى أرض العمل، ونحلّل عملياتك، ونكتشف أين تتسرّب التكاليف والجودة والوقت.' },
+        { n:'02', title:'التصميم', desc:'نضع خطة عملية والتقنية المناسبة — مبنية على طريقة عملك الفعلية.' },
+        { n:'03', title:'التنفيذ والتطبيق', desc:'فريقنا الداخلي يبني ويخصّص ويطبّق — مع فريقك، لا بدلاً عنه.' },
+        { n:'04', title:'الدعم والنمو', desc:'دعم مخصص ومراقبة لحظية تحافظ على التشغيل والتحسين بعد الإطلاق.' }
+      ]
+    },
+    about: {
+      eyebrow:'من نحن',
+      title:'أسسها ممارسون، لا مجرد مستشارين',
+      sub:'قصتنا تبدأ من أرض الميدان، لا من قاعات المحاضرات.',
+      story:'تأسست مراس الحلول للتقنية والاستشارات الفنية والإدارية بناءً على ملاحظة بسيطة: أغلب شركات الاستشارات تكتب تقارير، بينما تحتاج الشركات إلى نتائج فعلية. لذلك بنينا مراس بطريقة مختلفة، حول فريق من المستشارين وخبراء التقنية الذين عملوا لسنوات داخل خطوط الإنتاج، وشبكات التوزيع، والإدارات المالية، ومشاريع التحول التقني في المملكة العربية السعودية والمنطقة، قبل أن يكتبوا توصية واحدة.',
+      story2:'هذه الخبرة الميدانية هي أساسنا، وهي ما يشكّل كل ما نقدمه: حلول عملية وقابلة للتنفيذ، مصممة على طريقة عمل شركتك الفعلية، لا كما تقول الكتب أنها يجب أن تكون.',
+      visionLabel:'// الرؤية', visionTitle:'جسر موثوق بين التقنية والإدارة',
+      visionText:'أن نكون الجسر الموثوق بين التقنية والإدارة للشركات الصغيرة والمتوسطة في المملكة العربية السعودية ودول الخليج ومصر وأفريقيا، ونمكّنها من النمو بأدوات وانضباط يضاهي أكبر المؤسسات في المنطقة.',
+      missionLabel:'// الرسالة', missionTitle:'خبرة تشغيلية × تقنية حديثة',
+      missionText:'نجمع بين الخبرة التشغيلية الميدانية والتقنية الحديثة لمساعدة شركات التصنيع والتوزيع والخدمات على تقليل التكاليف، ورفع الجودة، وتعزيز الرقابة المالية، وتحويل عملياتها رقمياً، بما يتوافق تماماً مع أهداف رؤية المملكة 2030.',
+      valuesLabel:'ما يوجّهنا', valuesTitle:'قيمنا الأساسية',
+      values: [
+        { title:'الواقعية', desc:'نصمم الحلول للتنفيذ، لا للعرض فقط.' },
+        { title:'الدقة', desc:'كل توصية مبنية على تفاصيل تشغيلية حقيقية.' },
+        { title:'الشراكة', desc:'نعمل بجانب فريقك، لا فوقه.' },
+        { title:'الابتكار', desc:'نبني ما لا يوجد جاهزاً عندما لا تكفي الأنظمة التقليدية.' }
+      ]
+    },
+    industries: {
+      eyebrow:'نخدم قطاعات متنوعة',
+      title:'تركيز قطاعي حيث يصنع الأثر',
+      items:['التصنيع','الأغذية والمشروبات','التجزئة والتوزيع','الصالونات ومراكز التجميل','الشركات الصغيرة والمتوسطة']
+    },
+    contact: {
+      eyebrow:'تواصل معنا',
+      title:'أعمالك تستحق حلولاً مبنية على خبرة حقيقية',
+      sub:'لا على افتراضات. تحدث مع فريق سبق له تشغيل ما يستشيرك فيه اليوم. تواصل معنا لاستشارة مجانية، وسيعاود فريقنا الاتصال بك خلال يوم عمل واحد.',
+      form: { name:'الاسم الكامل', company:'اسم الشركة', phone:'الجوال / واتساب', email:'البريد الإلكتروني', message:'رسالتك', messagePh:'حدّثنا عن التحدي الذي تواجهه شركتك...', submit:'إرسال الطلب', sent:'شكراً — رسالتك جاهزة في تطبيق البريد لديك. أرسلها ونرد خلال يوم عمل واحد.' },
+      info: [ { label:'البريد', value:'hello@maras.solutions' }, { label:'الموقع', value:'المملكة العربية السعودية — بخدمة الخليج ومصر وأفريقيا' } ]
+    },
+    footer: {
+      tagline:'خبرة حقيقية... حلول عملية. نجمع بين التقنية والإدارة لشركات التصنيع والتوزيع والخدمات في السعودية والخليج.',
+      navLabel:'// خريطة الموقع', connectLabel:'// تواصل',
+      location:'المملكة العربية السعودية',
+      rights:'© 2026 مراس الحلول. جميع الحقوق محفوظة.', built:'بكل فخر، نواكب رؤية المملكة 2030'
+    }
+  }
+};
 
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,214,161,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,214,161,0.05) 1px,transparent 1px);background-size:54px 54px;animation:mrGridDrift 6s linear infinite;mask-image:radial-gradient(ellipse 120% 90% at 50% 0%,#000 30%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse 120% 90% at 50% 0%,#000 30%,transparent 90%);"></div>
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(0,214,161,0.16),transparent 60%);"></div>
-  <div style="position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.18) 0px,rgba(0,0,0,0.18) 1px,transparent 1px,transparent 3px);opacity:0.5;mix-blend-mode:multiply;animation:mrScan 0.6s steps(3) infinite;"></div>
-  <div style="position:fixed;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 220px 40px rgba(0,0,0,0.85);"></div>
-  <div class="mr-corner" style="position:fixed;top:18px;left:18px;width:26px;height:26px;border-top:2px solid rgba(0,214,161,0.5);border-left:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
-  <div class="mr-corner" style="position:fixed;top:18px;right:18px;width:26px;height:26px;border-top:2px solid rgba(0,214,161,0.5);border-right:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
-  <div class="mr-corner" style="position:fixed;bottom:18px;left:18px;width:26px;height:26px;border-bottom:2px solid rgba(0,214,161,0.5);border-left:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
-  <div class="mr-corner" style="position:fixed;bottom:18px;right:18px;width:26px;height:26px;border-bottom:2px solid rgba(0,214,161,0.5);border-right:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>
+// ─── State ───────────────────────────────────────────────────────────────────
+let currentLang = 'en';
+try {
+  const q = (location.search.match(/[?&]lang=(en|ar)/i) || [])[1];
+  if (q) { currentLang = q.toLowerCase(); }
+  else {
+    const s = localStorage.getItem('maras-lang');
+    if (s === 'en' || s === 'ar') currentLang = s;
+  }
+} catch(e) {}
 
-  <header style="position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(7,13,12,0.72);border-bottom:1px solid rgba(0,214,161,0.12);">
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+function e(tag, attrs, ...children) {
+  const el = document.createElement(tag);
+  if (attrs) {
+    Object.entries(attrs).forEach(([k,v]) => {
+      if (k === 'className') el.className = v;
+      else if (k === 'style') el.style.cssText = v;
+      else if (k.startsWith('on')) el.addEventListener(k.slice(2).toLowerCase(), v);
+      else el.setAttribute(k, v);
+    });
+  }
+  children.forEach(c => {
+    if (c == null) return;
+    if (typeof c === 'string') el.appendChild(document.createTextNode(c));
+    else if (c instanceof Node) el.appendChild(c);
+  });
+  return el;
+}
+
+function h(html) {
+  const d = document.createElement('div');
+  d.innerHTML = html;
+  return d.firstChild;
+}
+
+const TEAL = '#00D6A1';
+const DOT = `<span style="width:6px;height:6px;background:#00D6A1;border-radius:50%;box-shadow:0 0 8px #00D6A1;display:inline-block;"></span>`;
+const PULSE_DOT = `<span style="width:6px;height:6px;background:#00D6A1;border-radius:50%;animation:mrPulse 1.6s infinite;display:inline-block;"></span>`;
+const CORNER_TR = `<div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>`;
+
+function eyebrow(text, center) {
+  return h(`<div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;color:#00D6A1;margin-bottom:18px;${center?'justify-content:center;':''}">
+    <span style="width:26px;height:1px;background:#00D6A1;"></span>${text}<span style="width:26px;height:1px;background:#00D6A1;"></span>
+  </div>`);
+}
+
+// ─── Build Page ───────────────────────────────────────────────────────────────
+function buildPage(lang) {
+  const t = CONTENT[lang];
+  const isAr = lang === 'ar';
+  const dir = isAr ? 'rtl' : 'ltr';
+  const arrow = isAr ? '←' : '→';
+  const ls = isAr ? 'normal' : '0.18em';
+  const langBtn = isAr ? 'EN' : 'ع';
+
+  document.documentElement.lang = lang;
+  document.title = 'MARAS Solutions';
+
+  // ── Fixed BG layers ──
+  const bgGrid = h(`<div style="position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,214,161,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,214,161,0.05) 1px,transparent 1px);background-size:54px 54px;animation:mrGridDrift 6s linear infinite;mask-image:radial-gradient(ellipse 120% 90% at 50% 0%,#000 30%,transparent 90%);-webkit-mask-image:radial-gradient(ellipse 120% 90% at 50% 0%,#000 30%,transparent 90%);"></div>`);
+  const bgGlow = h(`<div style="position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(0,214,161,0.16),transparent 60%);"></div>`);
+  const bgScan = h(`<div style="position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.18) 0px,rgba(0,0,0,0.18) 1px,transparent 1px,transparent 3px);opacity:0.5;mix-blend-mode:multiply;animation:mrScan 0.6s steps(3) infinite;"></div>`);
+  const bgVig = h(`<div style="position:fixed;inset:0;z-index:2;pointer-events:none;box-shadow:inset 0 0 220px 40px rgba(0,0,0,0.85);"></div>`);
+  const cTL = h(`<div class="mr-corner" style="position:fixed;top:18px;left:18px;width:26px;height:26px;border-top:2px solid rgba(0,214,161,0.5);border-left:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>`);
+  const cTR = h(`<div class="mr-corner" style="position:fixed;top:18px;right:18px;width:26px;height:26px;border-top:2px solid rgba(0,214,161,0.5);border-right:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>`);
+  const cBL = h(`<div class="mr-corner" style="position:fixed;bottom:18px;left:18px;width:26px;height:26px;border-bottom:2px solid rgba(0,214,161,0.5);border-left:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>`);
+  const cBR = h(`<div class="mr-corner" style="position:fixed;bottom:18px;right:18px;width:26px;height:26px;border-bottom:2px solid rgba(0,214,161,0.5);border-right:2px solid rgba(0,214,161,0.5);z-index:60;pointer-events:none;"></div>`);
+
+  // ── Header ──
+  const header = h(`<header style="position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(7,13,12,0.72);border-bottom:1px solid rgba(0,214,161,0.12);">
     <div class="mr-headrow" style="max-width:1320px;margin:0 auto;padding:14px clamp(20px,5vw,48px);display:flex;align-items:center;justify-content:space-between;gap:24px;">
       <a href="#top" class="mr-logo" style="display:flex;align-items:center;gap:14px;text-decoration:none;flex-shrink:0;">
         <img src="assets/maras-wordmark.png" alt="Maras Solutions" style="height:32px;width:auto;filter:drop-shadow(0 0 10px rgba(0,214,161,0.35));"/>
       </a>
       <nav class="mr-nav" style="display:flex;align-items:center;gap:22px;">
-        <a href="#about" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.about }}</a>
-        <a href="#why" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.why }}</a>
-        <a href="#services" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.services }}</a>
-        <a href="#products" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.products }}</a>
-        <a href="#process" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.process }}</a>
-        <a href="#industries" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.industries }}</a>
-        <a href="#contact" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:{{ navLs }};color:#9DB3AC;text-decoration:none;">{{ t.nav.contact }}</a>
+        ${['about','why','services','products','process','industries','contact'].map(k=>`
+          <a href="#${k}" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;letter-spacing:${ls};color:#9DB3AC;text-decoration:none;">${t.nav[k]}</a>
+        `).join('')}
       </nav>
       <div class="mr-actions" style="display:flex;align-items:center;gap:14px;flex-shrink:0;">
-        <button onClick="{{ toggleLang }}" style="display:flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(0,214,161,0.3);color:#00D6A1;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.08em;padding:8px 12px;cursor:pointer;border-radius:2px;" style-hover="background:rgba(0,214,161,0.1);">
-          <span style="width:6px;height:6px;background:#00D6A1;border-radius:50%;box-shadow:0 0 8px #00D6A1;"></span>{{ langBtn }}
+        <button id="lang-btn" class="lang-btn" style="display:flex;align-items:center;gap:7px;background:transparent;border:1px solid rgba(0,214,161,0.3);color:#00D6A1;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;letter-spacing:0.08em;padding:8px 12px;cursor:pointer;border-radius:2px;">
+          <span style="width:6px;height:6px;background:#00D6A1;border-radius:50%;box-shadow:0 0 8px #00D6A1;"></span>${langBtn}
         </button>
-        <a href="#contact" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:0.06em;color:#070D0C;background:#00D6A1;padding:10px 18px;text-decoration:none;border-radius:2px;box-shadow:0 0 20px rgba(0,214,161,0.35);" style-hover="background:#34F5D0;">{{ t.nav.cta }}</a>
+        <a href="#contact" class="btn-primary" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:0.06em;color:#070D0C;background:#00D6A1;padding:10px 18px;text-decoration:none;border-radius:2px;box-shadow:0 0 20px rgba(0,214,161,0.35);">${t.nav.cta}</a>
       </div>
     </div>
-  </header>
+  </header>`);
 
-  <main style="position:relative;z-index:5;max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,48px);" id="top">
+  // ── Hero ──
+  const heroStats = t.hero.stats.map(s => `
+    <div style="background:#080F0E;padding:18px 12px;text-align:center;">
+      <div style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:clamp(22px,3vw,32px);color:#00D6A1;line-height:1;text-shadow:0 0 24px rgba(0,214,161,0.35);" dir="ltr">${s.num}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:${ls};color:#7d938c;margin-top:10px;line-height:1.4;">${s.label}</div>
+    </div>
+  `).join('');
 
-    <!-- HERO -->
-    <section class="mr-hero" style="padding:clamp(60px,9vw,120px) 0 clamp(48px,6vw,80px);display:grid;grid-template-columns:1.15fr 0.85fr;gap:clamp(32px,5vw,72px);align-items:center;">
-      <div data-reveal="left">
-        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;border:1px solid rgba(0,214,161,0.25);padding:7px 14px;border-radius:2px;margin-bottom:28px;">
-          <span style="width:6px;height:6px;background:#00D6A1;border-radius:50%;animation:mrPulse 1.6s infinite;"></span>{{ t.hero.eyebrow }}
-        </div>
-        <h1 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(38px,5.6vw,68px);line-height:1.04;letter-spacing:-0.01em;color:#F2FBF8;margin-bottom:26px;text-wrap:balance;">{{ t.hero.titleA }}<span style="color:#00D6A1;text-shadow:0 0 30px rgba(0,214,161,0.45);">{{ t.hero.titleB }}</span>{{ t.hero.titleC }}</h1>
-        <p style="font-size:clamp(16px,1.4vw,19px);line-height:1.7;color:#92A8A1;max-width:46ch;margin-bottom:36px;">{{ t.hero.sub }}</p>
-        <div style="display:flex;flex-wrap:wrap;gap:14px;">
-          <a href="#contact" style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;letter-spacing:0.04em;color:#070D0C;background:#00D6A1;padding:15px 26px;text-decoration:none;border-radius:2px;box-shadow:0 0 28px rgba(0,214,161,0.4);" style-hover="background:#34F5D0;">{{ t.hero.cta1 }} <span style="font-size:16px;">{{ arrow }}</span></a>
-          <a href="#services" style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;letter-spacing:0.04em;color:#E8F3F0;background:transparent;border:1px solid rgba(0,214,161,0.3);padding:15px 26px;text-decoration:none;border-radius:2px;" style-hover="border-color:#00D6A1;background:rgba(0,214,161,0.06);">{{ t.hero.cta2 }}</a>
-        </div>
+  const heroSection = h(`<section class="mr-hero" id="top" style="padding:clamp(60px,9vw,120px) 0 clamp(48px,6vw,80px);display:grid;grid-template-columns:1.15fr 0.85fr;gap:clamp(32px,5vw,72px);align-items:center;">
+    <div data-reveal="left">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;border:1px solid rgba(0,214,161,0.25);padding:7px 14px;border-radius:2px;margin-bottom:28px;">
+        ${PULSE_DOT} ${t.hero.eyebrow}
       </div>
-
-      <div data-reveal="right" data-float style="position:relative;">
-        <div style="position:absolute;inset:-1px;background:linear-gradient(135deg,rgba(0,214,161,0.4),transparent 50%);border-radius:8px;opacity:0.55;filter:blur(2px);"></div>
-        <div style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.18);border-radius:7px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,0.8);padding:clamp(24px,3vw,36px);">
-          <div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
-          <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:6px;height:6px;background:#00D6A1;border-radius:50%;box-shadow:0 0 8px #00D6A1;"></span>{{ t.hero.panelEyebrow }}</div>
-          <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(20px,2vw,27px);color:#EAF6F2;margin-bottom:14px;line-height:1.2;">{{ t.hero.panelTitle }}</h3>
-          <p style="font-size:15px;line-height:1.7;color:#869c95;margin-bottom:26px;">{{ t.hero.panelText }}</p>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(0,214,161,0.12);border:1px solid rgba(0,214,161,0.12);border-radius:4px;overflow:hidden;">
-            <sc-for list="{{ t.hero.stats }}" as="s" hint-placeholder-count="3">
-              <div style="background:#080F0E;padding:18px 12px;text-align:center;">
-                <div style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:clamp(22px,3vw,32px);color:#00D6A1;line-height:1;text-shadow:0 0 24px rgba(0,214,161,0.35);" dir="ltr">{{ s.num }}</div>
-                <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:{{ ls }};color:#7d938c;margin-top:10px;line-height:1.4;">{{ s.label }}</div>
-              </div>
-            </sc-for>
-          </div>
+      <h1 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(38px,5.6vw,68px);line-height:1.04;letter-spacing:-0.01em;color:#F2FBF8;margin-bottom:26px;">${t.hero.titleA}<span style="color:#00D6A1;text-shadow:0 0 30px rgba(0,214,161,0.45);">${t.hero.titleB}</span>${t.hero.titleC}</h1>
+      <p style="font-size:clamp(16px,1.4vw,19px);line-height:1.7;color:#92A8A1;max-width:46ch;margin-bottom:36px;">${t.hero.sub}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;">
+        <a href="#contact" class="btn-primary" style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;letter-spacing:0.04em;color:#070D0C;background:#00D6A1;padding:15px 26px;text-decoration:none;border-radius:2px;box-shadow:0 0 28px rgba(0,214,161,0.4);">${t.hero.cta1} <span style="font-size:16px;">${arrow}</span></a>
+        <a href="#services" class="btn-outline" style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;letter-spacing:0.04em;color:#E8F3F0;background:transparent;border:1px solid rgba(0,214,161,0.3);padding:15px 26px;text-decoration:none;border-radius:2px;">${t.hero.cta2}</a>
+      </div>
+    </div>
+    <div data-reveal="right" data-float style="position:relative;">
+      <div style="position:absolute;inset:-1px;background:linear-gradient(135deg,rgba(0,214,161,0.4),transparent 50%);border-radius:8px;opacity:0.55;filter:blur(2px);"></div>
+      <div style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.18);border-radius:7px;overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,0.8);padding:clamp(24px,3vw,36px);">
+        ${CORNER_TR}
+        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:18px;">${DOT} ${t.hero.panelEyebrow}</div>
+        <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(20px,2vw,27px);color:#EAF6F2;margin-bottom:14px;line-height:1.2;">${t.hero.panelTitle}</h3>
+        <p style="font-size:15px;line-height:1.7;color:#869c95;margin-bottom:26px;">${t.hero.panelText}</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(0,214,161,0.12);border:1px solid rgba(0,214,161,0.12);border-radius:4px;overflow:hidden;">
+          ${heroStats}
         </div>
       </div>
-    </section>
+    </div>
+  </section>`);
 
-    <!-- DIFFERENTIATORS STRIP -->
-    <section style="padding-bottom:clamp(48px,7vw,84px);">
-      <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(0,214,161,0.12);border:1px solid rgba(0,214,161,0.14);border-radius:5px;overflow:hidden;">
-        <sc-for list="{{ t.diff.items }}" as="d" hint-placeholder-count="4">
-          <div data-reveal="up" style="background:#080F0E;padding:clamp(16px,2vw,22px) clamp(16px,2vw,22px);display:flex;align-items:center;gap:12px;">
-            <span style="flex-shrink:0;width:7px;height:7px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span>
-            <span style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(13px,1.3vw,15.5px);color:#D4E5E0;line-height:1.3;">{{ d }}</span>
-          </div>
-        </sc-for>
-      </div>
-    </section>
+  // ── Differentiators Strip ──
+  const diffItems = t.diff.items.map(d => `
+    <div data-reveal="up" style="background:#080F0E;padding:clamp(16px,2vw,22px);display:flex;align-items:center;gap:12px;">
+      <span style="flex-shrink:0;width:7px;height:7px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span>
+      <span style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(13px,1.3vw,15.5px);color:#D4E5E0;line-height:1.3;">${d}</span>
+    </div>
+  `).join('');
+  const diffSection = h(`<section style="padding-bottom:clamp(48px,7vw,84px);">
+    <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(0,214,161,0.12);border:1px solid rgba(0,214,161,0.14);border-radius:5px;overflow:hidden;">
+      ${diffItems}
+    </div>
+  </section>`);
 
-    <!-- PILLARS -->
-    <section id="pillars" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
-      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
-        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.pillars.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
-        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:20ch;margin:0 auto 14px;text-wrap:balance;">{{ t.pillars.title }}</h2>
-        <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:54ch;margin:0 auto;">{{ t.pillars.sub }}</p>
+  // ── Pillars ──
+  const pillarItems = t.pillars.items.map(p => `
+    <div data-reveal="up" class="card-hover" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(26px,3vw,38px);overflow:hidden;">
+      ${CORNER_TR}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;">
+        <div style="width:50px;height:50px;border:1px solid rgba(0,214,161,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#00D6A1;background:rgba(0,214,161,0.05);box-shadow:inset 0 0 18px rgba(0,214,161,0.12);" dir="ltr"><span style="font-family:'JetBrains Mono',monospace;font-size:20px;">${p.glyph}</span></div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3a5650;">${p.n}</span>
       </div>
-      <div class="mr-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,20px);">
-        <sc-for list="{{ t.pillars.items }}" as="p" hint-placeholder-count="3">
-          <div data-reveal="up" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(26px,3vw,38px);overflow:hidden;" style-hover="border-color:rgba(0,214,161,0.45);background:#0A1411;">
-            <div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;">
-              <div style="width:50px;height:50px;border:1px solid rgba(0,214,161,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#00D6A1;background:rgba(0,214,161,0.05);box-shadow:inset 0 0 18px rgba(0,214,161,0.12);" dir="ltr"><span style="font-family:'JetBrains Mono',monospace;font-size:20px;">{{ p.glyph }}</span></div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3a5650;">{{ p.n }}</span>
-            </div>
-            <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(19px,1.7vw,23px);color:#EAF6F2;margin-bottom:12px;">{{ p.title }}</h3>
-            <p style="font-size:15px;line-height:1.7;color:#869c95;">{{ p.desc }}</p>
-          </div>
-        </sc-for>
-      </div>
-    </section>
+      <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(19px,1.7vw,23px);color:#EAF6F2;margin-bottom:12px;">${p.title}</h3>
+      <p style="font-size:15px;line-height:1.7;color:#869c95;">${p.desc}</p>
+    </div>
+  `).join('');
+  const pillarsSection = h(`<section id="pillars" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+    <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>${t.pillars.eyebrow}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
+      <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:20ch;margin:0 auto 14px;">${t.pillars.title}</h2>
+      <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:54ch;margin:0 auto;">${t.pillars.sub}</p>
+    </div>
+    <div class="mr-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,20px);">
+      ${pillarItems}
+    </div>
+  </section>`);
 
-    <!-- WHY MARAS -->
-    <section id="why" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
-      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:clamp(32px,4vw,52px);">
+  // ── Why MARAS ──
+  const reasonItems = t.why.reasons.map(r => `
+    <div data-reveal="up" style="position:relative;padding-top:28px;">
+      <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,#00D6A1,rgba(0,214,161,0.1));"></div>
+      <div style="position:absolute;top:-6px;left:0;width:11px;height:11px;background:#00D6A1;border-radius:50%;box-shadow:0 0 12px #00D6A1;"></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00D6A1;margin-bottom:14px;">${r.n}</div>
+      <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(17px,1.6vw,21px);color:#EAF6F2;margin-bottom:12px;">${r.title}</h3>
+      <p style="font-size:14.5px;line-height:1.7;color:#869c95;">${r.desc}</p>
+    </div>
+  `).join('');
+  const typicalItems = t.why.typical.map(x => `
+    <div style="display:flex;align-items:flex-start;gap:12px;">
+      <span style="flex-shrink:0;width:18px;height:18px;border-radius:50%;border:1px solid rgba(157,179,172,0.4);color:#7d938c;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:2px;" dir="ltr">&times;</span>
+      <span style="font-size:14.5px;line-height:1.6;color:#869c95;">${x}</span>
+    </div>
+  `).join('');
+  const marasItems = t.why.maras.map(m => `
+    <div style="display:flex;align-items:flex-start;gap:12px;">
+      <span style="flex-shrink:0;width:18px;height:18px;border-radius:50%;background:rgba(0,214,161,0.12);border:1px solid rgba(0,214,161,0.4);color:#00D6A1;display:flex;align-items:center;justify-content:center;font-size:11px;margin-top:2px;" dir="ltr">&#10003;</span>
+      <span style="font-size:14.5px;line-height:1.6;color:#D4E5E0;">${m}</span>
+    </div>
+  `).join('');
+  const whySection = h(`<section id="why" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:clamp(32px,4vw,52px);">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>${t.why.eyebrow}</div>
+        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:18ch;">${t.why.title}</h2>
+      </div>
+      <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:40ch;">${t.why.sub}</p>
+    </div>
+    <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,20px);margin-bottom:clamp(28px,4vw,44px);">
+      ${reasonItems}
+    </div>
+    <div class="mr-grid-2" style="display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.6vw,20px);">
+      <div data-reveal="left" style="background:#080F0E;border:1px solid rgba(0,214,161,0.12);border-radius:6px;padding:clamp(26px,3vw,36px);">
+        <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(17px,1.6vw,20px);color:#9DB3AC;margin-bottom:20px;">${t.why.typicalLabel}</h3>
+        <div style="display:flex;flex-direction:column;gap:14px;">${typicalItems}</div>
+      </div>
+      <div data-reveal="right" style="position:relative;background:linear-gradient(160deg,#0A1614,#080F0E);border:1px solid rgba(0,214,161,0.3);border-radius:6px;padding:clamp(26px,3vw,36px);overflow:hidden;">
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 0%,rgba(0,214,161,0.14),transparent 55%);pointer-events:none;"></div>
+        <h3 style="position:relative;font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(17px,1.6vw,20px);color:#00D6A1;margin-bottom:20px;">${t.why.marasLabel}</h3>
+        <div style="position:relative;display:flex;flex-direction:column;gap:14px;">${marasItems}</div>
+      </div>
+    </div>
+  </section>`);
+
+  // ── Services ──
+  const serviceCards = t.services.items.map(srv => `
+    <div data-reveal="up" class="card-hover" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(26px,3vw,36px);overflow:hidden;display:flex;flex-direction:column;">
+      ${CORNER_TR}
+      <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3a5650;margin-bottom:18px;">${srv.n}</span>
+      <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(19px,1.7vw,23px);color:#EAF6F2;margin-bottom:12px;">${srv.title}</h3>
+      <p style="font-size:14.5px;line-height:1.7;color:#869c95;margin-bottom:22px;">${srv.desc}</p>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:auto;">
+        ${srv.points.map(pt=>`<div style="display:flex;align-items:flex-start;gap:11px;"><span style="flex-shrink:0;width:6px;height:6px;background:#00D6A1;border-radius:50%;margin-top:8px;box-shadow:0 0 8px rgba(0,214,161,0.6);"></span><span style="font-size:14px;line-height:1.55;color:#A9BEB7;">${pt}</span></div>`).join('')}
+      </div>
+      <a href="#contact" style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:0.04em;color:#00D6A1;text-decoration:none;margin-top:24px;">${t.services.cta} <span>${arrow}</span></a>
+    </div>
+  `).join('');
+  const servicesSection = h(`<section id="services" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+    <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>${t.services.eyebrow}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
+      <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:22ch;margin:0 auto;">${t.services.title}</h2>
+    </div>
+    <div class="mr-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,20px);">
+      ${serviceCards}
+    </div>
+  </section>`);
+
+  // ── Products ──
+  const productCards = t.products.items.map(pr => `
+    <div data-reveal="up" class="card-hover" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(24px,2.8vw,34px);overflow:hidden;display:flex;flex-direction:column;">
+      ${CORNER_TR}
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+        <div style="width:48px;height:48px;border:1px solid rgba(0,214,161,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#00D6A1;background:rgba(0,214,161,0.05);box-shadow:inset 0 0 18px rgba(0,214,161,0.12);" dir="ltr"><span style="font-family:'JetBrains Mono',monospace;font-size:20px;">${pr.glyph}</span></div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3a5650;">${pr.n}</span>
+      </div>
+      <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(19px,1.7vw,23px);color:#EAF6F2;margin-bottom:12px;">${pr.title}</h3>
+      <p style="font-size:14.5px;line-height:1.7;color:#869c95;margin-bottom:22px;">${pr.desc}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;">
+        ${pr.tags.map(tg=>`<span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9DB3AC;background:rgba(0,214,161,0.05);border:1px solid rgba(0,214,161,0.16);padding:5px 10px;border-radius:2px;">${tg}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+  const moreModules = t.products.more.map(mod => `
+    <span class="pill-hover" style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:500;font-size:13.5px;color:#C4D6D0;background:rgba(0,214,161,0.05);border:1px solid rgba(0,214,161,0.16);padding:8px 16px;border-radius:3px;cursor:default;transition:border-color .2s,color .2s,background .2s;">${mod}</span>
+  `).join('');
+  const productsSection = h(`<section id="products" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+    <div data-reveal="up" style="text-align:center;margin-bottom:clamp(26px,3.4vw,40px);">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>${t.products.eyebrow}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
+      <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:24ch;margin:0 auto 14px;">${t.products.title}</h2>
+      <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:58ch;margin:0 auto;">${t.products.sub}</p>
+    </div>
+    <div style="display:flex;justify-content:center;margin-bottom:clamp(28px,4vw,44px);">
+      <div style="display:inline-flex;align-items:center;gap:11px;background:rgba(0,214,161,0.06);border:1px solid rgba(0,214,161,0.22);border-radius:3px;padding:11px 18px;">
+        <span style="flex-shrink:0;width:7px;height:7px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.06em;color:#C4D6D0;line-height:1.5;">${t.products.badge}</span>
+      </div>
+    </div>
+    <div class="mr-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,20px);">
+      ${productCards}
+    </div>
+    <div data-reveal="up" style="margin-top:clamp(28px,4vw,44px);display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:11px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:${ls};color:#5d7a72;align-self:center;">${t.products.moreLabel} //</span>
+      ${moreModules}
+    </div>
+  </section>`);
+
+  // ── Process ──
+  const processSteps = t.process.steps.map(st => `
+    <div data-reveal="up" class="card-hover" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(24px,2.6vw,32px);overflow:hidden;">
+      ${CORNER_TR}
+      <div style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:clamp(30px,3.4vw,42px);color:rgba(0,214,161,0.25);line-height:1;margin-bottom:18px;" dir="ltr">${st.n}</div>
+      <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(18px,1.7vw,22px);color:#EAF6F2;margin-bottom:12px;">${st.title}</h3>
+      <p style="font-size:14.5px;line-height:1.7;color:#869c95;">${st.desc}</p>
+    </div>
+  `).join('');
+  const processSection = h(`<section id="process" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+    <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>${t.process.eyebrow}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
+      <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:24ch;margin:0 auto 14px;">${t.process.title}</h2>
+      <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:56ch;margin:0 auto;">${t.process.sub}</p>
+    </div>
+    <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,20px);">
+      ${processSteps}
+    </div>
+  </section>`);
+
+  // ── About ──
+  const valueCards = t.about.values.map(v => `
+    <div data-reveal="up" class="card-hover" style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(20px,2.2vw,28px);transition:border-color .2s,background .2s;">
+      <div style="width:38px;height:38px;border:1px solid rgba(0,214,161,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#00D6A1;background:rgba(0,214,161,0.05);margin-bottom:18px;">
+        <span style="width:8px;height:8px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span>
+      </div>
+      <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:17px;color:#EAF6F2;margin-bottom:10px;">${v.title}</h3>
+      <p style="font-size:14px;line-height:1.65;color:#869c95;">${v.desc}</p>
+    </div>
+  `).join('');
+  const aboutSection = h(`<section id="about" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+    <div class="mr-split" style="display:grid;grid-template-columns:0.9fr 1.1fr;gap:clamp(28px,5vw,64px);align-items:center;margin-bottom:clamp(40px,6vw,72px);">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>${t.about.eyebrow}</div>
+        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;margin-bottom:16px;">${t.about.title}</h2>
+        <p style="font-size:clamp(15px,1.4vw,18px);line-height:1.7;color:#00D6A1;">${t.about.sub}</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:18px;">
+        <p style="font-size:15.5px;line-height:1.8;color:#92A8A1;">${t.about.story}</p>
+        <p style="font-size:15.5px;line-height:1.8;color:#92A8A1;">${t.about.story2}</p>
+      </div>
+    </div>
+    <div class="mr-grid-2" style="display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.6vw,20px);margin-bottom:clamp(40px,6vw,72px);">
+      <div data-reveal="up" style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(26px,3vw,38px);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:16px;">${t.about.visionLabel}</div>
+        <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(18px,1.7vw,22px);color:#EAF6F2;margin-bottom:14px;">${t.about.visionTitle}</h3>
+        <p style="font-size:14.5px;line-height:1.75;color:#869c95;">${t.about.visionText}</p>
+      </div>
+      <div data-reveal="up" style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(26px,3vw,38px);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:16px;">${t.about.missionLabel}</div>
+        <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(18px,1.7vw,22px);color:#EAF6F2;margin-bottom:14px;">${t.about.missionTitle}</h3>
+        <p style="font-size:14.5px;line-height:1.75;color:#869c95;">${t.about.missionText}</p>
+      </div>
+    </div>
+    <div data-reveal="up" style="text-align:center;margin-bottom:clamp(28px,4vw,44px);">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:14px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>${t.about.valuesLabel}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
+      <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(26px,3.2vw,40px);line-height:1.1;color:#F2FBF8;">${t.about.valuesTitle}</h2>
+    </div>
+    <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,20px);">
+      ${valueCards}
+    </div>
+  </section>`);
+
+  // ── Industries ──
+  const indLoop = [...t.industries.items, ...t.industries.items];
+  const indItems = indLoop.map(ind => `
+    <span style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(16px,1.8vw,22px);color:#C4D6D0;background:rgba(0,214,161,0.04);border:1px solid rgba(0,214,161,0.16);padding:14px 26px;border-radius:3px;white-space:nowrap;">${ind}</span>
+  `).join('');
+  const industriesSection = h(`<section id="industries" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
+    <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,48px);">
+      <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>${t.industries.eyebrow}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
+      <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(26px,3.2vw,42px);line-height:1.1;color:#F2FBF8;max-width:22ch;margin:0 auto;">${t.industries.title}</h2>
+    </div>
+    <div style="position:relative;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);" dir="ltr">
+      <div style="display:flex;gap:clamp(14px,2vw,24px);width:max-content;animation:mrMarquee 32s linear infinite;">
+        ${indItems}
+      </div>
+    </div>
+  </section>`);
+
+  // ── Contact ──
+  const contactInfo = t.contact.info.map(i => `
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5d7a72;letter-spacing:${ls};width:72px;flex-shrink:0;">${i.label}</span>
+      <span style="font-size:14px;color:#C4D6D0;">${i.value}</span>
+    </div>
+  `).join('');
+  const contactSection = h(`<section id="contact" style="padding-bottom:clamp(60px,8vw,100px);scroll-margin-top:90px;">
+    <div data-reveal="scale" style="position:relative;background:linear-gradient(160deg,#0A1614,#070D0C);border:1px solid rgba(0,214,161,0.2);border-radius:8px;padding:clamp(32px,5vw,68px);overflow:hidden;">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 0%,rgba(0,214,161,0.16),transparent 50%);pointer-events:none;"></div>
+      <div class="mr-grid-2" style="position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);align-items:start;">
         <div>
-          <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.why.eyebrow }}</div>
-          <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:18ch;text-wrap:balance;">{{ t.why.title }}</h2>
+          <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:${ls};color:#00D6A1;margin-bottom:20px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>${t.contact.eyebrow}</div>
+          <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:700;font-size:clamp(28px,3.6vw,48px);line-height:1.08;color:#F2FBF8;margin-bottom:18px;">${t.contact.title}</h2>
+          <p style="font-size:16px;line-height:1.7;color:#92A8A1;max-width:44ch;margin-bottom:34px;">${t.contact.sub}</p>
+          <div style="display:flex;flex-direction:column;gap:18px;">${contactInfo}</div>
         </div>
-        <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:40ch;">{{ t.why.sub }}</p>
-      </div>
-      <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,20px);margin-bottom:clamp(28px,4vw,44px);">
-        <sc-for list="{{ t.why.reasons }}" as="r" hint-placeholder-count="4">
-          <div data-reveal="up" style="position:relative;padding-top:28px;">
-            <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,#00D6A1,rgba(0,214,161,0.1));"></div>
-            <div style="position:absolute;top:-6px;left:0;width:11px;height:11px;background:#00D6A1;border-radius:50%;box-shadow:0 0 12px #00D6A1;"></div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#00D6A1;margin-bottom:14px;">{{ r.n }}</div>
-            <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(17px,1.6vw,21px);color:#EAF6F2;margin-bottom:12px;">{{ r.title }}</h3>
-            <p style="font-size:14.5px;line-height:1.7;color:#869c95;">{{ r.desc }}</p>
-          </div>
-        </sc-for>
-      </div>
-      <div class="mr-grid-2" style="display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.6vw,20px);">
-        <div data-reveal="left" style="background:#080F0E;border:1px solid rgba(0,214,161,0.12);border-radius:6px;padding:clamp(26px,3vw,36px);">
-          <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(17px,1.6vw,20px);color:#9DB3AC;margin-bottom:20px;">{{ t.why.typicalLabel }}</h3>
-          <div style="display:flex;flex-direction:column;gap:14px;">
-            <sc-for list="{{ t.why.typical }}" as="x" hint-placeholder-count="3">
-              <div style="display:flex;align-items:flex-start;gap:12px;">
-                <span style="flex-shrink:0;width:18px;height:18px;border-radius:50%;border:1px solid rgba(157,179,172,0.4);color:#7d938c;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:2px;" dir="ltr">&times;</span>
-                <span style="font-size:14.5px;line-height:1.6;color:#869c95;">{{ x }}</span>
-              </div>
-            </sc-for>
-          </div>
-        </div>
-        <div data-reveal="right" style="position:relative;background:linear-gradient(160deg,#0A1614,#080F0E);border:1px solid rgba(0,214,161,0.3);border-radius:6px;padding:clamp(26px,3vw,36px);overflow:hidden;">
-          <div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 0%,rgba(0,214,161,0.14),transparent 55%);pointer-events:none;"></div>
-          <h3 style="position:relative;font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(17px,1.6vw,20px);color:#00D6A1;margin-bottom:20px;">{{ t.why.marasLabel }}</h3>
-          <div style="position:relative;display:flex;flex-direction:column;gap:14px;">
-            <sc-for list="{{ t.why.maras }}" as="m" hint-placeholder-count="3">
-              <div style="display:flex;align-items:flex-start;gap:12px;">
-                <span style="flex-shrink:0;width:18px;height:18px;border-radius:50%;background:rgba(0,214,161,0.12);border:1px solid rgba(0,214,161,0.4);color:#00D6A1;display:flex;align-items:center;justify-content:center;font-size:11px;margin-top:2px;" dir="ltr">&#10003;</span>
-                <span style="font-size:14.5px;line-height:1.6;color:#D4E5E0;">{{ m }}</span>
-              </div>
-            </sc-for>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SERVICES -->
-    <section id="services" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
-      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
-        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.services.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
-        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:22ch;margin:0 auto;text-wrap:balance;">{{ t.services.title }}</h2>
-      </div>
-      <div class="mr-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,20px);">
-        <sc-for list="{{ t.services.items }}" as="srv" hint-placeholder-count="3">
-          <div data-reveal="up" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(26px,3vw,36px);overflow:hidden;display:flex;flex-direction:column;" style-hover="border-color:rgba(0,214,161,0.45);background:#0A1411;">
-            <div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3a5650;margin-bottom:18px;">{{ srv.n }}</span>
-            <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(19px,1.7vw,23px);color:#EAF6F2;margin-bottom:12px;">{{ srv.title }}</h3>
-            <p style="font-size:14.5px;line-height:1.7;color:#869c95;margin-bottom:22px;">{{ srv.desc }}</p>
-            <div style="display:flex;flex-direction:column;gap:12px;margin-top:auto;">
-              <sc-for list="{{ srv.points }}" as="pt" hint-placeholder-count="4">
-                <div style="display:flex;align-items:flex-start;gap:11px;">
-                  <span style="flex-shrink:0;width:6px;height:6px;background:#00D6A1;border-radius:50%;margin-top:8px;box-shadow:0 0 8px rgba(0,214,161,0.6);"></span>
-                  <span style="font-size:14px;line-height:1.55;color:#A9BEB7;">{{ pt }}</span>
-                </div>
-              </sc-for>
-            </div>
-            <a href="#contact" style="display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:0.04em;color:#00D6A1;text-decoration:none;margin-top:24px;">{{ t.services.cta }} <span>{{ arrow }}</span></a>
-          </div>
-        </sc-for>
-      </div>
-    </section>
-
-    <!-- PRODUCTS -->
-    <section id="products" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
-      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(26px,3.4vw,40px);">
-        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.products.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
-        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:24ch;margin:0 auto 14px;text-wrap:balance;">{{ t.products.title }}</h2>
-        <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:58ch;margin:0 auto;">{{ t.products.sub }}</p>
-      </div>
-      <div style="display:flex;justify-content:center;margin-bottom:clamp(28px,4vw,44px);">
-        <div style="display:inline-flex;align-items:center;gap:11px;background:rgba(0,214,161,0.06);border:1px solid rgba(0,214,161,0.22);border-radius:3px;padding:11px 18px;max-width:100%;">
-          <span style="flex-shrink:0;width:7px;height:7px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span>
-          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:{{ navLs }};color:#C4D6D0;line-height:1.5;">{{ t.products.badge }}</span>
-        </div>
-      </div>
-      <div class="mr-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(14px,1.6vw,20px);">
-        <sc-for list="{{ t.products.items }}" as="pr" hint-placeholder-count="6">
-          <div data-reveal="up" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(24px,2.8vw,34px);overflow:hidden;display:flex;flex-direction:column;" style-hover="border-color:rgba(0,214,161,0.45);background:#0A1411;">
-            <div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
-              <div style="width:48px;height:48px;border:1px solid rgba(0,214,161,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#00D6A1;background:rgba(0,214,161,0.05);box-shadow:inset 0 0 18px rgba(0,214,161,0.12);" dir="ltr"><span style="font-family:'JetBrains Mono',monospace;font-size:20px;">{{ pr.glyph }}</span></div>
-              <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3a5650;">{{ pr.n }}</span>
-            </div>
-            <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(19px,1.7vw,23px);color:#EAF6F2;margin-bottom:12px;">{{ pr.title }}</h3>
-            <p style="font-size:14.5px;line-height:1.7;color:#869c95;margin-bottom:22px;">{{ pr.desc }}</p>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;">
-              <sc-for list="{{ pr.tags }}" as="tg" hint-placeholder-count="3">
-                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.02em;color:#9DB3AC;background:rgba(0,214,161,0.05);border:1px solid rgba(0,214,161,0.16);padding:5px 10px;border-radius:2px;">{{ tg }}</span>
-              </sc-for>
-            </div>
-          </div>
-        </sc-for>
-      </div>
-      <div data-reveal="up" style="margin-top:clamp(28px,4vw,44px);display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:11px;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:{{ ls }};color:#5d7a72;align-self:center;">{{ t.products.moreLabel }} //</span>
-        <sc-for list="{{ t.products.more }}" as="mod" hint-placeholder-count="9">
-          <span style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:500;font-size:13.5px;color:#C4D6D0;background:rgba(0,214,161,0.05);border:1px solid rgba(0,214,161,0.16);padding:8px 16px;border-radius:3px;" style-hover="border-color:rgba(0,214,161,0.45);color:#EAF6F2;background:rgba(0,214,161,0.08);">{{ mod }}</span>
-        </sc-for>
-      </div>
-    </section>
-
-    <!-- PROCESS -->
-    <section id="process" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
-      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,52px);">
-        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.process.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
-        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;max-width:24ch;margin:0 auto 14px;text-wrap:balance;">{{ t.process.title }}</h2>
-        <p style="font-size:15.5px;line-height:1.7;color:#8aa099;max-width:56ch;margin:0 auto;">{{ t.process.sub }}</p>
-      </div>
-      <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,20px);">
-        <sc-for list="{{ t.process.steps }}" as="st" hint-placeholder-count="4">
-          <div data-reveal="up" style="position:relative;background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(24px,2.6vw,32px);overflow:hidden;" style-hover="border-color:rgba(0,214,161,0.4);background:#0A1411;">
-            <div style="position:absolute;top:14px;right:14px;width:18px;height:18px;border-top:1.5px solid rgba(0,214,161,0.35);border-right:1.5px solid rgba(0,214,161,0.35);"></div>
-            <div style="font-family:'Chakra Petch',sans-serif;font-weight:700;font-size:clamp(30px,3.4vw,42px);color:rgba(0,214,161,0.25);line-height:1;margin-bottom:18px;" dir="ltr">{{ st.n }}</div>
-            <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(18px,1.7vw,22px);color:#EAF6F2;margin-bottom:12px;">{{ st.title }}</h3>
-            <p style="font-size:14.5px;line-height:1.7;color:#869c95;">{{ st.desc }}</p>
-          </div>
-        </sc-for>
-      </div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
-      <div class="mr-split" style="display:grid;grid-template-columns:0.9fr 1.1fr;gap:clamp(28px,5vw,64px);align-items:center;margin-bottom:clamp(40px,6vw,72px);">
-        <div>
-          <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.about.eyebrow }}</div>
-          <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,46px);line-height:1.08;color:#F2FBF8;margin-bottom:16px;text-wrap:balance;">{{ t.about.title }}</h2>
-          <p style="font-size:clamp(15px,1.4vw,18px);line-height:1.7;color:#00D6A1;">{{ t.about.sub }}</p>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:18px;">
-          <p style="font-size:15.5px;line-height:1.8;color:#92A8A1;">{{ t.about.story }}</p>
-          <p style="font-size:15.5px;line-height:1.8;color:#92A8A1;">{{ t.about.story2 }}</p>
-        </div>
-      </div>
-
-      <div class="mr-grid-2" style="display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.6vw,20px);margin-bottom:clamp(40px,6vw,72px);">
-        <div data-reveal="up" style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(26px,3vw,38px);">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:16px;">{{ t.about.visionLabel }}</div>
-          <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(18px,1.7vw,22px);color:#EAF6F2;margin-bottom:14px;">{{ t.about.visionTitle }}</h3>
-          <p style="font-size:14.5px;line-height:1.75;color:#869c95;">{{ t.about.visionText }}</p>
-        </div>
-        <div data-reveal="up" style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:6px;padding:clamp(26px,3vw,38px);">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:16px;">{{ t.about.missionLabel }}</div>
-          <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(18px,1.7vw,22px);color:#EAF6F2;margin-bottom:14px;">{{ t.about.missionTitle }}</h3>
-          <p style="font-size:14.5px;line-height:1.75;color:#869c95;">{{ t.about.missionText }}</p>
-        </div>
-      </div>
-
-      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(28px,4vw,44px);">
-        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:14px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.about.valuesLabel }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
-        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(26px,3.2vw,40px);line-height:1.1;color:#F2FBF8;">{{ t.about.valuesTitle }}</h2>
-      </div>
-      <div class="mr-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,20px);">
-        <sc-for list="{{ t.about.values }}" as="v" hint-placeholder-count="4">
-          <div data-reveal="up" style="background:#080F0E;border:1px solid rgba(0,214,161,0.14);border-radius:5px;padding:clamp(20px,2.2vw,28px);" style-hover="border-color:rgba(0,214,161,0.4);">
-            <div style="width:38px;height:38px;border:1px solid rgba(0,214,161,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#00D6A1;background:rgba(0,214,161,0.05);margin-bottom:18px;" dir="ltr"><span style="width:8px;height:8px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span></div>
-            <h3 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:17px;color:#EAF6F2;margin-bottom:10px;">{{ v.title }}</h3>
-            <p style="font-size:14px;line-height:1.65;color:#869c95;">{{ v.desc }}</p>
-          </div>
-        </sc-for>
-      </div>
-    </section>
-
-    <!-- INDUSTRIES -->
-    <section id="industries" style="padding-bottom:clamp(70px,10vw,130px);scroll-margin-top:90px;">
-      <div data-reveal="up" style="text-align:center;margin-bottom:clamp(32px,4vw,48px);">
-        <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:18px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.industries.eyebrow }}<span style="width:26px;height:1px;background:#00D6A1;"></span></div>
-        <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(26px,3.2vw,42px);line-height:1.1;color:#F2FBF8;max-width:22ch;margin:0 auto;text-wrap:balance;">{{ t.industries.title }}</h2>
-      </div>
-      <div style="position:relative;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);" dir="ltr">
-        <div style="display:flex;gap:clamp(14px,2vw,24px);width:max-content;animation:mrMarquee 32s linear infinite;">
-          <sc-for list="{{ industriesLoop }}" as="ind" hint-placeholder-count="10">
-            <span style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:600;font-size:clamp(16px,1.8vw,22px);color:#C4D6D0;background:rgba(0,214,161,0.04);border:1px solid rgba(0,214,161,0.16);padding:14px 26px;border-radius:3px;white-space:nowrap;">{{ ind }}</span>
-          </sc-for>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" style="padding-bottom:clamp(60px,8vw,100px);scroll-margin-top:90px;">
-      <div data-reveal="scale" style="position:relative;background:linear-gradient(160deg,#0A1614,#070D0C);border:1px solid rgba(0,214,161,0.2);border-radius:8px;padding:clamp(32px,5vw,68px);overflow:hidden;">
-        <div style="position:absolute;inset:0;background:radial-gradient(circle at 85% 0%,rgba(0,214,161,0.16),transparent 50%);pointer-events:none;"></div>
-        <div class="mr-grid-2" style="position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);align-items:start;">
-          <div>
-            <div style="display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:{{ ls }};color:#00D6A1;margin-bottom:20px;"><span style="width:26px;height:1px;background:#00D6A1;"></span>{{ t.contact.eyebrow }}</div>
-            <h2 style="font-family:'Chakra Petch','IBM Plex Sans Arabic',sans-serif;font-weight:700;font-size:clamp(28px,3.6vw,48px);line-height:1.08;color:#F2FBF8;margin-bottom:18px;text-wrap:balance;">{{ t.contact.title }}</h2>
-            <p style="font-size:16px;line-height:1.7;color:#92A8A1;max-width:44ch;margin-bottom:34px;">{{ t.contact.sub }}</p>
-            <div style="display:flex;flex-direction:column;gap:18px;">
-              <sc-for list="{{ t.contact.info }}" as="i" hint-placeholder-count="2">
-                <div style="display:flex;align-items:center;gap:14px;">
-                  <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5d7a72;letter-spacing:{{ ls }};width:72px;flex-shrink:0;">{{ i.label }}</span>
-                  <span style="font-size:14px;color:#C4D6D0;">{{ i.value }}</span>
-                </div>
-              </sc-for>
-            </div>
-          </div>
-          <form onSubmit="{{ submitForm }}" style="display:flex;flex-direction:column;gap:14px;">
-            <div class="mr-form-2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-              <div>
-                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.name }}</label>
-                <input type="text" name="name" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
-              </div>
-              <div>
-                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.company }}</label>
-                <input type="text" name="company" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
-              </div>
-            </div>
-            <div class="mr-form-2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-              <div>
-                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.phone }}</label>
-                <input type="text" name="phone" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
-              </div>
-              <div>
-                <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.email }}</label>
-                <input type="email" name="email" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;" style-focus="border-color:#00D6A1;"/>
-              </div>
+        <div id="contact-form-wrap" style="display:flex;flex-direction:column;gap:14px;">
+          <div class="mr-form-2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div>
+              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:${ls};color:#5d7a72;margin-bottom:8px;">${t.contact.form.name}</label>
+              <input id="cf-name" type="text" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;"/>
             </div>
             <div>
-              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:8px;">{{ t.contact.form.message }}</label>
-              <textarea rows="4" name="message" placeholder="{{ t.contact.form.messagePh }}" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;resize:vertical;" style-focus="border-color:#00D6A1;"></textarea>
+              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:${ls};color:#5d7a72;margin-bottom:8px;">${t.contact.form.company}</label>
+              <input id="cf-company" type="text" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;"/>
             </div>
-            <button type="submit" style="margin-top:6px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;letter-spacing:0.04em;color:#070D0C;background:#00D6A1;border:none;padding:15px 26px;border-radius:3px;cursor:pointer;box-shadow:0 0 28px rgba(0,214,161,0.4);" style-hover="background:#34F5D0;">{{ t.contact.form.submit }} <span style="font-size:15px;">{{ arrow }}</span></button>
-            <sc-if value="{{ sent }}">
-              <div style="display:flex;align-items:center;gap:11px;background:rgba(0,214,161,0.08);border:1px solid rgba(0,214,161,0.3);border-radius:3px;padding:13px 15px;margin-top:4px;">
-                <span style="flex-shrink:0;width:7px;height:7px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span>
-                <span style="font-size:13.5px;line-height:1.5;color:#D4E5E0;">{{ t.contact.form.sent }}</span>
-              </div>
-            </sc-if>
-          </form>
+          </div>
+          <div class="mr-form-2" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div>
+              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:${ls};color:#5d7a72;margin-bottom:8px;">${t.contact.form.phone}</label>
+              <input id="cf-phone" type="text" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;"/>
+            </div>
+            <div>
+              <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:${ls};color:#5d7a72;margin-bottom:8px;">${t.contact.form.email}</label>
+              <input id="cf-email" type="email" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;"/>
+            </div>
+          </div>
+          <div>
+            <label style="display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:${ls};color:#5d7a72;margin-bottom:8px;">${t.contact.form.message}</label>
+            <textarea id="cf-msg" rows="4" placeholder="${t.contact.form.messagePh}" style="width:100%;background:#070D0C;border:1px solid rgba(0,214,161,0.18);border-radius:3px;padding:13px 14px;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;font-size:14px;outline:none;resize:vertical;"></textarea>
+          </div>
+          <button id="cf-submit" type="button" class="btn-primary" style="margin-top:6px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:600;letter-spacing:0.04em;color:#070D0C;background:#00D6A1;border:none;padding:15px 26px;border-radius:3px;cursor:pointer;box-shadow:0 0 28px rgba(0,214,161,0.4);">${t.contact.form.submit} <span style="font-size:15px;">${arrow}</span></button>
+          <div id="sent-msg" style="display:none;align-items:center;gap:11px;background:rgba(0,214,161,0.08);border:1px solid rgba(0,214,161,0.3);border-radius:3px;padding:13px 15px;margin-top:4px;">
+            <span style="flex-shrink:0;width:7px;height:7px;background:#00D6A1;border-radius:50%;box-shadow:0 0 10px #00D6A1;"></span>
+            <span id="sent-text" style="font-size:13.5px;line-height:1.5;color:#D4E5E0;">${t.contact.form.sent}</span>
+          </div>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>`);
 
-  <footer style="position:relative;z-index:5;border-top:1px solid rgba(0,214,161,0.12);background:rgba(7,13,12,0.6);">
+  // ── Footer ──
+  const footer = h(`<footer style="position:relative;z-index:5;border-top:1px solid rgba(0,214,161,0.12);background:rgba(7,13,12,0.6);">
     <div class="mr-footer" style="max-width:1320px;margin:0 auto;padding:clamp(40px,5vw,60px) clamp(20px,5vw,48px);display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px;align-items:start;">
       <div>
         <img src="assets/maras-logo.png" alt="Maras Solutions" style="height:74px;width:auto;filter:drop-shadow(0 0 12px rgba(0,214,161,0.3));margin-bottom:18px;"/>
-        <p style="font-size:14px;line-height:1.7;color:#7d938c;max-width:36ch;">{{ t.footer.tagline }}</p>
+        <p style="font-size:14px;line-height:1.7;color:#7d938c;max-width:36ch;">${t.footer.tagline}</p>
       </div>
       <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:16px;">{{ t.footer.navLabel }}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:${ls};color:#5d7a72;margin-bottom:16px;">${t.footer.navLabel}</div>
         <div style="display:flex;flex-direction:column;gap:11px;">
-          <a href="#about" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.about }}</a>
-          <a href="#why" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.why }}</a>
-          <a href="#services" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.services }}</a>
-          <a href="#products" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.products }}</a>
-          <a href="#process" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.process }}</a>
-          <a href="#contact" style="font-size:14px;color:#A9BEB7;text-decoration:none;">{{ t.nav.contact }}</a>
+          ${['about','why','services','products','process','contact'].map(k=>`<a href="#${k}" style="font-size:14px;color:#A9BEB7;text-decoration:none;" class="mr-footer">${t.nav[k]}</a>`).join('')}
         </div>
       </div>
       <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:{{ ls }};color:#5d7a72;margin-bottom:16px;">{{ t.footer.connectLabel }}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:${ls};color:#5d7a72;margin-bottom:16px;">${t.footer.connectLabel}</div>
         <div style="display:flex;flex-direction:column;gap:11px;">
           <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#00D6A1;" dir="ltr">hello@maras.solutions</span>
-          <a href="#" style="font-size:14px;color:#A9BEB7;text-decoration:none;">LinkedIn</a>
-          <span style="font-size:14px;color:#A9BEB7;">{{ t.footer.location }}</span>
+          <a href="#" style="font-size:14px;color:#A9BEB7;text-decoration:none;" class="mr-footer">LinkedIn</a>
+          <span style="font-size:14px;color:#A9BEB7;">${t.footer.location}</span>
         </div>
       </div>
     </div>
     <div style="border-top:1px solid rgba(0,214,161,0.1);">
       <div style="max-width:1320px;margin:0 auto;padding:18px clamp(20px,5vw,48px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-        <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#5d7a72;">{{ t.footer.rights }}</span>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#3a5650;">{{ t.footer.built }}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#5d7a72;">${t.footer.rights}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#3a5650;">${t.footer.built}</span>
       </div>
     </div>
-  </footer>
-</div>
-</x-dc>
-<script type="text/x-dc" data-dc-script>
-class Component extends DCLogic {
-  state = { lang: (function(){
-    try {
-      var q = (location.search.match(/[?&]lang=(en|ar)/i) || [])[1];
-      if (q) return q.toLowerCase();
-      var s = localStorage.getItem('maras-lang');
-      if (s === 'en' || s === 'ar') return s;
-    } catch (e) {}
-    return 'en';
-  })(), sent: false };
+  </footer>`);
 
-  toggleLang = () => this.setState(s => {
-    var next = s.lang === 'en' ? 'ar' : 'en';
-    try { localStorage.setItem('maras-lang', next); } catch (e) {}
+  // ── Assemble main wrapper ──
+  const wrapper = h(`<div dir="${dir}" style="position:relative;min-height:100vh;background:#070D0C;color:#E8F3F0;font-family:'Space Grotesk','IBM Plex Sans Arabic',sans-serif;overflow:hidden;"></div>`);
+  wrapper.append(bgGrid, bgGlow, bgScan, bgVig, cTL, cTR, cBL, cBR, header);
+
+  const main = h(`<main style="position:relative;z-index:5;max-width:1320px;margin:0 auto;padding:0 clamp(20px,5vw,48px);"></main>`);
+  main.append(heroSection, diffSection, pillarsSection, whySection, servicesSection, productsSection, processSection, aboutSection, industriesSection, contactSection);
+  wrapper.append(main, footer);
+
+  return wrapper;
+}
+
+// ─── Init & Render ────────────────────────────────────────────────────────────
+function render(lang) {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  const page = buildPage(lang);
+  app.appendChild(page);
+
+  // Lang toggle
+  document.getElementById('lang-btn').addEventListener('click', () => {
+    currentLang = currentLang === 'en' ? 'ar' : 'en';
+    try { localStorage.setItem('maras-lang', currentLang); } catch(e) {}
     try {
-      var url = new URL(location.href);
-      url.searchParams.set('lang', next);
+      const url = new URL(location.href);
+      url.searchParams.set('lang', currentLang);
       history.replaceState(null, '', url.toString());
-    } catch (e) {}
-    return { lang: next };
+    } catch(e) {}
+    render(currentLang);
+    initReveal();
   });
 
-  submitForm = (e) => {
-    e.preventDefault();
-    var f = new FormData(e.currentTarget);
-    var fm = this.content()[this.state.lang].contact.form;
-    var get = function (k) { return (f.get(k) || '').toString().trim(); };
-    var lines = [
-      fm.name + ': ' + get('name'),
-      fm.company + ': ' + get('company'),
-      fm.phone + ': ' + get('phone'),
-      fm.email + ': ' + get('email'),
-      '',
-      fm.message + ':',
-      get('message')
-    ];
-    var subject = 'Website inquiry — ' + (get('company') || get('name') || 'New contact');
-    var href = 'mailto:hello@maras.solutions'
-      + '?subject=' + encodeURIComponent(subject)
-      + '&body=' + encodeURIComponent(lines.join('\n'));
-    try { window.location.href = href; } catch (err) {}
-    this.setState({ sent: true });
-  };
-
-  content() {
-    const en = {
-      nav: { about:'ABOUT', why:'WHY MARAS', services:'SERVICES', products:'PRODUCTS', process:'PROCESS', industries:'INDUSTRIES', contact:'CONTACT', cta:'FREE CONSULTATION' },
-      diff: { items:['Customer-Centric Approach','On-Time Delivery','Enterprise-Grade Quality','Dedicated Ongoing Support'] },
-      hero: {
-        eyebrow:'TECHNOLOGY \u00D7 MANAGEMENT \u00D7 FIELD EXPERIENCE',
-        titleA:'Real Expertise. ', titleB:'Real Solutions.', titleC:' Real Results.',
-        sub:'Maras Solutions bridges the gap between technology and business management \u2014 built by people who have actually run the operations, not just studied them.',
-        cta1:'Book a Free Consultation', cta2:'Explore Our Services',
-        panelEyebrow:'WHAT SETS US APART',
-        panelTitle:'From the factory floor to the boardroom',
-        panelText:'Our consultants and technology experts have spent years inside the industries they now help transform.',
-        stats: [
-          { num:'3', label:'INTEGRATED DISCIPLINES' },
-          { num:'F&B', label:'SECTOR FOCUS' },
-          { num:'0', label:'IoT SUBSCRIPTION FEES' }
-        ]
-      },
-      pillars: {
-        eyebrow:'ONE CONNECTED SYSTEM',
-        title:'Three Disciplines, One Path to Growth',
-        sub:'Most businesses juggle separate consultants, accountants, and software vendors who never talk to each other. Maras Solutions brings all three disciplines under one roof.',
-        items: [
-          { n:'01', glyph:'\u25C8', title:'Business & Operations Consulting', desc:'Smarter operations. Lower costs. Higher quality.' },
-          { n:'02', glyph:'\u2328', title:'Financial Consulting & Accounting', desc:'Clarity and control over every riyal.' },
-          { n:'03', glyph:'\u25F0', title:'Custom Technology Solutions', desc:'Built around your business, not the reverse.' }
-        ]
-      },
-      why: {
-        eyebrow:'WHY MARAS',
-        title:'Our People Are Our Product',
-        sub:'Our consultants and IT specialists have worked inside factories, distribution networks, and finance departments \u2014 long before writing a single recommendation.',
-        reasons: [
-          { n:'01', title:'Hands-On Market Experience', desc:'Our team has run the operations they now advise on.' },
-          { n:'02', title:'Senior In-House Tech Team', desc:'We build and customize; we don\u2019t just resell software.' },
-          { n:'03', title:'F&B & Manufacturing Specialists', desc:'Deep, sector-specific expertise where it matters most.' },
-          { n:'04', title:'Smart IoT, Zero Subscription', desc:'Real-time monitoring without recurring connectivity fees.' }
-        ],
-        typicalLabel:'Typical Consulting Firms',
-        typical: [
-          'Generic academic frameworks applied to every client',
-          'Recommendations delivered without operational accountability',
-          'Software resold "as-is" with no industry context'
-        ],
-        marasLabel:'The Maras Team',
-        maras: [
-          'Solutions built from years on the factory floor and in the field',
-          'Consultants who\u2019ve managed real P&Ls, real production lines, real teams',
-          'An in-house tech team that customizes \u2014 not just installs'
-        ]
-      },
-      services: {
-        eyebrow:'OUR SERVICES',
-        title:'One Partner, Every Solution Your Business Needs',
-        cta:'Learn more',
-        items: [
-          { n:'01', title:'Business & Technical Consulting', desc:'Business development for manufacturing and distribution, with a focus on the F&B sector.', points:['Factory management, time & cost reduction','Quality elevation & tech system implementation','Distribution efficiency & sales development','HR, procurement & logistics support'] },
-          { n:'02', title:'Financial Consulting', desc:'Enterprise-grade financial discipline, with flexibility that scales with you.', points:['Financial auditing & internal controls','Outsourced bookkeeping subscription','Freelance accounting teams on demand','Feasibility & quality studies'] },
-          { n:'03', title:'Information Technology', desc:'Software and hardware engineered for what your operation actually needs — from concept to deployment.', points:['Custom software, e-commerce & mobile apps','Smart automation & real-time analytics','Fleet, production & OEE monitoring systems','Salon POS, IoT & seamless integrations'] }
-        ]
-      },
-      products: {
-        eyebrow:'ONE INTEGRATED SUITE',
-        title:'One Platform. Every Module Your Business Runs On.',
-        sub:'From CRM and sales to production, warehouse, fleet, HR, and AI — Maras delivers a single connected suite. Switch on only the modules you need today, and add the rest as you grow.',
-        badge:'LOCALIZED FOR KSA & EGYPT — ARABIC-FIRST, ZATCA & E-INVOICING READY',
-        items: [
-          { n:'01', glyph:'⊗', title:'Production & OEE', desc:'Manufacturing from bill of materials to finished goods, with quality and equipment effectiveness tracked from the floor up.', tags:['Production Orders','BOM','Planning','OEE'] },
-          { n:'02', glyph:'◈', title:'Smart POS', desc:'Fast, reliable checkout for retail and salons — inventory and VAT built in.', tags:['POS VAT / non-VAT','Carts','Stock control'] },
-          { n:'03', glyph:'◰', title:'Fleet Management', desc:'Vehicles, trips, and telematics tracked in real time — with zero IoT subscription fees.', tags:['Live Map','Geofencing','Trip Planning','Maintenance'] },
-          { n:'04', glyph:'◧', title:'Sales', desc:'Quote-to-cash across every channel, online and in-store.', tags:['Orders','Invoicing','Quotations','Returns'] },
-          { n:'05', glyph:'▦', title:'Accounts & eInvoicing', desc:'Total financial control plus built-in ZATCA tax and e-invoicing compliance.', tags:['Chart of Accounts','VAT','Fixed Assets','ZATCA'] },
-          { n:'06', glyph:'⇄', title:'ERP & Integrations', desc:'Connect everything to Microsoft Dynamics 365 and SAP — one clean data flow.', tags:['Dynamics 365','SAP','APIs'] }
-        ],
-        moreLabel:'PLUS THE FULL SUITE',
-        more:['CRM','Purchase','Warehouse','Transfers & Distribution','Workshop','HR & Payroll','CMS & Web','AI & Automation','Customer Support']
-      },
-      process: {
-        eyebrow:'HOW WE WORK',
-        title:'From Concept to Deployment — End to End',
-        sub:'One accountable team takes you from the first conversation to a running, supported solution — no handoffs, no finger-pointing.',
-        steps: [
-          { n:'01', title:'Discover', desc:'We sit on your floor, map your operations, and find where cost, quality, and time are leaking.' },
-          { n:'02', title:'Design', desc:'We shape a practical plan and the right technology — built around how you actually work.' },
-          { n:'03', title:'Build & Implement', desc:'Our in-house team builds, customizes, and rolls out — alongside your people, not over their heads.' },
-          { n:'04', title:'Support & Grow', desc:'Dedicated support and real-time monitoring keep things running and improving long after launch.' }
-        ]
-      },
-      about: {
-        eyebrow:'ABOUT US',
-        title:'Built by Practitioners, Not Just Consultants',
-        sub:'Our story starts on the operations floor, not in a lecture hall.',
-        story:'Maras Solutions for Technology, Technical & Administrative Consultations was founded on a simple observation: most consulting firms write reports, while businesses need results. We built Maras differently \u2014 around a team of consultants and IT professionals who spent years inside manufacturing floors, distribution networks, finance departments, and technology projects across Saudi Arabia and the region before ever writing a single recommendation.',
-        story2:'That field experience is our foundation, and it shapes everything we deliver: practical, implementable, and tailored to how your business actually operates \u2014 not how a textbook says it should.',
-        visionLabel:'// VISION', visionTitle:'A Trusted Bridge Between Technology and Management',
-        visionText:'To become the trusted bridge between technology and business management for SMEs and mid-market companies across Saudi Arabia, the GCC, Egypt, and Africa \u2014 empowering them to grow with the same tools and discipline as the region\u2019s largest enterprises.',
-        missionLabel:'// MISSION', missionTitle:'Operational Expertise \u00D7 Modern Technology',
-        missionText:'We combine hands-on operational expertise with modern technology to help manufacturing, distribution, and service businesses reduce cost, improve quality, strengthen financial control, and digitize their operations \u2014 in full alignment with the goals of Saudi Vision 2030.',
-        valuesLabel:'WHAT GUIDES US', valuesTitle:'Our Core Values',
-        values: [
-          { title:'Practicality', desc:'We design for implementation, not just admiration.' },
-          { title:'Precision', desc:'Every recommendation is backed by real operational detail.' },
-          { title:'Partnership', desc:'We work alongside your team, not above it.' },
-          { title:'Innovation', desc:'We engineer what doesn\u2019t exist yet when off-the-shelf falls short.' }
-        ]
-      },
-      industries: {
-        eyebrow:'INDUSTRIES WE SERVE',
-        title:'Sector focus where it matters most',
-        items:['Manufacturing','Food & Beverage','Retail & Distribution','Salons & Beauty','SMEs']
-      },
-      contact: {
-        eyebrow:'GET IN TOUCH',
-        title:'Your Business Deserves Solutions Built From Experience',
-        sub:'Not assumptions. Talk to a team that has actually run what they now advise you on. Reach out for a free consultation, and our team will get back to you within one business day.',
-        form: { name:'FULL NAME', company:'COMPANY NAME', phone:'PHONE / WHATSAPP', email:'EMAIL', message:'YOUR MESSAGE', messagePh:'Tell us about the challenge your business is facing...', submit:'Send Request', sent:'Thanks — your message is ready in your email app. Hit send and we’ll reply within one business day.' },
-        info: [ { label:'EMAIL', value:'hello@maras.solutions' }, { label:'LOCATION', value:'Saudi Arabia \u2014 serving the GCC, Egypt & Africa' } ]
-      },
-      footer: {
-        tagline:'Real expertise. Real solutions. Bridging technology and business management for manufacturing, distribution, and service companies across Saudi Arabia and the GCC.',
-        navLabel:'// SITEMAP', connectLabel:'// CONNECT',
-        location:'Saudi Arabia',
-        rights:'\u00A9 2026 Maras Solutions. All rights reserved.', built:'PROUDLY SUPPORTING SAUDI VISION 2030'
-      }
-    };
-
-    const ar = {
-      nav: { about:'\u0645\u0646 \u0646\u062D\u0646', why:'\u0644\u0645\u0627\u0630\u0627 \u0645\u0631\u0627\u0633', services:'\u062E\u062F\u0645\u0627\u062A\u0646\u0627', products:'\u0645\u0646\u062A\u062C\u0627\u062A\u0646\u0627', process:'\u0645\u0646\u0647\u062C\u064A\u062A\u0646\u0627', industries:'\u0627\u0644\u0642\u0637\u0627\u0639\u0627\u062A', contact:'\u062A\u0648\u0627\u0635\u0644', cta:'\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0645\u062C\u0627\u0646\u064A\u0629' },
-      diff: { items:['\u0646\u0647\u062C \u064A\u0631\u0643\u0651\u0632 \u0639\u0644\u0649 \u0627\u0644\u0639\u0645\u064A\u0644','\u0627\u0644\u062A\u0633\u0644\u064A\u0645 \u0641\u064A \u0627\u0644\u0648\u0642\u062A \u0627\u0644\u0645\u062D\u062F\u062F','\u062C\u0648\u062F\u0629 \u0628\u0645\u0639\u0627\u064A\u064A\u0631 \u0627\u0644\u0645\u0624\u0633\u0633\u0627\u062A','\u062F\u0639\u0645 \u0645\u0633\u062A\u0645\u0631 \u0648\u0645\u062E\u0635\u0635'] },
-      hero: {
-        eyebrow:'\u062A\u0642\u0646\u064A\u0629 \u00D7 \u0625\u062F\u0627\u0631\u0629 \u00D7 \u062E\u0628\u0631\u0629 \u0645\u064A\u062F\u0627\u0646\u064A\u0629',
-        titleA:'\u062E\u0628\u0631\u0629 \u062D\u0642\u064A\u0642\u064A\u0629... ', titleB:'\u062D\u0644\u0648\u0644 \u0639\u0645\u0644\u064A\u0629...', titleC:' \u0646\u062A\u0627\u0626\u062C \u0645\u0644\u0645\u0648\u0633\u0629',
-        sub:'\u0645\u0631\u0627\u0633 \u0627\u0644\u062D\u0644\u0648\u0644 \u062A\u062C\u0645\u0639 \u0628\u064A\u0646 \u0627\u0644\u062A\u0642\u0646\u064A\u0629 \u0648\u0627\u0644\u0625\u062F\u0627\u0631\u0629 \u0641\u064A \u0645\u0646\u0638\u0648\u0645\u0629 \u0648\u0627\u062D\u062F\u0629\u060C \u064A\u0642\u0648\u062F\u0647\u0627 \u0641\u0631\u064A\u0642 \u0639\u0645\u0644 \u0645\u0646 \u0627\u0644\u0645\u064A\u062F\u0627\u0646 \u0644\u0627 \u0645\u0646 \u0627\u0644\u0646\u0638\u0631\u064A\u0629 \u0641\u0642\u0637.',
-        cta1:'\u0627\u0637\u0644\u0628 \u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0645\u062C\u0627\u0646\u064A\u0629', cta2:'\u0627\u0633\u062A\u0643\u0634\u0641 \u062E\u062F\u0645\u0627\u062A\u0646\u0627',
-        panelEyebrow:'\u0645\u0627 \u064A\u0645\u064A\u0632\u0646\u0627',
-        panelTitle:'\u0645\u0646 \u0623\u0631\u0636 \u0627\u0644\u0645\u0635\u0646\u0639 \u0625\u0644\u0649 \u0642\u0631\u0627\u0631\u0627\u062A \u0627\u0644\u0625\u062F\u0627\u0631\u0629 \u0627\u0644\u0639\u0644\u064A\u0627',
-        panelText:'\u062E\u0628\u0631\u0627\u0624\u0646\u0627 \u0641\u064A \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0627\u062A \u0648\u0627\u0644\u062A\u0642\u0646\u064A\u0629 \u0639\u0645\u0644\u0648\u0627 \u0644\u0633\u0646\u0648\u0627\u062A \u062F\u0627\u062E\u0644 \u0627\u0644\u0642\u0637\u0627\u0639\u0627\u062A \u0627\u0644\u062A\u064A \u064A\u0633\u0627\u0639\u062F\u0648\u0646 \u0627\u0644\u064A\u0648\u0645 \u0639\u0644\u0649 \u062A\u0637\u0648\u064A\u0631\u0647\u0627.',
-        stats: [
-          { num:'3', label:'\u062A\u062E\u0635\u0635\u0627\u062A \u0645\u062A\u0643\u0627\u0645\u0644\u0629' },
-          { num:'F&B', label:'\u062A\u0631\u0643\u064A\u0632 \u0642\u0637\u0627\u0639\u064A' },
-          { num:'0', label:'\u0627\u0634\u062A\u0631\u0627\u0643 \u0644\u062D\u0644\u0648\u0644 IoT' }
-        ]
-      },
-      pillars: {
-        eyebrow:'\u0645\u0646\u0638\u0648\u0645\u0629 \u0648\u0627\u062D\u062F\u0629 \u0645\u062A\u0635\u0644\u0629',
-        title:'\u062B\u0644\u0627\u062B \u062A\u062E\u0635\u0635\u0627\u062A\u060C \u0637\u0631\u064A\u0642 \u0648\u0627\u062D\u062F \u0644\u0646\u0645\u0648 \u0623\u0639\u0645\u0627\u0644\u0643',
-        sub:'\u062A\u0646\u062A\u0647\u064A \u0623\u063A\u0644\u0628 \u0627\u0644\u0634\u0631\u0643\u0627\u062A \u0628\u0627\u0644\u062A\u0639\u0627\u0645\u0644 \u0645\u0639 \u0645\u0633\u062A\u0634\u0627\u0631 \u0645\u0646\u0641\u0635\u0644\u060C \u0648\u0645\u062D\u0627\u0633\u0628 \u0645\u0646\u0641\u0635\u0644\u060C \u0648\u0645\u0632\u0648\u0651\u062F \u0628\u0631\u0645\u062C\u064A\u0627\u062A \u0645\u0646\u0641\u0635\u0644\u060C \u062F\u0648\u0646 \u0623\u064A \u062A\u0646\u0633\u064A\u0642 \u0628\u064A\u0646\u0647\u0645. \u062A\u062C\u0645\u0639 \u0645\u0631\u0627\u0633 \u0627\u0644\u062D\u0644\u0648\u0644 \u0647\u0630\u0647 \u0627\u0644\u062A\u062E\u0635\u0635\u0627\u062A \u0627\u0644\u062B\u0644\u0627\u062B\u0629 \u062A\u062D\u062A \u0633\u0642\u0641 \u0648\u0627\u062D\u062F.',
-        items: [
-          { n:'01', glyph:'\u25C8', title:'\u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0627\u062A \u0627\u0644\u0641\u0646\u064A\u0629 \u0648\u0627\u0644\u0625\u062F\u0627\u0631\u064A\u0629', desc:'\u062A\u0634\u063A\u064A\u0644 \u0623\u0630\u0643\u0649\u060C \u062A\u0643\u0627\u0644\u064A\u0641 \u0623\u0642\u0644\u060C \u062C\u0648\u062F\u0629 \u0623\u0639\u0644\u0649.' },
-          { n:'02', glyph:'\u2328', title:'\u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0627\u062A \u0627\u0644\u0645\u0627\u0644\u064A\u0629', desc:'\u0648\u0636\u0648\u062D \u0648\u0633\u064A\u0637\u0631\u0629 \u0639\u0644\u0649 \u0643\u0644 \u0631\u064A\u0627\u0644 \u064A\u062A\u062D\u0631\u0643 \u0641\u064A \u0634\u0631\u0643\u062A\u0643.' },
-          { n:'03', glyph:'\u25F0', title:'\u062D\u0644\u0648\u0644 \u062A\u0642\u0646\u064A\u0629 \u0648\u0628\u0631\u0645\u062C\u064A\u0629 \u0645\u062E\u0635\u0635\u0629', desc:'\u0646\u0628\u0646\u064A \u0627\u0644\u062A\u0642\u0646\u064A\u0629 \u062D\u0648\u0644 \u0637\u0631\u064A\u0642\u0629 \u0639\u0645\u0644\u0643.' }
-        ]
-      },
-      why: {
-        eyebrow:'\u0644\u0645\u0627\u0630\u0627 \u0645\u0631\u0627\u0633',
-        title:'\u0641\u0631\u064A\u0642\u0646\u0627 \u0647\u0648 \u0645\u0646\u062A\u062C\u0646\u0627 \u0627\u0644\u062D\u0642\u064A\u0642\u064A',
-        sub:'\u0645\u0633\u062A\u0634\u0627\u0631\u0648\u0646\u0627 \u0648\u062E\u0628\u0631\u0627\u0624\u0646\u0627 \u0627\u0644\u062A\u0642\u0646\u064A\u0648\u0646 \u0639\u0645\u0644\u0648\u0627 \u0641\u0639\u0644\u064A\u0627\u064B \u062F\u0627\u062E\u0644 \u0627\u0644\u0645\u0635\u0627\u0646\u0639 \u0648\u0634\u0628\u0643\u0627\u062A \u0627\u0644\u062A\u0648\u0632\u064A\u0639 \u0648\u0627\u0644\u0625\u062F\u0627\u0631\u0627\u062A \u0627\u0644\u0645\u0627\u0644\u064A\u0629\u060C \u0642\u0628\u0644 \u0623\u0646 \u064A\u0643\u062A\u0628\u0648\u0627 \u062A\u0648\u0635\u064A\u0629 \u0648\u0627\u062D\u062F\u0629.',
-        reasons: [
-          { n:'01', title:'\u062E\u0628\u0631\u0629 \u0645\u064A\u062F\u0627\u0646\u064A\u0629 \u062D\u0642\u064A\u0642\u064A\u0629', desc:'\u0641\u0631\u064A\u0642\u0646\u0627 \u0623\u062F\u0627\u0631 \u0627\u0644\u0639\u0645\u0644\u064A\u0627\u062A \u0627\u0644\u062A\u064A \u064A\u0642\u062F\u0651\u0645 \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0641\u064A\u0647\u0627 \u0627\u0644\u064A\u0648\u0645.' },
-          { n:'02', title:'\u0641\u0631\u064A\u0642 \u062A\u0642\u0646\u064A \u062F\u0627\u062E\u0644\u064A \u0645\u062A\u0645\u0631\u0633', desc:'\u0646\u0628\u0646\u064A \u0648\u0646\u062E\u0635\u0651\u0635 \u0627\u0644\u062D\u0644\u0648\u0644\u060C \u0644\u0627 \u0646\u0639\u064A\u062F \u0628\u064A\u0639 \u0628\u0631\u0645\u062C\u064A\u0627\u062A \u062C\u0627\u0647\u0632\u0629.' },
-          { n:'03', title:'\u062A\u062E\u0635\u0635 \u0641\u064A \u0627\u0644\u062A\u0635\u0646\u064A\u0639 \u0648\u0627\u0644\u0623\u063A\u0630\u064A\u0629', desc:'\u062E\u0628\u0631\u0629 \u0639\u0645\u064A\u0642\u0629 \u0641\u064A \u0627\u0644\u0642\u0637\u0627\u0639\u0627\u062A \u0627\u0644\u0623\u0643\u062B\u0631 \u062D\u0633\u0627\u0633\u064A\u0629 \u062A\u0634\u063A\u064A\u0644\u064A\u0627\u064B.' },
-          { n:'04', title:'\u0625\u0646\u062A\u0631\u0646\u062A \u0627\u0644\u0623\u0634\u064A\u0627\u0621 \u0628\u062F\u0648\u0646 \u0627\u0634\u062A\u0631\u0627\u0643', desc:'\u0645\u0631\u0627\u0642\u0628\u0629 \u0644\u062D\u0638\u064A\u0629 \u062F\u0648\u0646 \u0641\u0627\u062A\u0648\u0631\u0629 \u0627\u062A\u0635\u0627\u0644 \u0645\u062A\u0643\u0631\u0631\u0629.' }
-        ],
-        typicalLabel:'\u0634\u0631\u0643\u0627\u062A \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0627\u062A \u0627\u0644\u062A\u0642\u0644\u064A\u062F\u064A\u0629',
-        typical: [
-          '\u0623\u0637\u0631 \u0623\u0643\u0627\u062F\u064A\u0645\u064A\u0629 \u0639\u0627\u0645\u0629 \u062A\u064F\u0637\u0628\u0651\u0642 \u0639\u0644\u0649 \u0643\u0644 \u0639\u0645\u064A\u0644 \u0628\u0627\u0644\u062A\u0633\u0627\u0648\u064A',
-          '\u062A\u0648\u0635\u064A\u0627\u062A \u062A\u064F\u0633\u0644\u0651\u0645 \u062F\u0648\u0646 \u0623\u064A \u0645\u0633\u0624\u0648\u0644\u064A\u0629 \u0639\u0646 \u062A\u0637\u0628\u064A\u0642\u0647\u0627',
-          '\u0628\u0631\u0645\u062C\u064A\u0627\u062A \u062A\u064F\u0639\u0627\u062F \u0628\u064A\u0639\u0647\u0627 \u0643\u0645\u0627 \u0647\u064A \u062F\u0648\u0646 \u0641\u0647\u0645 \u062D\u0642\u064A\u0642\u064A \u0644\u0644\u0642\u0637\u0627\u0639'
-        ],
-        marasLabel:'\u0641\u0631\u064A\u0642 \u0645\u0631\u0627\u0633',
-        maras: [
-          '\u062D\u0644\u0648\u0644 \u0645\u0628\u0646\u064A\u0629 \u0639\u0644\u0649 \u0633\u0646\u0648\u0627\u062A \u0645\u0646 \u0627\u0644\u0639\u0645\u0644 \u0627\u0644\u0645\u064A\u062F\u0627\u0646\u064A \u0627\u0644\u0641\u0639\u0644\u064A',
-          '\u0645\u0633\u062A\u0634\u0627\u0631\u0648\u0646 \u0623\u062F\u0627\u0631\u0648\u0627 \u0623\u0631\u0628\u0627\u062D\u0627\u064B \u0648\u062E\u0633\u0627\u0626\u0631\u060C \u0648\u062E\u0637\u0648\u0637 \u0625\u0646\u062A\u0627\u062C\u060C \u0648\u0641\u0631\u0642\u0627\u064B \u0641\u0639\u0644\u064A\u0629',
-          '\u0641\u0631\u064A\u0642 \u062A\u0642\u0646\u064A \u062F\u0627\u062E\u0644\u064A \u064A\u064F\u062E\u0635\u0651\u0635 \u0627\u0644\u062D\u0644\u0648\u0644 \u0644\u0627 \u064A\u0642\u062A\u0635\u0631 \u0639\u0644\u0649 \u062A\u0631\u0643\u064A\u0628\u0647\u0627'
-        ]
-      },
-      services: {
-        eyebrow:'\u062E\u062F\u0645\u0627\u062A\u0646\u0627',
-        title:'\u0634\u0631\u064A\u0643 \u0648\u0627\u062D\u062F\u060C \u0648\u0643\u0644 \u0627\u0644\u062D\u0644\u0648\u0644 \u0627\u0644\u062A\u064A \u062A\u062D\u062A\u0627\u062C\u0647\u0627 \u0634\u0631\u0643\u062A\u0643',
-        cta:'\u0627\u0639\u0631\u0641 \u0623\u0643\u062B\u0631',
-        items: [
-          { n:'01', title:'\u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0627\u062A \u0627\u0644\u0641\u0646\u064A\u0629 \u0648\u0627\u0644\u0625\u062F\u0627\u0631\u064A\u0629', desc:'\u062A\u0637\u0648\u064A\u0631 \u0627\u0644\u0623\u0639\u0645\u0627\u0644 \u0644\u0644\u062A\u0635\u0646\u064A\u0639 \u0648\u0627\u0644\u062A\u0648\u0632\u064A\u0639\u060C \u0645\u0639 \u062A\u0631\u0643\u064A\u0632 \u062E\u0627\u0635 \u0639\u0644\u0649 \u0642\u0637\u0627\u0639 \u0627\u0644\u0623\u063A\u0630\u064A\u0629 \u0648\u0627\u0644\u0645\u0634\u0631\u0648\u0628\u0627\u062A.', points:['\u062A\u062D\u0633\u064A\u0646 \u0639\u0645\u0644\u064A\u0627\u062A \u0627\u0644\u062A\u0635\u0646\u064A\u0639','\u0643\u0641\u0627\u0621\u0629 \u0627\u0644\u062A\u062C\u0632\u0626\u0629 \u0648\u0627\u0644\u062A\u0648\u0632\u064A\u0639','\u0631\u0641\u0639 \u0627\u0644\u062C\u0648\u062F\u0629 \u0648\u062A\u0637\u0628\u064A\u0642 \u0627\u0644\u0623\u0646\u0638\u0645\u0629 \u0627\u0644\u062A\u0642\u0646\u064A\u0629','\u062F\u0639\u0645 \u0627\u0644\u0645\u0648\u0627\u0631\u062F \u0627\u0644\u0628\u0634\u0631\u064A\u0629 \u0648\u0627\u0644\u0644\u0648\u062C\u0633\u062A\u064A\u0627\u062A'] },
-          { n:'02', title:'\u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0627\u062A \u0627\u0644\u0645\u0627\u0644\u064A\u0629', desc:'\u0627\u0646\u0636\u0628\u0627\u0637 \u0645\u0627\u0644\u064A \u0639\u0644\u0649 \u0645\u0633\u062A\u0648\u0649 \u0627\u0644\u0645\u0624\u0633\u0633\u0627\u062A \u0627\u0644\u0643\u0628\u0631\u0649\u060C \u0628\u0645\u0631\u0648\u0646\u0629 \u062A\u0646\u0627\u0633\u0628 \u0646\u0645\u0648 \u0634\u0631\u0643\u062A\u0643.', points:['\u0627\u0644\u062A\u062F\u0642\u064A\u0642 \u0627\u0644\u0645\u0627\u0644\u064A \u0648\u0627\u0644\u0631\u0642\u0627\u0628\u0629 \u0627\u0644\u062F\u0627\u062E\u0644\u064A\u0629','\u0645\u062D\u0627\u0633\u0628\u0629 \u062E\u0627\u0631\u062C\u064A\u0629 \u0628\u0646\u0638\u0627\u0645 \u0627\u0634\u062A\u0631\u0627\u0643 \u0634\u0647\u0631\u064A','\u0641\u0631\u0642 \u0645\u062D\u0627\u0633\u0628\u0629 \u0645\u0633\u062A\u0642\u0644\u0629 \u0639\u0646\u062F \u0627\u0644\u0637\u0644\u0628','\u062F\u0631\u0627\u0633\u0627\u062A \u0627\u0644\u062C\u062F\u0648\u0649 \u0648\u0627\u0644\u062C\u0648\u062F\u0629'] },
-          { n:'03', title:'\u062E\u062F\u0645\u0627\u062A \u062A\u0642\u0646\u064A\u0629 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062A', desc:'\u0628\u0631\u0645\u062C\u064A\u0627\u062A \u0648\u0623\u062C\u0647\u0632\u0629 \u0645\u0635\u0645\u0645\u0629 \u062E\u0635\u064A\u0635\u0627\u064B \u0644\u0645\u0627 \u062A\u062D\u062A\u0627\u062C\u0647 \u0639\u0645\u0644\u064A\u0627\u062A\u0643 \u0641\u0639\u0644\u0627\u064B \u2014 \u0645\u0646 \u0627\u0644\u0641\u0643\u0631\u0629 \u0625\u0644\u0649 \u0627\u0644\u062A\u0634\u063A\u064A\u0644.', points:['\u0628\u0631\u0645\u062C\u064A\u0627\u062A \u0645\u062E\u0635\u0635\u0629 \u0648\u0645\u062A\u0627\u062C\u0631 \u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A\u0629 \u0648\u062A\u0637\u0628\u064A\u0642\u0627\u062A \u062C\u0648\u0627\u0644','\u0623\u062A\u0645\u062A\u0629 \u0630\u0643\u064A\u0629 \u0648\u062A\u062D\u0644\u064A\u0644\u0627\u062A \u0644\u062D\u0638\u064A\u0629','\u0623\u0646\u0638\u0645\u0629 \u0645\u062A\u0627\u0628\u0639\u0629 \u0627\u0644\u0623\u0633\u0637\u0648\u0644 \u0648\u0627\u0644\u0625\u0646\u062A\u0627\u062C \u0648OEE','\u0643\u0627\u0634\u064A\u0631 \u0627\u0644\u0635\u0627\u0644\u0648\u0646\u0627\u062A \u0648\u0625\u0646\u062A\u0631\u0646\u062A \u0627\u0644\u0623\u0634\u064A\u0627\u0621 \u0648\u062A\u0643\u0627\u0645\u0644\u0627\u062A \u0633\u0644\u0633\u0629'] }
-        ]
-      },
-      products: {
-        eyebrow:'\u0645\u0646\u0638\u0648\u0645\u0629 \u0648\u0627\u062D\u062F\u0629 \u0645\u062A\u0643\u0627\u0645\u0644\u0629',
-        title:'\u0645\u0646\u0635\u0629 \u0648\u0627\u062D\u062F\u0629. \u0648\u0643\u0644 \u0648\u062D\u062F\u0629 \u062A\u062D\u062A\u0627\u062C\u0647\u0627 \u0623\u0639\u0645\u0627\u0644\u0643.',
-        sub:'\u0645\u0646 \u0625\u062F\u0627\u0631\u0629 \u0639\u0644\u0627\u0642\u0627\u062A \u0627\u0644\u0639\u0645\u0644\u0627\u0621 \u0648\u0627\u0644\u0645\u0628\u064A\u0639\u0627\u062A \u0625\u0644\u0649 \u0627\u0644\u0625\u0646\u062A\u0627\u062C \u0648\u0627\u0644\u0645\u0633\u062A\u0648\u062F\u0639\u0627\u062A \u0648\u0627\u0644\u0623\u0633\u0637\u0648\u0644 \u0648\u0627\u0644\u0645\u0648\u0627\u0631\u062F \u0627\u0644\u0628\u0634\u0631\u064A\u0629 \u0648\u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064A \u2014 \u062A\u0648\u0641\u0651\u0631 \u0645\u0631\u0627\u0633 \u0645\u0646\u0638\u0648\u0645\u0629 \u0648\u0627\u062D\u062F\u0629 \u0645\u062A\u0631\u0627\u0628\u0637\u0629. \u0641\u0639\u0651\u0644 \u0645\u0627 \u062A\u062D\u062A\u0627\u062C\u0647 \u0627\u0644\u064A\u0648\u0645 \u0641\u0642\u0637\u060C \u0648\u0623\u0636\u0641 \u0627\u0644\u0628\u0627\u0642\u064A \u0645\u0639 \u0646\u0645\u0648\u0651\u0643.',
-        badge:'\u0645\u0639\u0631\u0651\u0628\u0629 \u0644\u0644\u0633\u0639\u0648\u062F\u064A\u0629 \u0648\u0645\u0635\u0631 \u2014 \u0639\u0631\u0628\u064A\u0629 \u0623\u0648\u0644\u0627\u064B\u060C \u0648\u062C\u0627\u0647\u0632\u0629 \u0644\u0644\u0641\u0648\u062A\u0631\u0629 \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A\u0629 \u0648\u0647\u064A\u0626\u0629 \u0627\u0644\u0632\u0643\u0627\u0629 \u0648\u0627\u0644\u0636\u0631\u064A\u0628\u0629',
-        items: [
-          { n:'01', glyph:'\u2297', title:'\u0627\u0644\u0625\u0646\u062A\u0627\u062C \u0648\u0643\u0641\u0627\u0621\u0629 \u0627\u0644\u0645\u0639\u062F\u0627\u062A', desc:'\u0627\u0644\u062A\u0635\u0646\u064A\u0639 \u0645\u0646 \u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u0645\u0648\u0627\u062F \u0625\u0644\u0649 \u0627\u0644\u0645\u0646\u062A\u062C \u0627\u0644\u0646\u0647\u0627\u0626\u064A\u060C \u0645\u0639 \u0645\u062A\u0627\u0628\u0639\u0629 \u0627\u0644\u062C\u0648\u062F\u0629 \u0648\u0643\u0641\u0627\u0621\u0629 \u0627\u0644\u0645\u0639\u062F\u0627\u062A \u0645\u0646 \u0623\u0631\u0636 \u0627\u0644\u0645\u0635\u0646\u0639.', tags:['\u0623\u0648\u0627\u0645\u0631 \u0627\u0644\u0625\u0646\u062A\u0627\u062C','\u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u0645\u0648\u0627\u062F','\u0627\u0644\u062A\u062E\u0637\u064A\u0637','OEE'] },
-          { n:'02', glyph:'\u25C8', title:'\u0646\u0642\u0627\u0637 \u0627\u0644\u0628\u064A\u0639 \u0627\u0644\u0630\u0643\u064A\u0629', desc:'\u0643\u0627\u0634\u064A\u0631 \u0633\u0631\u064A\u0639 \u0648\u0645\u0648\u062B\u0648\u0642 \u0644\u0644\u062A\u062C\u0632\u0626\u0629 \u0648\u0627\u0644\u0635\u0627\u0644\u0648\u0646\u0627\u062A \u2014 \u0627\u0644\u0645\u062E\u0632\u0648\u0646 \u0648\u0627\u0644\u0636\u0631\u064A\u0628\u0629 \u0645\u062F\u0645\u062C\u0627\u0646.', tags:['\u0643\u0627\u0634\u064A\u0631 \u0628\u0636\u0631\u064A\u0628\u0629/\u0628\u062F\u0648\u0646','\u0627\u0644\u0633\u0644\u0627\u062A','\u0636\u0628\u0637 \u0627\u0644\u0645\u062E\u0632\u0648\u0646'] },
-          { n:'03', glyph:'\u25F0', title:'\u0625\u062F\u0627\u0631\u0629 \u0627\u0644\u0623\u0633\u0637\u0648\u0644', desc:'\u0627\u0644\u0645\u0631\u0643\u0628\u0627\u062A \u0648\u0627\u0644\u0631\u062D\u0644\u0627\u062A \u0648\u0627\u0644\u062A\u062A\u0628\u0651\u0639 \u0644\u062D\u0638\u064A\u0627\u064B \u2014 \u0648\u062F\u0648\u0646 \u0623\u064A \u0627\u0634\u062A\u0631\u0627\u0643 \u0644\u0625\u0646\u062A\u0631\u0646\u062A \u0627\u0644\u0623\u0634\u064A\u0627\u0621.', tags:['\u062E\u0631\u064A\u0637\u0629 \u062D\u064A\u0629','\u0627\u0644\u0633\u064A\u0627\u062C \u0627\u0644\u062C\u063A\u0631\u0627\u0641\u064A','\u062C\u062F\u0648\u0644\u0629 \u0627\u0644\u0631\u062D\u0644\u0627\u062A','\u0627\u0644\u0635\u064A\u0627\u0646\u0629'] },
-          { n:'04', glyph:'\u25E7', title:'\u0627\u0644\u0645\u0628\u064A\u0639\u0627\u062A', desc:'\u0645\u0646 \u0639\u0631\u0636 \u0627\u0644\u0633\u0639\u0631 \u0625\u0644\u0649 \u0627\u0644\u062A\u062D\u0635\u064A\u0644 \u0639\u0628\u0631 \u0643\u0644 \u0627\u0644\u0642\u0646\u0648\u0627\u062A\u060C \u0623\u0648\u0646\u0644\u0627\u064A\u0646 \u0648\u0641\u064A \u0627\u0644\u0645\u062A\u062C\u0631.', tags:['\u0627\u0644\u0637\u0644\u0628\u0627\u062A','\u0627\u0644\u0641\u0648\u062A\u0631\u0629','\u0639\u0631\u0648\u0636 \u0627\u0644\u0623\u0633\u0639\u0627\u0631','\u0627\u0644\u0645\u0631\u062A\u062C\u0639\u0627\u062A'] },
-          { n:'05', glyph:'\u25A6', title:'\u0627\u0644\u062D\u0633\u0627\u0628\u0627\u062A \u0648\u0627\u0644\u0641\u0648\u062A\u0631\u0629 \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A\u0629', desc:'\u062A\u062D\u0643\u0645 \u0645\u0627\u0644\u064A \u0643\u0627\u0645\u0644 \u0645\u0639 \u0627\u0644\u062A\u0632\u0627\u0645 \u0636\u0631\u064A\u0628\u064A \u0648\u0641\u0648\u062A\u0631\u0629 \u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A\u0629 \u0645\u062F\u0645\u062C\u0629 \u0644\u0647\u064A\u0626\u0629 \u0627\u0644\u0632\u0643\u0627\u0629.', tags:['\u062F\u0644\u064A\u0644 \u0627\u0644\u062D\u0633\u0627\u0628\u0627\u062A','\u0636\u0631\u064A\u0628\u0629 \u0627\u0644\u0642\u064A\u0645\u0629','\u0627\u0644\u0623\u0635\u0648\u0644 \u0627\u0644\u062B\u0627\u0628\u062A\u0629','\u0647\u064A\u0626\u0629 \u0627\u0644\u0632\u0643\u0627\u0629'] },
-          { n:'06', glyph:'\u21C4', title:'\u062A\u0643\u0627\u0645\u0644 \u0623\u0646\u0638\u0645\u0629 ERP', desc:'\u0627\u0631\u0628\u0637 \u0643\u0644 \u0634\u064A\u0621 \u0628\u0645\u0627\u064A\u0643\u0631\u0648\u0633\u0648\u0641\u062A Dynamics 365 \u0648SAP \u2014 \u062A\u062F\u0641\u0651\u0642 \u0628\u064A\u0627\u0646\u0627\u062A \u0648\u0627\u062D\u062F \u0648\u0646\u0638\u064A\u0641.', tags:['Dynamics 365','SAP','\u0648\u0627\u062C\u0647\u0627\u062A API'] }
-        ],
-        moreLabel:'\u0648\u0643\u0627\u0645\u0644 \u0627\u0644\u0645\u0646\u0638\u0648\u0645\u0629 \u0623\u064A\u0636\u0627\u064B',
-        more:['\u0625\u062F\u0627\u0631\u0629 \u0639\u0644\u0627\u0642\u0627\u062A \u0627\u0644\u0639\u0645\u0644\u0627\u0621','\u0627\u0644\u0645\u0634\u062A\u0631\u064A\u0627\u062A','\u0627\u0644\u0645\u0633\u062A\u0648\u062F\u0639\u0627\u062A','\u0627\u0644\u062A\u062D\u0648\u064A\u0644\u0627\u062A \u0648\u0627\u0644\u062A\u0648\u0632\u064A\u0639','\u0627\u0644\u0648\u0631\u0634','\u0627\u0644\u0645\u0648\u0627\u0631\u062F \u0627\u0644\u0628\u0634\u0631\u064A\u0629 \u0648\u0627\u0644\u0631\u0648\u0627\u062A\u0628','\u0625\u062F\u0627\u0631\u0629 \u0627\u0644\u0645\u062D\u062A\u0648\u0649 \u0648\u0627\u0644\u0648\u064A\u0628','\u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064A \u0648\u0627\u0644\u0623\u062A\u0645\u062A\u0629','\u062F\u0639\u0645 \u0627\u0644\u0639\u0645\u0644\u0627\u0621']
-      },
-      process: {
-        eyebrow:'\u0643\u064A\u0641 \u0646\u0639\u0645\u0644',
-        title:'\u0645\u0646 \u0627\u0644\u0641\u0643\u0631\u0629 \u0625\u0644\u0649 \u0627\u0644\u062A\u0634\u063A\u064A\u0644 \u2014 \u0645\u0646 \u0627\u0644\u0628\u062F\u0627\u064A\u0629 \u0625\u0644\u0649 \u0627\u0644\u0646\u0647\u0627\u064A\u0629',
-        sub:'\u0641\u0631\u064A\u0642 \u0648\u0627\u062D\u062F \u0645\u0633\u0624\u0648\u0644 \u064A\u0631\u0627\u0641\u0642\u0643 \u0645\u0646 \u0623\u0648\u0644 \u062D\u062F\u064A\u062B \u062D\u062A\u0649 \u062D\u0644\u064D\u0651 \u064A\u0639\u0645\u0644 \u0648\u064A\u064F\u062F\u0639\u064E\u0645 \u2014 \u062F\u0648\u0646 \u062A\u0646\u0642\u0651\u0644 \u0644\u0644\u0645\u0633\u0624\u0648\u0644\u064A\u0629 \u0623\u0648 \u062A\u0628\u0627\u062F\u0644 \u0644\u0644\u0651\u0648\u0645.',
-        steps: [
-          { n:'01', title:'\u0627\u0644\u0627\u0633\u062A\u0643\u0634\u0627\u0641', desc:'\u0646\u0646\u0632\u0644 \u0625\u0644\u0649 \u0623\u0631\u0636 \u0627\u0644\u0639\u0645\u0644\u060C \u0648\u0646\u062D\u0644\u0651\u0644 \u0639\u0645\u0644\u064A\u0627\u062A\u0643\u060C \u0648\u0646\u0643\u062A\u0634\u0641 \u0623\u064A\u0646 \u062A\u062A\u0633\u0631\u0651\u0628 \u0627\u0644\u062A\u0643\u0627\u0644\u064A\u0641 \u0648\u0627\u0644\u062C\u0648\u062F\u0629 \u0648\u0627\u0644\u0648\u0642\u062A.' },
-          { n:'02', title:'\u0627\u0644\u062A\u0635\u0645\u064A\u0645', desc:'\u0646\u0636\u0639 \u062E\u0637\u0629 \u0639\u0645\u0644\u064A\u0629 \u0648\u0627\u0644\u062A\u0642\u0646\u064A\u0629 \u0627\u0644\u0645\u0646\u0627\u0633\u0628\u0629 \u2014 \u0645\u0628\u0646\u064A\u0629 \u0639\u0644\u0649 \u0637\u0631\u064A\u0642\u0629 \u0639\u0645\u0644\u0643 \u0627\u0644\u0641\u0639\u0644\u064A\u0629.' },
-          { n:'03', title:'\u0627\u0644\u062A\u0646\u0641\u064A\u0630 \u0648\u0627\u0644\u062A\u0637\u0628\u064A\u0642', desc:'\u0641\u0631\u064A\u0642\u0646\u0627 \u0627\u0644\u062F\u0627\u062E\u0644\u064A \u064A\u0628\u0646\u064A \u0648\u064A\u062E\u0635\u0651\u0635 \u0648\u064A\u0637\u0628\u0651\u0642 \u2014 \u0645\u0639 \u0641\u0631\u064A\u0642\u0643\u060C \u0644\u0627 \u0628\u062F\u0644\u0627\u064B \u0639\u0646\u0647.' },
-          { n:'04', title:'\u0627\u0644\u062F\u0639\u0645 \u0648\u0627\u0644\u0646\u0645\u0648', desc:'\u062F\u0639\u0645 \u0645\u062E\u0635\u0635 \u0648\u0645\u0631\u0627\u0642\u0628\u0629 \u0644\u062D\u0638\u064A\u0629 \u062A\u062D\u0627\u0641\u0638 \u0639\u0644\u0649 \u0627\u0644\u062A\u0634\u063A\u064A\u0644 \u0648\u0627\u0644\u062A\u062D\u0633\u064A\u0646 \u0628\u0639\u062F \u0627\u0644\u0625\u0637\u0644\u0627\u0642.' }
-        ]
-      },
-      about: {
-        eyebrow:'\u0645\u0646 \u0646\u062D\u0646',
-        title:'\u0623\u0633\u0633\u0647\u0627 \u0645\u0645\u0627\u0631\u0633\u0648\u0646\u060C \u0644\u0627 \u0645\u062C\u0631\u062F \u0645\u0633\u062A\u0634\u0627\u0631\u064A\u0646',
-        sub:'\u0642\u0635\u062A\u0646\u0627 \u062A\u0628\u062F\u0623 \u0645\u0646 \u0623\u0631\u0636 \u0627\u0644\u0645\u064A\u062F\u0627\u0646\u060C \u0644\u0627 \u0645\u0646 \u0642\u0627\u0639\u0627\u062A \u0627\u0644\u0645\u062D\u0627\u0636\u0631\u0627\u062A.',
-        story:'\u062A\u0623\u0633\u0633\u062A \u0645\u0631\u0627\u0633 \u0627\u0644\u062D\u0644\u0648\u0644 \u0644\u0644\u062A\u0642\u0646\u064A\u0629 \u0648\u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0627\u062A \u0627\u0644\u0641\u0646\u064A\u0629 \u0648\u0627\u0644\u0625\u062F\u0627\u0631\u064A\u0629 \u0628\u0646\u0627\u0621\u064B \u0639\u0644\u0649 \u0645\u0644\u0627\u062D\u0638\u0629 \u0628\u0633\u064A\u0637\u0629: \u0623\u063A\u0644\u0628 \u0634\u0631\u0643\u0627\u062A \u0627\u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0627\u062A \u062A\u0643\u062A\u0628 \u062A\u0642\u0627\u0631\u064A\u0631\u060C \u0628\u064A\u0646\u0645\u0627 \u062A\u062D\u062A\u0627\u062C \u0627\u0644\u0634\u0631\u0643\u0627\u062A \u0625\u0644\u0649 \u0646\u062A\u0627\u0626\u062C \u0641\u0639\u0644\u064A\u0629. \u0644\u0630\u0644\u0643 \u0628\u0646\u064A\u0646\u0627 \u0645\u0631\u0627\u0633 \u0628\u0637\u0631\u064A\u0642\u0629 \u0645\u062E\u062A\u0644\u0641\u0629\u060C \u062D\u0648\u0644 \u0641\u0631\u064A\u0642 \u0645\u0646 \u0627\u0644\u0645\u0633\u062A\u0634\u0627\u0631\u064A\u0646 \u0648\u062E\u0628\u0631\u0627\u0621 \u0627\u0644\u062A\u0642\u0646\u064A\u0629 \u0627\u0644\u0630\u064A\u0646 \u0639\u0645\u0644\u0648\u0627 \u0644\u0633\u0646\u0648\u0627\u062A \u062F\u0627\u062E\u0644 \u062E\u0637\u0648\u0637 \u0627\u0644\u0625\u0646\u062A\u0627\u062C\u060C \u0648\u0634\u0628\u0643\u0627\u062A \u0627\u0644\u062A\u0648\u0632\u064A\u0639\u060C \u0648\u0627\u0644\u0625\u062F\u0627\u0631\u0627\u062A \u0627\u0644\u0645\u0627\u0644\u064A\u0629\u060C \u0648\u0645\u0634\u0627\u0631\u064A\u0639 \u0627\u0644\u062A\u062D\u0648\u0644 \u0627\u0644\u062A\u0642\u0646\u064A \u0641\u064A \u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629 \u0648\u0627\u0644\u0645\u0646\u0637\u0642\u0629\u060C \u0642\u0628\u0644 \u0623\u0646 \u064A\u0643\u062A\u0628\u0648\u0627 \u062A\u0648\u0635\u064A\u0629 \u0648\u0627\u062D\u062F\u0629.',
-        story2:'\u0647\u0630\u0647 \u0627\u0644\u062E\u0628\u0631\u0629 \u0627\u0644\u0645\u064A\u062F\u0627\u0646\u064A\u0629 \u0647\u064A \u0623\u0633\u0627\u0633\u0646\u0627\u060C \u0648\u0647\u064A \u0645\u0627 \u064A\u0634\u0643\u0651\u0644 \u0643\u0644 \u0645\u0627 \u0646\u0642\u062F\u0645\u0647: \u062D\u0644\u0648\u0644 \u0639\u0645\u0644\u064A\u0629 \u0648\u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u062A\u0646\u0641\u064A\u0630\u060C \u0645\u0635\u0645\u0645\u0629 \u0639\u0644\u0649 \u0637\u0631\u064A\u0642\u0629 \u0639\u0645\u0644 \u0634\u0631\u0643\u062A\u0643 \u0627\u0644\u0641\u0639\u0644\u064A\u0629\u060C \u0644\u0627 \u0643\u0645\u0627 \u062A\u0642\u0648\u0644 \u0627\u0644\u0643\u062A\u0628 \u0623\u0646\u0647\u0627 \u064A\u062C\u0628 \u0623\u0646 \u062A\u0643\u0648\u0646.',
-        visionLabel:'// \u0627\u0644\u0631\u0624\u064A\u0629', visionTitle:'\u062C\u0633\u0631 \u0645\u0648\u062B\u0648\u0642 \u0628\u064A\u0646 \u0627\u0644\u062A\u0642\u0646\u064A\u0629 \u0648\u0627\u0644\u0625\u062F\u0627\u0631\u0629',
-        visionText:'\u0623\u0646 \u0646\u0643\u0648\u0646 \u0627\u0644\u062C\u0633\u0631 \u0627\u0644\u0645\u0648\u062B\u0648\u0642 \u0628\u064A\u0646 \u0627\u0644\u062A\u0642\u0646\u064A\u0629 \u0648\u0627\u0644\u0625\u062F\u0627\u0631\u0629 \u0644\u0644\u0634\u0631\u0643\u0627\u062A \u0627\u0644\u0635\u063A\u064A\u0631\u0629 \u0648\u0627\u0644\u0645\u062A\u0648\u0633\u0637\u0629 \u0641\u064A \u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629 \u0648\u062F\u0648\u0644 \u0627\u0644\u062E\u0644\u064A\u062C \u0648\u0645\u0635\u0631 \u0648\u0623\u0641\u0631\u064A\u0642\u064A\u0627\u060C \u0648\u0646\u0645\u0643\u0651\u0646\u0647\u0627 \u0645\u0646 \u0627\u0644\u0646\u0645\u0648 \u0628\u0623\u062F\u0648\u0627\u062A \u0648\u0627\u0646\u0636\u0628\u0627\u0637 \u064A\u0636\u0627\u0647\u064A \u0623\u0643\u0628\u0631 \u0627\u0644\u0645\u0624\u0633\u0633\u0627\u062A \u0641\u064A \u0627\u0644\u0645\u0646\u0637\u0642\u0629.',
-        missionLabel:'// \u0627\u0644\u0631\u0633\u0627\u0644\u0629', missionTitle:'\u062E\u0628\u0631\u0629 \u062A\u0634\u063A\u064A\u0644\u064A\u0629 \u00D7 \u062A\u0642\u0646\u064A\u0629 \u062D\u062F\u064A\u062B\u0629',
-        missionText:'\u0646\u062C\u0645\u0639 \u0628\u064A\u0646 \u0627\u0644\u062E\u0628\u0631\u0629 \u0627\u0644\u062A\u0634\u063A\u064A\u0644\u064A\u0629 \u0627\u0644\u0645\u064A\u062F\u0627\u0646\u064A\u0629 \u0648\u0627\u0644\u062A\u0642\u0646\u064A\u0629 \u0627\u0644\u062D\u062F\u064A\u062B\u0629 \u0644\u0645\u0633\u0627\u0639\u062F\u0629 \u0634\u0631\u0643\u0627\u062A \u0627\u0644\u062A\u0635\u0646\u064A\u0639 \u0648\u0627\u0644\u062A\u0648\u0632\u064A\u0639 \u0648\u0627\u0644\u062E\u062F\u0645\u0627\u062A \u0639\u0644\u0649 \u062A\u0642\u0644\u064A\u0644 \u0627\u0644\u062A\u0643\u0627\u0644\u064A\u0641\u060C \u0648\u0631\u0641\u0639 \u0627\u0644\u062C\u0648\u062F\u0629\u060C \u0648\u062A\u0639\u0632\u064A\u0632 \u0627\u0644\u0631\u0642\u0627\u0628\u0629 \u0627\u0644\u0645\u0627\u0644\u064A\u0629\u060C \u0648\u062A\u062D\u0648\u064A\u0644 \u0639\u0645\u0644\u064A\u0627\u062A\u0647\u0627 \u0631\u0642\u0645\u064A\u0627\u064B\u060C \u0628\u0645\u0627 \u064A\u062A\u0648\u0627\u0641\u0642 \u062A\u0645\u0627\u0645\u0627\u064B \u0645\u0639 \u0623\u0647\u062F\u0627\u0641 \u0631\u0624\u064A\u0629 \u0627\u0644\u0645\u0645\u0644\u0643\u0629 2030.',
-        valuesLabel:'\u0645\u0627 \u064A\u0648\u062C\u0651\u0647\u0646\u0627', valuesTitle:'\u0642\u064A\u0645\u0646\u0627 \u0627\u0644\u0623\u0633\u0627\u0633\u064A\u0629',
-        values: [
-          { title:'\u0627\u0644\u0648\u0627\u0642\u0639\u064A\u0629', desc:'\u0646\u0635\u0645\u0645 \u0627\u0644\u062D\u0644\u0648\u0644 \u0644\u0644\u062A\u0646\u0641\u064A\u0630\u060C \u0644\u0627 \u0644\u0644\u0639\u0631\u0636 \u0641\u0642\u0637.' },
-          { title:'\u0627\u0644\u062F\u0642\u0629', desc:'\u0643\u0644 \u062A\u0648\u0635\u064A\u0629 \u0645\u0628\u0646\u064A\u0629 \u0639\u0644\u0649 \u062A\u0641\u0627\u0635\u064A\u0644 \u062A\u0634\u063A\u064A\u0644\u064A\u0629 \u062D\u0642\u064A\u0642\u064A\u0629.' },
-          { title:'\u0627\u0644\u0634\u0631\u0627\u0643\u0629', desc:'\u0646\u0639\u0645\u0644 \u0628\u062C\u0627\u0646\u0628 \u0641\u0631\u064A\u0642\u0643\u060C \u0644\u0627 \u0641\u0648\u0642\u0647.' },
-          { title:'\u0627\u0644\u0627\u0628\u062A\u0643\u0627\u0631', desc:'\u0646\u0628\u0646\u064A \u0645\u0627 \u0644\u0627 \u064A\u0648\u062C\u062F \u062C\u0627\u0647\u0632\u0627\u064B \u0639\u0646\u062F\u0645\u0627 \u0644\u0627 \u062A\u0643\u0641\u064A \u0627\u0644\u0623\u0646\u0638\u0645\u0629 \u0627\u0644\u062A\u0642\u0644\u064A\u062F\u064A\u0629.' }
-        ]
-      },
-      industries: {
-        eyebrow:'\u0646\u062E\u062F\u0645 \u0642\u0637\u0627\u0639\u0627\u062A \u0645\u062A\u0646\u0648\u0639\u0629',
-        title:'\u062A\u0631\u0643\u064A\u0632 \u0642\u0637\u0627\u0639\u064A \u062D\u064A\u062B \u064A\u0635\u0646\u0639 \u0627\u0644\u0623\u062B\u0631',
-        items:['\u0627\u0644\u062A\u0635\u0646\u064A\u0639','\u0627\u0644\u0623\u063A\u0630\u064A\u0629 \u0648\u0627\u0644\u0645\u0634\u0631\u0648\u0628\u0627\u062A','\u0627\u0644\u062A\u062C\u0632\u0626\u0629 \u0648\u0627\u0644\u062A\u0648\u0632\u064A\u0639','\u0627\u0644\u0635\u0627\u0644\u0648\u0646\u0627\u062A \u0648\u0645\u0631\u0627\u0643\u0632 \u0627\u0644\u062A\u062C\u0645\u064A\u0644','\u0627\u0644\u0634\u0631\u0643\u0627\u062A \u0627\u0644\u0635\u063A\u064A\u0631\u0629 \u0648\u0627\u0644\u0645\u062A\u0648\u0633\u0637\u0629']
-      },
-      contact: {
-        eyebrow:'\u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627',
-        title:'\u0623\u0639\u0645\u0627\u0644\u0643 \u062A\u0633\u062A\u062D\u0642 \u062D\u0644\u0648\u0644\u0627\u064B \u0645\u0628\u0646\u064A\u0629 \u0639\u0644\u0649 \u062E\u0628\u0631\u0629 \u062D\u0642\u064A\u0642\u064A\u0629',
-        sub:'\u0644\u0627 \u0639\u0644\u0649 \u0627\u0641\u062A\u0631\u0627\u0636\u0627\u062A. \u062A\u062D\u062F\u062B \u0645\u0639 \u0641\u0631\u064A\u0642 \u0633\u0628\u0642 \u0644\u0647 \u062A\u0634\u063A\u064A\u0644 \u0645\u0627 \u064A\u0633\u062A\u0634\u064A\u0631\u0643 \u0641\u064A\u0647 \u0627\u0644\u064A\u0648\u0645. \u062A\u0648\u0627\u0635\u0644 \u0645\u0639\u0646\u0627 \u0644\u0627\u0633\u062A\u0634\u0627\u0631\u0629 \u0645\u062C\u0627\u0646\u064A\u0629\u060C \u0648\u0633\u064A\u0639\u0627\u0648\u062F \u0641\u0631\u064A\u0642\u0646\u0627 \u0627\u0644\u0627\u062A\u0635\u0627\u0644 \u0628\u0643 \u062E\u0644\u0627\u0644 \u064A\u0648\u0645 \u0639\u0645\u0644 \u0648\u0627\u062D\u062F.',
-        form: { name:'\u0627\u0644\u0627\u0633\u0645 \u0627\u0644\u0643\u0627\u0645\u0644', company:'\u0627\u0633\u0645 \u0627\u0644\u0634\u0631\u0643\u0629', phone:'\u0627\u0644\u062C\u0648\u0627\u0644 / \u0648\u0627\u062A\u0633\u0627\u0628', email:'\u0627\u0644\u0628\u0631\u064A\u062F \u0627\u0644\u0625\u0644\u0643\u062A\u0631\u0648\u0646\u064A', message:'\u0631\u0633\u0627\u0644\u062A\u0643', messagePh:'\u062D\u062F\u0651\u062B\u0646\u0627 \u0639\u0646 \u0627\u0644\u062A\u062D\u062F\u064A \u0627\u0644\u0630\u064A \u062A\u0648\u0627\u062C\u0647\u0647 \u0634\u0631\u0643\u062A\u0643...', submit:'\u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0637\u0644\u0628', sent:'\u0634\u0643\u0631\u0627\u064B \u2014 \u0631\u0633\u0627\u0644\u062A\u0643 \u062C\u0627\u0647\u0632\u0629 \u0641\u064A \u062A\u0637\u0628\u064A\u0642 \u0627\u0644\u0628\u0631\u064A\u062F \u0644\u062F\u064A\u0643. \u0623\u0631\u0633\u0644\u0647\u0627 \u0648\u0633\u0646\u0631\u062F \u062E\u0644\u0627\u0644 \u064A\u0648\u0645 \u0639\u0645\u0644 \u0648\u0627\u062D\u062F.' },
-        info: [ { label:'\u0627\u0644\u0628\u0631\u064A\u062F', value:'hello@maras.solutions' }, { label:'\u0627\u0644\u0645\u0648\u0642\u0639', value:'\u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629 \u2014 \u0628\u062E\u062F\u0645\u0629 \u0627\u0644\u062E\u0644\u064A\u062C \u0648\u0645\u0635\u0631 \u0648\u0623\u0641\u0631\u064A\u0642\u064A\u0627' } ]
-      },
-      footer: {
-        tagline:'\u062E\u0628\u0631\u0629 \u062D\u0642\u064A\u0642\u064A\u0629... \u062D\u0644\u0648\u0644 \u0639\u0645\u0644\u064A\u0629. \u0646\u062C\u0645\u0639 \u0628\u064A\u0646 \u0627\u0644\u062A\u0642\u0646\u064A\u0629 \u0648\u0627\u0644\u0625\u062F\u0627\u0631\u0629 \u0644\u0634\u0631\u0643\u0627\u062A \u0627\u0644\u062A\u0635\u0646\u064A\u0639 \u0648\u0627\u0644\u062A\u0648\u0632\u064A\u0639 \u0648\u0627\u0644\u062E\u062F\u0645\u0627\u062A \u0641\u064A \u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629 \u0648\u0627\u0644\u062E\u0644\u064A\u062C.',
-        navLabel:'// \u062E\u0631\u064A\u0637\u0629 \u0627\u0644\u0645\u0648\u0642\u0639', connectLabel:'// \u062A\u0648\u0627\u0635\u0644',
-        location:'\u0627\u0644\u0645\u0645\u0644\u0643\u0629 \u0627\u0644\u0639\u0631\u0628\u064A\u0629 \u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629',
-        rights:'\u00A9 2026 \u0645\u0631\u0627\u0633 \u0627\u0644\u062D\u0644\u0648\u0644. \u062C\u0645\u064A\u0639 \u0627\u0644\u062D\u0642\u0648\u0642 \u0645\u062D\u0641\u0648\u0638\u0629.', built:'\u0628\u0643\u0644 \u0641\u062E\u0631\u060C \u0646\u0648\u0627\u0643\u0628 \u0631\u0624\u064A\u0629 \u0627\u0644\u0645\u0645\u0644\u0643\u0629 2030' }
-    };
-    return { en, ar };
-  }
-
-  renderVals() {
-    const lang = this.state.lang;
-    const t = this.content()[lang];
-    const isAr = lang === 'ar';
-    return {
-      t,
-      dir: isAr ? 'rtl' : 'ltr',
-      ls: isAr ? 'normal' : '0.18em',
-      navLs: isAr ? 'normal' : '0.06em',
-      langBtn: isAr ? 'EN' : '\u0639',
-      arrow: isAr ? '\u2190' : '\u2192',
-      toggleLang: this.toggleLang,
-      submitForm: this.submitForm,
-      sent: this.state.sent,
-      industriesLoop: [...t.industries.items, ...t.industries.items]
-    };
+  // Contact form
+  const submitBtn = document.getElementById('cf-submit');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', () => {
+      const tf = CONTENT[currentLang].contact.form;
+      const name    = (document.getElementById('cf-name')?.value || '').trim();
+      const company = (document.getElementById('cf-company')?.value || '').trim();
+      const phone   = (document.getElementById('cf-phone')?.value || '').trim();
+      const email   = (document.getElementById('cf-email')?.value || '').trim();
+      const msg     = (document.getElementById('cf-msg')?.value || '').trim();
+      const lines = [
+        tf.name + ': ' + name,
+        tf.company + ': ' + company,
+        tf.phone + ': ' + phone,
+        tf.email + ': ' + email,
+        '',
+        tf.message + ':',
+        msg
+      ];
+      const subject = 'Website inquiry — ' + (company || name || 'New contact');
+      const href = 'mailto:hello@maras.solutions'
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(lines.join('\n'));
+      try { window.location.href = href; } catch(err) {}
+      const sentEl = document.getElementById('sent-msg');
+      if (sentEl) sentEl.style.display = 'flex';
+    });
   }
 }
+
+// ─── Scroll Reveal ────────────────────────────────────────────────────────────
+function initReveal() {
+  document.documentElement.classList.add('mr-js');
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) {
+    document.querySelectorAll('[data-reveal]').forEach(n => n.classList.add('mr-in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('mr-in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -7% 0px' });
+  document.querySelectorAll('[data-reveal]').forEach(n => io.observe(n));
+}
+
+// ─── Boot — runs synchronously, no external dependency ───────────────────────
+render(currentLang);
+initReveal();
 </script>
 </body>
 </html>
