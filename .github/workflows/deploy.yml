@@ -40,11 +40,11 @@ jobs:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
+          port: 2232
           script: |
-            gcloud auth configure-docker us-central1-docker.pkg.dev -q
-            # Ensure the directory exists
-            mkdir -p ~/docker/maras
-            cd ~/docker/maras
-            # Pull the new image and restart the container
-            sudo docker compose pull
-            sudo docker compose up -d
+            set -e
+            export PATH="$HOME/google-cloud-sdk/bin:$PATH"
+            cd ~/docker/apps/maras
+            docker compose pull
+            docker compose up -d
+            docker image prune -f
